@@ -1,20 +1,18 @@
-package es.deusto.ingenieria.sd.rmi.server;
+package rmi.server;
 
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.rmi.server.*;
 import java.util.HashMap;
 
-public class Server extends UnicastRemoteObject implements IServer {
+public class ServerUsuarios extends UnicastRemoteObject implements IServerUsuarios {
 
 	private static final long serialVersionUID = 1L;
 	private int cont = 0;
 	private HashMap <String, String> registeredUsers = null;
 
-	protected Server() throws RemoteException 
+	protected ServerUsuarios() throws RemoteException 
 	{
 		super();
 		registeredUsers = new HashMap<String, String> ();
@@ -29,29 +27,29 @@ public class Server extends UnicastRemoteObject implements IServer {
 	}
 	
 	@Override
-	public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser
+	public String sayMessage(String login, String password, String message) throws RemoteException
 	{
 		if (registeredUsers.containsValue(login)) {
 
 			if (registeredUsers.get(login).contentEquals(password)) {
 				return message;
 			} else {
-				throw new InvalidUser("Incorrect password for user " + login);
+				throw new RemoteException();
 			}
 
 		} else {
-			throw new InvalidUser("User name " + login + "is not present among the registered users");
+			throw new RemoteException();
 		}
 	}
-
+	
 	@Override
-	public void registerUser(String login, String password) throws RemoteException, InvalidUser 
+	public void registerUser(String login, String password) throws RemoteException 
 	{
 		if ( registeredUsers.containsValue(login) == false ) {
 			registeredUsers.put(login, password);			
 		} else {
-			throw new InvalidUser("User name " + login + " is already in the database");
-		}		
+			throw new RemoteException();
+		}	
 	}
 	
 
@@ -69,7 +67,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 		try 
 		{	
-			IServer objServer = new Server();
+			IServerStaff objServer = new ServerStaff();
 			Registry registry = LocateRegistry.createRegistry((Integer.valueOf(args[1])));
 			//Naming.rebind(name, objServer);
 			registry.rebind(name, objServer);

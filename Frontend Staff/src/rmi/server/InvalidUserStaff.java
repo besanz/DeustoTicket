@@ -1,17 +1,17 @@
-package es.deusto.ingenieria.sd.rmi.server;
+package rmi.server;
 
-public class InvalidUser extends Exception 
+public class InvalidUserStaff extends Exception 
 {
 
 	private String message;
 	
 	
-	public InvalidUser() {
+	public InvalidUserStaff() {
 		super();
 		this.message = "";		
 	}
 	
-	public InvalidUser(String exceptionMessage) {
+	public InvalidUserStaff(String exceptionMessage) {
 		super();
 		this.message = exceptionMessage;
 	}

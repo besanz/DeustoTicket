@@ -28,7 +28,14 @@
     </target>	
     
 	<target name="server" depends="build" description="Runs the Server">
-		<java classname="es.deusto.ingenieria.sd.rmi.server.Server" classpath="${classpath}" fork="true">
+		<java classname="rmi.server.ServerStaff" classpath="${classpath}" fork="true">
+			<jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
+			<jvmarg value="-Djava.security.policy=${policy.file}"/>			
+        	<arg value="${server.IP}"/> 
+	 		<arg value="${server.port}"/> 
+			<arg value="${server.Name}"/> 
+        </java>
+		<java classname="rmi.server.ServerUsuarios" classpath="${classpath}" fork="true">
 			<jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
 			<jvmarg value="-Djava.security.policy=${policy.file}"/>			
         	<arg value="${server.IP}"/> 

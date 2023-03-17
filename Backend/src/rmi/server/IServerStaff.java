@@ -1,9 +1,9 @@
-package es.deusto.ingenieria.sd.rmi.server;
+package rmi.server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface IServer extends Remote 
+public interface IServerStaff extends Remote 
 {
 	/**
 	 * Test message to say hello to client
@@ -33,12 +33,13 @@ public interface IServer extends Remote
 
 	/**
 	 * Método para consultar un ticket por id
-	 */
+	 
 	 Ticket ConsultarTicket (int idTicket);
 
 	 /**
 	 * Método para validar un ticket
-	 */
+	 
 
 	 void ValidarTicket (Ticket ticket);
+	 */
 }
