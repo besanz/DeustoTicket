@@ -1,8 +1,6 @@
-package rmi.server.entidades;
+package entidades;
 
-import java.io.Serializable;
-
-public class Ticket implements Serializable {
+public class Ticket {
     private int id;
     private Evento evento;
     private Precio precio;

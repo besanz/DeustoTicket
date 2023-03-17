@@ -3,8 +3,10 @@ package rmi.server.api;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
-import rmi.server.entidades.Evento;
-import rmi.server.entidades.Precio;
+
+import entidades.Evento;
+import entidades.Precio;
+import entidades.Espacio;
 
 public interface IEventService extends Remote {
     
@@ -85,4 +87,38 @@ public interface IEventService extends Remote {
      * @throws RemoteException
      */
     boolean eliminarPrecio(int id) throws RemoteException;
+
+    /**
+ * Crear un nuevo espacio
+ * @param nombre
+ * @param direccion
+ * @return Espacio creado
+ * @throws RemoteException
+ */
+Espacio crearEspacio(String nombre, String direccion) throws RemoteException;
+
+/**
+ * Obtener la lista de espacios
+ * @return Lista de espacios
+ * @throws RemoteException
+ */
+List<Espacio> obtenerEspacios() throws RemoteException;
+
+/**
+ * Actualizar un espacio existente
+ * @param id
+ * @param nombre
+ * @param direccion
+ * @return Espacio actualizado
+ * @throws RemoteException
+ */
+Espacio actualizarEspacio(int id, String nombre, String direccion) throws RemoteException;
+
+/**
+ * Eliminar un espacio
+ * @param id
+ * @return true si se eliminó con éxito, false en caso contrario
+ * @throws RemoteException
+ */
+boolean eliminarEspacio(int id) throws RemoteException;
 }

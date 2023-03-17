@@ -4,7 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import rmi.server.entidades.Cliente;
+import entidades.Cliente;
+import entidades.Artista;
 import rmi.server.exceptions.InvalidUser;
 
 public interface IUserService extends Remote {
@@ -67,4 +68,43 @@ public interface IUserService extends Remote {
      * @throws RemoteException
      */
     boolean eliminarCliente(int id) throws RemoteException;
+
+    /**
+ * Crear un nuevo artista
+ * @param nombre
+ * @param descripcion
+ * @param fechaNacimiento
+ * @param foto
+ * @return Artista creado
+ * @throws RemoteException
+ */
+Artista crearArtista(String nombre, String descripcion, String fechaNacimiento, String foto) throws RemoteException;
+
+/**
+ * Obtener la lista de artistas
+ * @return Lista de artistas
+ * @throws RemoteException
+ */
+List<Artista> obtenerArtistas() throws RemoteException;
+
+/**
+ * Actualizar un artista existente
+ * @param id
+ * @param nombre
+ * @param descripcion
+ * @param fechaNacimiento
+ * @param foto
+ * @return Artista actualizado
+ * @throws RemoteException
+ */
+Artista actualizarArtista(int id, String nombre, String descripcion, String fechaNacimiento, String foto) throws RemoteException;
+
+/**
+ * Eliminar un artista
+ * @param id
+ * @return true si se eliminó con éxito, false en caso contrario
+ * @throws RemoteException
+ */
+boolean eliminarArtista(int id) throws RemoteException;
+
 }

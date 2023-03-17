@@ -1,9 +1,8 @@
-package rmi.server.entidades;
+package entidades;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Evento implements Serializable {
+public class Evento {
     private int id;
     private String titulo;
     private String descripcion;
@@ -67,7 +66,4 @@ public class Evento implements Serializable {
     public void setAforo(int aforo) {
         this.aforo = aforo;
     }
-
-    // Getters y setters
-    
 }

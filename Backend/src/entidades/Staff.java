@@ -1,21 +1,16 @@
-package rmi.server.entidades;
+package entidades;
 
-import java.io.Serializable;
-
-public class StaffMember implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Staff{
     private int id;
     private String nombre;
     private String cargo;
 
-    public StaffMember(int id, String nombre, String cargo) {
+    public Staff(int id, String nombre, String cargo) {
         this.id = id;
         this.nombre = nombre;
         this.cargo = cargo;
     }
 
-    // Getters y setters
     public int getId() {
         return id;
     }

@@ -7,8 +7,13 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import entidades.Cliente;
+import entidades.Artista;
 import rmi.server.api.IUserService;
-import rmi.server.entidades.Cliente;
 import rmi.server.exceptions.InvalidUser;
 
 public class ServerUsuarios extends UnicastRemoteObject implements IUserService {
@@ -17,12 +22,15 @@ public class ServerUsuarios extends UnicastRemoteObject implements IUserService 
     private int cont = 0;
     private HashMap<String, String> registeredUsers = null;
     private List<Cliente> clientes = null;
-
+    private List<Artista> artistas = null;
+ 
     protected ServerUsuarios() throws RemoteException {
         super();
         registeredUsers = new HashMap<String, String>();
         clientes = new ArrayList<>();
+        artistas = new ArrayList<>();
     }
+    
 
     @Override
     public String sayHello() throws RemoteException {
@@ -80,6 +88,51 @@ public class ServerUsuarios extends UnicastRemoteObject implements IUserService 
     public boolean eliminarCliente(int id) throws RemoteException {
         return clientes.removeIf(cliente -> cliente.getId() == id);
     }
+
+    @Override
+public Artista crearArtista(String nombre, String descripcion, String fechaNacimiento, String foto) throws RemoteException {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    Date date = null;
+    try {
+        date = formatter.parse(fechaNacimiento);
+    } catch (ParseException e) {
+        e.printStackTrace();
+    }
+    Artista artista = new Artista(cont++, nombre, descripcion, date, foto);
+    artistas.add(artista);
+    return artista;
+}
+
+@Override
+public List<Artista> obtenerArtistas() throws RemoteException {
+    return artistas;
+}
+
+@Override
+public Artista actualizarArtista(int id, String nombre, String descripcion, String fechaNacimiento, String foto) throws RemoteException {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    Date date = null;
+    try {
+        date = formatter.parse(fechaNacimiento);
+    } catch (ParseException e) {
+        e.printStackTrace();
+    }
+    for (Artista artista : artistas) {
+        if (artista.getId() == id) {
+            artista.setNombre(nombre);
+            artista.setDescripcion(descripcion);
+            artista.setFechaNacimiento(date);
+            artista.setFoto(foto);
+            return artista;
+        }
+    }
+    return null;
+}
+
+@Override
+public boolean eliminarArtista(int id) throws RemoteException {
+    return artistas.removeIf(artista -> artista.getId() == id);
+}
 
     public static void main(String[] args) {
         if (args.length != 3) {

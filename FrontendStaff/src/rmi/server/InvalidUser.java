@@ -1,17 +1,17 @@
-package rmi.server;
+package server;
 
-public class InvalidUserStaff extends Exception 
+public class InvalidUser extends Exception 
 {
 
 	private String message;
 	
 	
-	public InvalidUserStaff() {
+	public InvalidUser() {
 		super();
 		this.message = "";		
 	}
 	
-	public InvalidUserStaff(String exceptionMessage) {
+	public InvalidUser(String exceptionMessage) {
 		super();
 		this.message = exceptionMessage;
 	}

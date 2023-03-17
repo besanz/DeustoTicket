@@ -1,9 +1,9 @@
-package rmi.server;
+package server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface IServerStaff extends Remote 
+public interface IServer extends Remote 
 {
 	/**
 	 * Test message to say hello to client
@@ -21,7 +21,7 @@ public interface IServerStaff extends Remote
 	 * @return Message
 	 * @throws RemoteException
 	 */
-	String sayMessage(String login, String password, String message) throws RemoteException, InvalidUserStaff;
+	String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser;
 	
 	/**
 	 * Function to register a new user
@@ -29,6 +29,6 @@ public interface IServerStaff extends Remote
 	 * @param password
 	 * @throws RemoteException
 	 */
-	void registerUser(String login, String password) throws RemoteException, InvalidUserStaff;
+	void registerUser(String login, String password) throws RemoteException, InvalidUser;
 
 }

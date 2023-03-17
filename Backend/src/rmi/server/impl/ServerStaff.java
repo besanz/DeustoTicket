@@ -5,15 +5,17 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import rmi.server.api.IStaffService;
-import rmi.server.entidades.StaffMember;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import entidades.Staff;
+
 public class ServerStaff extends UnicastRemoteObject implements IStaffService {
 
     private static final long serialVersionUID = 1L;
-    private List<StaffMember> staffMembers;
+    private List<Staff> staffMembers;
     private AtomicInteger idCounter;
 
     protected ServerStaff() throws RemoteException {
@@ -23,21 +25,21 @@ public class ServerStaff extends UnicastRemoteObject implements IStaffService {
     }
 
     @Override
-    public StaffMember crearStaffMember(String nombre, String cargo) throws RemoteException {
+    public Staff crearStaffMember(String nombre, String cargo) throws RemoteException {
         int id = idCounter.incrementAndGet();
-        StaffMember staffMember = new StaffMember(id, nombre, cargo);
+        Staff staffMember = new Staff(id, nombre, cargo);
         staffMembers.add(staffMember);
         return staffMember;
     }
 
     @Override
-    public List<StaffMember> obtenerStaffMembers() throws RemoteException {
+    public List<Staff> obtenerStaffMembers() throws RemoteException {
         return staffMembers;
     }
 
     @Override
-    public StaffMember actualizarStaffMember(int id, String nombre, String cargo) throws RemoteException {
-        for (StaffMember staffMember : staffMembers) {
+    public Staff actualizarStaffMember(int id, String nombre, String cargo) throws RemoteException {
+        for (Staff staffMember : staffMembers) {
             if (staffMember.getId() == id) {
                 staffMember.setNombre(nombre);
                 staffMember.setCargo(cargo);

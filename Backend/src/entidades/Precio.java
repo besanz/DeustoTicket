@@ -1,4 +1,4 @@
-package rmi.server.entidades;
+package entidades;
 
 import java.io.Serializable;
 

@@ -1,10 +1,10 @@
-package rmi.client;
+package client;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import rmi.server.IServerStaff;
-
+import server.IServer;
+import server.InvalidUser;
 
 public class Client {
 
@@ -20,7 +20,7 @@ public class Client {
 			System.setSecurityManager(new SecurityManager());
 		}
 
-		IServerStaff stubServer = null;
+		IServer stubServer = null;
 		/**
 		 * Try test message
 		 */
@@ -29,7 +29,7 @@ public class Client {
 			Registry registry = LocateRegistry.getRegistry(((Integer.valueOf(args[1]))));
 			String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
 			//stubServer = (IServer) java.rmi.Naming.lookup(name);
-			stubServer = (IServerStaff) registry.lookup(name);
+			stubServer = (IServer) registry.lookup(name);
 			System.out.println("* Message coming from the server: '" + stubServer.sayHello() + "'");
 			
 		} 
@@ -57,7 +57,10 @@ public class Client {
 			stubServer.registerUser("Test3", "Test3");
 			System.out.println("* Added user Test3");
 		}
-		
+		catch (InvalidUser iu)
+		{
+			System.err.println("- Exception running the client: " + iu.getErrorMessage());
+		}
 		catch (Exception e)
 		{
 			System.err.println("- Exception running the client: " + e.getMessage());
@@ -70,9 +73,16 @@ public class Client {
 		 */
 		try
 		{
-			System.out.println("El jokin es un tajas");
+			System.out.println("* Message coming from the server: " + stubServer.sayMessage("Test1", "Test1", "Message 1"));
+			System.out.println("* Message coming from the server: " + stubServer.sayMessage("Test2", "Test2", "Message 2"));
+			System.out.println("* Message coming from the server: " + stubServer.sayMessage("Test3", "Test3", "Message 3"));
+			System.out.println("* Message coming from the server: " + stubServer.sayMessage("Test3", "Test4", "Message 4"));
+			System.out.println("* Message coming from the server: " + stubServer.sayMessage("Test4", "Test4", "Message 5"));
 		}
-		
+		catch (InvalidUser iu)
+		{
+			System.err.println("- Exception running the client: " + iu.getErrorMessage());
+		}
 		catch (Exception e)
 		{
 			System.err.println("- Exception running the client: " + e.getMessage());

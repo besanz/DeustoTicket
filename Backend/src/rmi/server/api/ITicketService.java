@@ -2,7 +2,8 @@ package rmi.server.api;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import rmi.server.entidades.Ticket;
+
+import entidades.Ticket;
 
 public interface ITicketService extends Remote {
     
