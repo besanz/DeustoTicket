@@ -14,12 +14,12 @@ public class Client {
 			System.out.println("uso: java [policy] [codebase] cliente.Cliente [host] [port] [server]");
 			System.exit(0);
 		}
-
+/* 
 		if (System.getSecurityManager() == null) 
 		{
 			System.setSecurityManager(new SecurityManager());
 		}
-
+*/
 		IServer stubServer = null;
 		/**
 		 * Try test message

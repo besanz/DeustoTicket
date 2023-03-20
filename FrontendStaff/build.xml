@@ -28,7 +28,7 @@
     </target>
 
 	<target name="client" depends="build" description="Runs the Client">
-		<java classname="rmi.client.Client" classpath="${classpath}" fork="true">
+		<java classname="client.Client" classpath="${classpath}" fork="true">
 			<jvmarg value="-Djava.security.policy=${policy.file}"/>			
         	<arg value="${server.IP}"/> 
 	 		<arg value="${server.port}"/> 
