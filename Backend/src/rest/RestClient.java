@@ -9,7 +9,7 @@ import java.net.URL;
 public class RestClient {
     public static void main(String[] args) throws IOException {
         //Set up the URL of the REST API endpoint
-        URL url = new URL("https://deusto-api.arambarri.eus/api/eventos");
+        URL url = new URL("https://deusto-api.arambarri.eus/api/artistas");
 
         //Open a connection to the URL
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
