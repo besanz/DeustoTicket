@@ -16,11 +16,11 @@ public class Client {
 			System.exit(0);
 		}
 
-		if (System.getSecurityManager() == null) 
+		/*if (System.getSecurityManager() == null) 
 		{
 			System.setSecurityManager(new SecurityManager());
 		}
-
+		*/
 		IStaffService stubServer = null;
 		/**
 		 * Try test message
