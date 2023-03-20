@@ -3,8 +3,9 @@ package client;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import server.IServer;
-import server.InvalidUser;
+import rmi.server.api.IUserService;
+import rmi.server.exceptions.InvalidUser;
+
 
 public class Client {
 
@@ -14,13 +15,13 @@ public class Client {
 			System.out.println("uso: java [policy] [codebase] cliente.Cliente [host] [port] [server]");
 			System.exit(0);
 		}
-/* 
+
 		if (System.getSecurityManager() == null) 
 		{
 			System.setSecurityManager(new SecurityManager());
 		}
-*/
-		IServer stubServer = null;
+
+		IUserService stubServer = null;
 		/**
 		 * Try test message
 		 */
@@ -29,7 +30,7 @@ public class Client {
 			Registry registry = LocateRegistry.getRegistry(((Integer.valueOf(args[1]))));
 			String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
 			//stubServer = (IServer) java.rmi.Naming.lookup(name);
-			stubServer = (IServer) registry.lookup(name);
+			stubServer = (IUserService) registry.lookup(name);
 			System.out.println("* Message coming from the server: '" + stubServer.sayHello() + "'");
 			
 		} 
@@ -45,16 +46,16 @@ public class Client {
 		 */
 		try
 		{			
-			stubServer.registerUser("Test1", "Test1");
+			stubServer.registrarUsuario("Test1", "Test1");
 			System.out.println("* Added user Test1");
 			
-			stubServer.registerUser("Test2", "Test2");
+			stubServer.registrarUsuario("Test2", "Test2");
 			System.out.println("* Added user Test2");
 			
-			stubServer.registerUser("Test3", "Test3");
+			stubServer.registrarUsuario("Test3", "Test3");
 			System.out.println("* Added user Test3");
 			
-			stubServer.registerUser("Test3", "Test3");
+			stubServer.registrarUsuario("Test3", "Test3");
 			System.out.println("* Added user Test3");
 		}
 		catch (InvalidUser iu)

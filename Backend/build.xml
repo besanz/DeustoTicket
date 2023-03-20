@@ -27,7 +27,7 @@
 		<jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" excludes="**/Server.class"/>
     </target>	
     
-	<target name="server" depends="build" description="Runs the Server">
+	<target name="serverStaff" depends="build" description="Runs the Server">
 		<java classname="rmi.server.impl.ServerStaff" classpath="${classpath}" fork="true">
 			<jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
 			<jvmarg value="-Djava.security.policy=${policy.file}"/>			
@@ -35,6 +35,8 @@
 	 		<arg value="${server.port}"/> 
 			<arg value="${server.Name}"/> 
         </java>
+    </target>
+	<target name="serverUser" depends="build" description="Runs the Server">
 		<java classname="rmi.server.impl.ServerUsuarios" classpath="${classpath}" fork="true">
 			<jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
 			<jvmarg value="-Djava.security.policy=${policy.file}"/>			
