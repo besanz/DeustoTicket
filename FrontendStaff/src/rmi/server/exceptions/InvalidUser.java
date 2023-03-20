@@ -1,4 +1,4 @@
-package server.exceptions;
+package rmi.server.exceptions;
 
 public class InvalidUser extends Exception 
 {

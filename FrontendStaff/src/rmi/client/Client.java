@@ -6,6 +6,7 @@ import java.rmi.registry.Registry;
 import rmi.server.api.IStaffService;
 import rmi.server.exceptions.InvalidUser;
 
+
 public class Client {
 
 	public static void main(String[] args) {

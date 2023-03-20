@@ -35,16 +35,6 @@ public interface IStaffService extends Remote {
 	 */
 	void registrarUsuario(String login, String password) throws RemoteException, InvalidUser;
 
-	/**
-	 * Método para consultar un ticket por id
-	 */
-	 //Ticket ConsultarTicket (int idTicket);
-
-	 /**
-	 * Método para validar un ticket
-	 */
-	 //void ValidarTicket (Ticket ticket);
-    
     /**
      * Función para crear un nuevo miembro del personal
      * @param nombre
