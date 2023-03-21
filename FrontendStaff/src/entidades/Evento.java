@@ -1,8 +1,9 @@
 package entidades;
 
 import java.util.Date;
+import java.io.Serializable;
 
-public class Evento {
+public class Evento implements Serializable {
     private int id;
     private String titulo;
     private String descripcion;

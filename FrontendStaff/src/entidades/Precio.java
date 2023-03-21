@@ -58,5 +58,5 @@ public class Precio implements Serializable {
     }
 
     // Getters y setters
-    
+
 }

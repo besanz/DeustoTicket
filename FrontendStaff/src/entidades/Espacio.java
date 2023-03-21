@@ -1,6 +1,8 @@
 package entidades;
 
-public class Espacio {
+import java.io.Serializable;
+
+public class Espacio implements Serializable {
     private int id;
     private String nombre;
     private String direccion;

@@ -1,6 +1,8 @@
 package entidades;
 
-public class Staff{
+import java.io.Serializable;
+
+public class Staff implements Serializable {
     private int id;
     private String nombre;
     private String cargo;

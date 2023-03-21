@@ -1,6 +1,8 @@
 package entidades;
 
-public class Cliente {
+import java.io.Serializable;
+
+public class Cliente implements Serializable {
     private int id;
     private String nombre;
 
@@ -23,5 +25,5 @@ public class Cliente {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }   
+    }
 }
