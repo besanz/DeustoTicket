@@ -1,8 +1,12 @@
 package entidades;
 
 import java.io.Serializable;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PrimaryKey;
 
+@PersistenceCapable
 public class Ticket implements Serializable {
+    @PrimaryKey
     private int id;
     private Evento evento;
     private Precio precio;

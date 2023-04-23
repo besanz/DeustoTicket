@@ -2,8 +2,12 @@ package entidades;
 
 import java.util.Date;
 import java.io.Serializable;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PrimaryKey;
 
+@PersistenceCapable
 public class Artista implements Serializable {
+    @PrimaryKey
     private int id;
     private String nombre;
     private String descripcion;
