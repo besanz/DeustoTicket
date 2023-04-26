@@ -3,31 +3,14 @@ package data.entidades;
 import java.io.Serializable;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @PersistenceCapable
 public class Cliente implements Serializable {
     @PrimaryKey
-    private int id;
-    private String nombre;
-
-    public Cliente(int id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    @Getter @Setter private int id;
+    @Getter @Setter private String nombre;
 }
+
