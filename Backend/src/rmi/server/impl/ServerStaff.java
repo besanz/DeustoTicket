@@ -12,9 +12,17 @@ import rmi.server.api.IStaffService;
 import rmi.server.exceptions.InvalidUser;
 
 public class ServerStaff extends UnicastRemoteObject implements IStaffService {
+    private static ServerStaff instance;
 
     protected ServerStaff() throws RemoteException {
         super();
+    }
+
+    public static ServerStaff getInstance() throws RemoteException {
+        if (instance == null) {
+            instance = new ServerStaff();
+        }
+        return instance;
     }
 
     @Override

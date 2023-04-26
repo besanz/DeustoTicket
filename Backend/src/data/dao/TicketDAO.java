@@ -1,4 +1,4 @@
-package data.dao.clases;
+package data.dao;
 
 public class TicketDAO {
     

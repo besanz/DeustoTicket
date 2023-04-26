@@ -1,5 +1,5 @@
 package data.dao;
 
-public class IDao {
+public class ClienteDAO {
     
 }
