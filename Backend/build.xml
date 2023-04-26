@@ -42,7 +42,7 @@
         </java>
     </target>
     <target name="serverUser" depends="build" description="Runs the Server">
-        <java classname="rmi.server.impl.ServerUsuarios" classpathref="classpath" fork="true">
+        <java classname="rmi.server.impl.ServerUser" classpathref="classpath" fork="true">
             <jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
             <jvmarg value="-Djava.security.policy=${policy.file}"/>          
             <arg value="${server.IP}"/> 

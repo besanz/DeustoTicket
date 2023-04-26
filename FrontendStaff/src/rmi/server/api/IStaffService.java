@@ -4,10 +4,10 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import entidades.Artista;
-import entidades.Evento;
-import entidades.Precio;
-import entidades.Espacio;
+import data.entidades.Artista;
+import data.entidades.Espacio;
+import data.entidades.Evento;
+import data.entidades.Precio;
 import rmi.server.exceptions.InvalidUser;
 
 public interface IStaffService extends Remote {

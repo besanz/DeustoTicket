@@ -4,10 +4,10 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import entidades.Cliente;
-import entidades.Artista;
-import entidades.Evento;
-import entidades.Ticket;
+import data.entidades.Artista;
+import data.entidades.Cliente;
+import data.entidades.Evento;
+import data.entidades.Ticket;
 import rmi.server.exceptions.InvalidUser;
 
 public interface IUserService extends Remote {
