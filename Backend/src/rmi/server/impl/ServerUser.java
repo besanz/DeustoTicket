@@ -114,8 +114,8 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade, IU
         String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
 
         try {
-            IRemoteFacade objServer = new RemoteFacadeImpl(); // Cambia ServerUser.getInstance() a new RemoteFacadeImpl()
-            Registry registry = LocateRegistry.createRegistry((Integer.valueOf(args[1])));
+            IRemoteFacade objServer = ServerUser.getInstance();
+            Registry registry = LocateRegistry.getRegistry();
             registry.rebind(name, objServer);
             System.out.println("* Server '" + name + "' active and waiting...");
         } catch (Exception e) {

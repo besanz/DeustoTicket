@@ -8,7 +8,7 @@ public class ServiceLocator {
 
     public ServiceLocator(String remoteUrl) throws RemoteException {
         try {
-            remoteFacade = (IRemoteFacade) Naming.lookup(remoteUrl);
+            remoteFacade = (IRemoteFacade) Naming.lookup("//localhost:1099/IRemoteFacade");
         } catch (Exception e) {
             throw new RemoteException("Error al localizar el objeto remoto", e);
         }
