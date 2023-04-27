@@ -105,23 +105,33 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade, IU
         return null;
     }
 
-    public static void main(String[] args) {
-        if (args.length != 3) {
-            System.out.println("usage: java [policy] [codebase] server.Server [host] [port] [server]");
-            System.exit(0);
-        }
-
-        String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
-
-        try {
-            IRemoteFacade objServer = ServerUser.getInstance();
-            Registry registry = LocateRegistry.getRegistry();
-            registry.rebind(name, objServer);
-            System.out.println("* Server '" + name + "' active and waiting...");
-        } catch (Exception e) {
-            System.err.println("- Exception running the server: " + e.getMessage());
-            e.printStackTrace();
-        }
+public static void main(String[] args) {
+    // Verifica que se proporcionen los argumentos correctos: [host] [port] [server]
+    if (args.length != 3) {
+        System.out.println("usage: java [policy] [codebase] server.Server [host] [port] [server]");
+        System.exit(0);
     }
+
+    // Construye el nombre del objeto remoto utilizando los argumentos proporcionados
+    String name = "//" + args[0] + ":" + args[1] + "/" + "GuTicketServer";
+
+    try {
+        // Obtiene la instancia de IRemoteFacade
+        IRemoteFacade objServer = ServerUser.getInstance();
+        
+        // Crea y configura el registro RMI con el número de puerto proporcionado
+        Registry registry = LocateRegistry.createRegistry(Integer.valueOf(args[1]));
+        
+        // Registra el objeto remoto en el registro RMI
+        registry.rebind(name, objServer);
+        
+        // Muestra un mensaje indicando que el servidor está activo y esperando conexiones
+        System.out.println("* Server '" + name + "' active and waiting...");
+    } catch (Exception e) {
+        System.err.println("- Exception running the server: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
 
 } 
