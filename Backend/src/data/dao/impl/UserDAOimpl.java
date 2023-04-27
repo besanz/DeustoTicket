@@ -9,7 +9,7 @@ public class UserDAOImpl implements UserDAO {
     private List<User> users;
 
     private UserDAOImpl() {
-        // Carga los usuarios desde la base de datos o desde un archivo.
+        // Carga los usuarios desde la base de datos o desde un archivo
     }
 
     public static UserDAOImpl getInstance() {
