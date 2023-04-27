@@ -29,8 +29,9 @@
     <target name="export" depends="build" description="Export the project into a .jar file">
         <delete dir="${dist.dir}"/>
         <mkdir dir="${dist.dir}"/>
-        <jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" excludes="**/ServerStaff.class, **/ServerUser.class"/>
+        <jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" includes="**/*"/>
     </target>
+
 
     <target name="serverStaff" depends="build" description="Runs the ServerStaff">
         <java classname="rmi.server.impl.ServerStaff" classpathref="classpath" fork="true">

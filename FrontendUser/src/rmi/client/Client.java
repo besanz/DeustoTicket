@@ -1,66 +1,37 @@
 package client;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-
-import rmi.server.api.IUserService;
-import rmi.server.exceptions.InvalidUser;
+import java.rmi.RemoteException;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import remote.ServiceLocator;
+import gui.LoginUser;
 
 public class Client {
 
-	public static void main(String[] args) {
-		if (args.length != 3) {
-			System.out.println("uso: java [policy] [codebase] cliente.Cliente [host] [port] [server]");
-			System.exit(0);
-		}
+    public static void main(String[] args) {
+        if (args.length != 3) {
+            System.out.println("uso: java [policy] [codebase] cliente.Cliente [host] [port] [server]");
+            System.exit(0);
+        }
 
-		IUserService stubServer = null;
+        try {
+            // Establecer el aspecto visual de la aplicación para que se vea como el sistema operativo en el que se ejecuta
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
-		try {
-			Registry registry = LocateRegistry.getRegistry(((Integer.valueOf(args[1]))));
-			String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
-			stubServer = (IUserService) registry.lookup(name);
-			System.out.println("* Message coming from the server: '" + stubServer.sayHello() + "'");
+        String serverIP = args[0];
+        int serverPort = Integer.parseInt(args[1]);
+        String serverName = args[2];
+        String remoteUrl = String.format("rmi://%s:%d/%s", serverIP, serverPort, serverName);
 
-		} catch (Exception e) {
-			System.err.println("- Exception running the client: " + e.getMessage());
-			e.printStackTrace();
-		}
-
-		try {
-			stubServer.registrarUsuario("Test1", "Test1");
-			System.out.println("* Added user Test1");
-
-			stubServer.registrarUsuario("Test2", "Test2");
-			System.out.println("* Added user Test2");
-
-			stubServer.registrarUsuario("Test3", "Test3");
-			System.out.println("* Added user Test3");
-
-			stubServer.registrarUsuario("Test3", "Test3");
-			System.out.println("* Added user Test3");
-		} catch (InvalidUser iu) {
-			System.err.println("- Exception running the client: " + iu.getErrorMessage());
-		} catch (Exception e) {
-			System.err.println("- Exception running the client: " + e.getMessage());
-		}
-
-		try {
-			System.out.println(
-					"* Message coming from the server: " + stubServer.sayMessage("Test1", "Test1", "Message 1"));
-			System.out.println(
-					"* Message coming from the server: " + stubServer.sayMessage("Test2", "Test2", "Message 2"));
-			System.out.println(
-					"* Message coming from the server: " + stubServer.sayMessage("Test3", "Test3", "Message 3"));
-			System.out.println(
-					"* Message coming from the server: " + stubServer.sayMessage("Test3", "Test4", "Message 4"));
-			System.out.println(
-					"* Message coming from the server: " + stubServer.sayMessage("Test4", "Test4", "Message 5"));
-		} catch (InvalidUser iu) {
-			System.err.println("- Exception running the client: " + iu.getErrorMessage());
-		} catch (Exception e) {
-			System.err.println("- Exception running the client: " + e.getMessage());
-		}
-
-	}
+        try {
+            ServiceLocator serviceLocator = new ServiceLocator(remoteUrl);
+            LoginUser loginUser = new LoginUser(serviceLocator);
+            loginUser.setVisible(true);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 }

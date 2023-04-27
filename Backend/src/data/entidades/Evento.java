@@ -17,5 +17,4 @@ public class Evento implements Serializable {
     @Getter @Setter private Date fecha;
     @Getter @Setter private String portada;
     @Getter @Setter private int aforo;
-    
 }
