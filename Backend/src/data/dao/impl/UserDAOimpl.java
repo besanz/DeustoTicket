@@ -8,10 +8,12 @@ public class UserDAOImpl implements UserDAO {
     private static UserDAOImpl instance;
     private List<User> users;
 
+    // Constructor privado
     private UserDAOImpl() {
         // Carga los usuarios desde la base de datos o desde un archivo
     }
 
+    // Método estático para obtener la instancia de la clase
     public static UserDAOImpl getInstance() {
         if (instance == null) {
             instance = new UserDAOImpl();
@@ -27,3 +29,4 @@ public class UserDAOImpl implements UserDAO {
             .orElse(null);
     }
 }
+

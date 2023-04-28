@@ -10,6 +10,7 @@ import data.entidades.Cliente;
 import data.entidades.Staff;
 import rmi.server.api.IStaffService;
 import rmi.server.exceptions.InvalidUser;
+import service.*;
 
 public class ServerStaff extends UnicastRemoteObject implements IStaffService {
     private static ServerStaff instance;

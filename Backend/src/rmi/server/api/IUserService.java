@@ -4,15 +4,14 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import data.entidades.Cliente;
-import data.entidades.Artista;
-import data.entidades.Evento;
-import data.entidades.Ticket;
+import data.entidades.*;
 import rmi.server.exceptions.InvalidUser;
 
 public interface IUserService extends Remote {
     String sayHello() throws RemoteException;
     String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser;
+    User loginUser(String login, String password) throws RemoteException;
+
     
     void registrarUsuario(String login, String password) throws RemoteException, InvalidUser;
     boolean validarUsuario(String login, String password) throws RemoteException, InvalidUser;
@@ -28,7 +27,7 @@ public interface IUserService extends Remote {
     Evento obtenerEventoPorID(int id) throws RemoteException;
     List<Evento> obtenerEventosDestacados() throws RemoteException;
 
-    Ticket comprarTicket(int idPrecio, int idCliente) throws RemoteException;
+    //Ticket comprarTicket(int idPrecio, int idCliente) throws RemoteException;
 
 }
 

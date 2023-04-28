@@ -1,10 +1,10 @@
 package client;
 
 import java.rmi.RemoteException;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import remote.ServiceLocator;
-import gui.LoginUser;
+import remote.IRemoteFacade;
 
 public class Client {
 
@@ -14,24 +14,27 @@ public class Client {
             System.exit(0);
         }
 
-        try {
-            // Establecer el aspecto visual de la aplicación para que se vea como el sistema operativo en el que se ejecuta
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
         String serverIP = args[0];
         int serverPort = Integer.parseInt(args[1]);
         String serverName = args[2];
-        String remoteUrl = String.format("rmi://%s:%d/%s", serverIP, serverPort, serverName);
 
+        String remoteUrl = String.format("//%s:%d/%s", serverIP, serverPort, serverName);
+        System.out.println("Remote URL: " + remoteUrl);
+
+        IRemoteFacade stubServer = null;
         try {
-            ServiceLocator serviceLocator = new ServiceLocator(remoteUrl);
-            LoginUser loginUser = new LoginUser(serviceLocator);
-            loginUser.setVisible(true);
-        } catch (RemoteException e) {
+            Registry registry = LocateRegistry.getRegistry(serverPort);
+            stubServer = (IRemoteFacade) registry.lookup(serverName);
+
+            // A partir de aquí, puedes llamar a los métodos de stubServer como en el ejemplo de la clase.
+            // Por ejemplo:
+            System.out.println("* Message coming from the server: '" + stubServer.sayHello() + "'");
+
+        } catch (Exception e) {
+            System.err.println("- Exception running the client: " + e.getMessage());
             e.printStackTrace();
         }
+
+        // Aquí puedes agregar el resto del código de tu cliente, como en el ejemplo de la clase.
     }
 }

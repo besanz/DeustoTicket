@@ -4,24 +4,17 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
-
-import data.dao.UserDAO;
-import data.dao.impl.UserDAOImpl;
-import data.entidades.*;
+import data.entidades.User;
 import remote.IRemoteFacade;
-import remote.impl.RemoteFacadeImpl;
-import rmi.server.exceptions.InvalidUser;
 import rmi.server.api.IUserService;
+import service.UserService;
 
-
-
-public class ServerUser extends UnicastRemoteObject implements IRemoteFacade, IUserService {
+public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
     private static ServerUser instance;
-    private UserDAO userDAO;
+    private IUserService userService;
 
     private ServerUser() throws RemoteException {
-        userDAO = UserDAOImpl.getInstance();
+        userService = UserService.getInstance();
     }
 
     public static ServerUser getInstance() throws RemoteException {
@@ -31,107 +24,35 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade, IU
         return instance;
     }
 
-    @Override
     public User loginUser(String login, String password) throws RemoteException {
-        return userDAO.findByLoginAndPassword(login, password);
+        return userService.loginUser(login, password);
     }
 
-
-    @Override
     public String sayHello() throws RemoteException {
-        return "Hello!";
+        return userService.sayHello();
     }
 
-    @Override
-    public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser {
-        return "Hello, " + login + "! Your message is: " + message;
-    }
+    public static void main(String[] args) {
+        try {
+            String host = "127.0.0.1";
+            int port = 2000;
+            String serverName = "GuTicketServer";
 
-    @Override
-    public void registrarUsuario(String login, String password) throws RemoteException, InvalidUser {
-    }
+            //Establecer la política de seguridad para la conexión RMI
+            System.setProperty("java.security.policy", "../security/java.policy");
 
-    @Override
-    public boolean validarUsuario(String login, String password) throws RemoteException, InvalidUser {
-        return false;
-    }
+            System.setProperty("java.rmi.server.hostname", host);
+            IRemoteFacade objServer = ServerUser.getInstance();
 
-    @Override
-    public void registrarCliente(String login, String password) throws RemoteException, InvalidUser {
-    }
+            Registry registry = LocateRegistry.createRegistry(port);
+            System.out.println("RMI Registry created on port " + port);
 
-    @Override
-    public Cliente crearCliente(String nombre) throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public List<Cliente> obtenerClientes() throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public Cliente actualizarCliente(int id, String nombre) throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public boolean eliminarCliente(int id) throws RemoteException {
-        return false;
-    }
-
-    @Override
-    public List<Artista> obtenerArtistas() throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public List<Evento> obtenerEventos() throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public Evento obtenerEventoPorID(int id) throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public List<Evento> obtenerEventosDestacados() throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public Ticket comprarTicket(int idPrecio, int idCliente) throws RemoteException {
-        return null;
-    }
-
-public static void main(String[] args) {
-    // Verifica que se proporcionen los argumentos correctos: [host] [port] [server]
-    if (args.length != 3) {
-        System.out.println("usage: java [policy] [codebase] server.Server [host] [port] [server]");
-        System.exit(0);
-    }
-
-    // Construye el nombre del objeto remoto utilizando los argumentos proporcionados
-    String name = "//" + args[0] + ":" + args[1] + "/" + "GuTicketServer";
-
-    try {
-        // Obtiene la instancia de IRemoteFacade
-        IRemoteFacade objServer = ServerUser.getInstance();
-        
-        // Crea y configura el registro RMI con el número de puerto proporcionado
-        Registry registry = LocateRegistry.createRegistry(Integer.valueOf(args[1]));
-        
-        // Registra el objeto remoto en el registro RMI
-        registry.rebind(name, objServer);
-        
-        // Muestra un mensaje indicando que el servidor está activo y esperando conexiones
-        System.out.println("* Server '" + name + "' active and waiting...");
-    } catch (Exception e) {
-        System.err.println("- Exception running the server: " + e.getMessage());
-        e.printStackTrace();
+            registry.rebind(serverName, objServer);
+            System.out.println("* Server '" + "//" + host + ":" + port + "/" + serverName + "' active and waiting...");
+        } catch (Exception e) {
+            System.err.println("- Exception running the server: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
 
-
-} 
