@@ -1,18 +1,18 @@
+// StaffDAOImpl.java
 package data.dao.impl;
 
+import data.DBConfig;
 import data.dao.StaffDAO;
 import data.entidades.Staff;
-import java.util.ArrayList;
-import java.util.List;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+import javax.jdo.Transaction;
 
 public class StaffDAOImpl implements StaffDAO {
     private static StaffDAOImpl instance;
-    private List<Staff> staffs;
 
     // Constructor privado
     private StaffDAOImpl() {
-        // Carga los staff desde la base de datos o desde un archivo
-        staffs = new ArrayList<>();
     }
 
     // Método estático para obtener la instancia de la clase
@@ -22,12 +22,25 @@ public class StaffDAOImpl implements StaffDAO {
         }
         return instance;
     }
-    
+
     @Override
     public Staff findByUsernameAndPassword(String username, String password) {
-        return staffs.stream()
-                .filter(staff -> staff.getUsername().equals(username) && staff.getPassword().equals(password))
-                .findFirst()
-                .orElse(null);
+        PersistenceManager pm = DBConfig.getPersistenceManager();
+        Staff staff = null;
+        Transaction tx = pm.currentTransaction();
+        try {
+            tx.begin();
+            Query<Staff> query = pm.newNamedQuery(Staff.class, "findByUsernameAndPassword");
+            query.setFilter("username == u && password == p");
+            query.declareParameters("String u, String p");
+            staff = (Staff) query.execute(username, password);
+            tx.commit();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+        }
+        return staff;
     }
 }

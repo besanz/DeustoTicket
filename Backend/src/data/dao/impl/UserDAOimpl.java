@@ -1,16 +1,18 @@
+// UserDAOImpl.java
 package data.dao.impl;
 
+import data.DBConfig;
 import data.dao.UserDAO;
 import data.entidades.User;
-import java.util.List;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+import javax.jdo.Transaction;
 
 public class UserDAOImpl implements UserDAO {
     private static UserDAOImpl instance;
-    private List<User> users;
 
     // Constructor privado
     private UserDAOImpl() {
-        // Carga los usuarios desde la base de datos o desde un archivo
     }
 
     // Método estático para obtener la instancia de la clase
@@ -23,10 +25,22 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User findByLoginAndPassword(String login, String password) {
-        return users.stream()
-            .filter(user -> user.getEmail().equals(login) && user.getPassword().equals(password))
-            .findFirst()
-            .orElse(null);
+        PersistenceManager pm = DBConfig.getPersistenceManager();
+        User user = null;
+        Transaction tx = pm.currentTransaction();
+        try {
+            tx.begin();
+            Query<User> query = pm.newNamedQuery(User.class, "findByLoginAndPassword");
+            query.setFilter("email == e && password == p");
+            query.declareParameters("String e, String p");
+            user = (User) query.execute(login, password);
+            tx.commit();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+        }
+        return user;
     }
 }
-

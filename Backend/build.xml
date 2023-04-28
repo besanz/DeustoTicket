@@ -5,7 +5,7 @@
     <property name="build.dir" location="bin"/>
     <property name="dist.dir" location="dist"/>
     <property name="lib.dir" location="lib"/>
-    <property name="server.user" value="2000"/>
+    <property name="server.port" value="2000"/>
     <property name="server.IP" value="127.0.0.1"/>
     <property name="server.Name" value="GuTicketServer"/>
     <property name="export.file" value="server.jar"/>
@@ -14,15 +14,19 @@
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="*.jar"/>
         <pathelement location="${build.dir}"/>
+        <pathelement location="lib/mysql-connector-java-8.0.26.jar"/>
     </path>
 
     <target name="help">
-        <echo>Usage: ant [build | export | server]</echo>
+        <echo>Usage: ant [build | export | server | setupDatabase]</echo>
     </target>
 
     <target name="build" description="Builds the project">
         <delete dir="${build.dir}"/>
         <mkdir dir="${build.dir}"/>
+        <copy todir="${lib.dir}">
+            <fileset file="lib/mysql-connector-java-8.0.26.jar"/>
+        </copy>
         <javac srcdir="${source.dir}" destdir="${build.dir}" classpathref="classpath" deprecation="true" fork="true" includeAntRuntime="no"/>
     </target>
 
@@ -32,6 +36,9 @@
         <jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" includes="**/*"/>
     </target>
 
+    <target name="setupDatabase" depends="build" description="Sets up the database">
+        <java classname="data.db.DBSetup" classpathref="classpath" fork="true"/>
+    </target>
 
     <target name="serverUser" depends="build" description="Runs the Public Server">
         <java classname="rmi.server.impl.ServerUser" classpathref="classpath" fork="true">
