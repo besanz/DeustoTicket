@@ -40,11 +40,7 @@ Para compilar el proyecto, abre una terminal en el directorio raíz del backend 
 
 Para ejecutar el proyecto, ejecuta el siguiente comando en la misma terminal:
 
-```ant serverUser```
-
-o
-
-```ant serveStaff```
+```ant serverUser``` o ```ant serveStaff```
 
 Dependiendo de qué parte del servidor deseas ejecutar.
 
