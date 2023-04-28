@@ -13,7 +13,7 @@
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="*.jar"/>
         <pathelement location="${build.dir}"/>
-        <pathelement location="lib/serveruser.jar"/>
+        <pathelement location="lib/server.jar"/>
     </path>
     
     <target name="help">

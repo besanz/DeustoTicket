@@ -11,7 +11,6 @@ public interface IUserService extends Remote {
     String sayHello() throws RemoteException;
     String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser;
     User loginUser(String login, String password) throws RemoteException;
-
     
     void registrarUsuario(String login, String password) throws RemoteException, InvalidUser;
     boolean validarUsuario(String login, String password) throws RemoteException, InvalidUser;

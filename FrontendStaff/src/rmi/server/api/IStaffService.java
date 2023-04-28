@@ -4,16 +4,14 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import data.entidades.Artista;
-import data.entidades.Espacio;
-import data.entidades.Evento;
-import data.entidades.Precio;
+import data.entidades.*;
 import rmi.server.exceptions.InvalidUser;
 
 public interface IStaffService extends Remote {
     String sayHello() throws RemoteException;
     String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser;
     void registrarUsuario(String login, String password) throws RemoteException, InvalidUser;
+    Staff loginStaff(String login, String password) throws RemoteException;
 
     List<Artista> obtenerArtistas() throws RemoteException;
 
@@ -24,3 +22,4 @@ public interface IStaffService extends Remote {
     List<Espacio> obtenerEspacios() throws RemoteException;
 
 }
+

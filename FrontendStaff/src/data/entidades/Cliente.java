@@ -13,4 +13,3 @@ public class Cliente implements Serializable {
     @Getter @Setter private int id;
     @Getter @Setter private String nombre;
 }
-

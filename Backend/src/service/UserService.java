@@ -24,22 +24,17 @@ public class UserService implements IUserService {
         return instance;
     }
 
-    @Override
     public User loginUser(String login, String password) throws RemoteException {
         return userDAO.findByLoginAndPassword(login, password);
     }
 
-    @Override
     public String sayHello() throws RemoteException {
         return "Hello!";
     }
 
-    @Override
     public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser {
         return "Hello, " + login + "! Your message is: " + message;
     }
-
-    // Implementación de otros métodos de IUserService aquí
 
     @Override
     public void registrarUsuario(String login, String password) throws RemoteException, InvalidUser {
@@ -104,5 +99,4 @@ public class UserService implements IUserService {
         // Implementa la lógica para obtener eventos destacados aquí
         return null;
     }
-
 }

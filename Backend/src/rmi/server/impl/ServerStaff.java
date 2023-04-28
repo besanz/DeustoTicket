@@ -4,70 +4,59 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
 
-import data.entidades.Cliente;
-import data.entidades.Staff;
-import rmi.server.api.IStaffService;
+import data.entidades.*;
+import remote.IRemoteFacade;
+import rmi.server.api.*;
 import rmi.server.exceptions.InvalidUser;
-import service.*;
+import service.StaffService;
 
 public class ServerStaff extends UnicastRemoteObject implements IStaffService {
-    private static ServerStaff instance;
+    private static final long serialVersionUID = 1L;
+    private StaffService staffService;
 
-    protected ServerStaff() throws RemoteException {
+    private ServerStaff() throws RemoteException {
         super();
+        staffService = new StaffService();
     }
 
     public static ServerStaff getInstance() throws RemoteException {
-        if (instance == null) {
-            instance = new ServerStaff();
-        }
-        return instance;
+        return new ServerStaff();
+    }
+
+    public String sayHello() throws RemoteException {
+        return staffService.sayHello();
+    }
+
+    public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser {
+        return staffService.sayMessage(login, password, message);
     }
 
     @Override
-    public Staff loginStaff(String username, String password) throws RemoteException, InvalidUser {
-        return null;
-    }
-
-    @Override
-    public Cliente registrarCliente(String nombre) throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public List<Cliente> obtenerClientes() throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public Cliente actualizarCliente(int id, String nombre) throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public boolean eliminarCliente(int id) throws RemoteException {
-        return false;
+    public Staff loginStaff(String login, String password) throws RemoteException {
+        return staffService.loginStaff(login, password);
     }
 
     public static void main(String[] args) {
-        if (args.length != 3) {
-            System.out.println("usage: java [policy] [codebase] server.Server [host] [port] [server]");
-            System.exit(0);
-        }
-
-        String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
-
         try {
-            IStaffService objServer = new ServerStaff();
-            Registry registry = LocateRegistry.createRegistry((Integer.valueOf(args[1])));
-            registry.rebind(name, objServer);
-            System.out.println("* Server '" + name + "' active and waiting...");
+            String host = "127.0.0.1";
+            int port = 2000;
+            String serverName = "GuTicketServer";
+
+            //Establecer la política de seguridad para la conexión RMI
+            System.setProperty("java.security.policy", "../security/java.policy");
+
+            System.setProperty("java.rmi.server.hostname", host);
+            IRemoteFacade objServer = ServerUser.getInstance();
+
+            Registry registry = LocateRegistry.createRegistry(port);
+            System.out.println("RMI Registry created on port " + port);
+
+            registry.rebind(serverName, objServer);
+            System.out.println("* Server '" + "//" + host + ":" + port + "/" + serverName + "' active and waiting...");
         } catch (Exception e) {
             System.err.println("- Exception running the server: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
 }

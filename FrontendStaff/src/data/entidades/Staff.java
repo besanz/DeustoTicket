@@ -12,6 +12,6 @@ import lombok.*;
 public class Staff implements Serializable {
     @PrimaryKey
     @Getter @Setter private int id;
-    @Getter @Setterprivate String nombre;
-
+    @Getter @Setter private String username;
+    @Getter @Setter private String password;
 }

@@ -1,22 +1,20 @@
 package controller;
 
-import service.LoginAppService;
+import service.UserService;
 import data.entidades.User;
 import remote.ServiceLocator;
 import java.rmi.RemoteException;
 
 public class LoginController {
-    private ServiceLocator serviceLocator;
-    private LoginAppService loginAppService;
+    private UserService userService;
 
     public LoginController(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-        this.loginAppService = LoginAppService.getInstance(serviceLocator.getRemoteFacade());
+        this.userService = UserService.getInstance();
     }
 
     public User loginUser(String login, String password) {
         try {
-            return loginAppService.loginUser(login, password);
+            return userService.loginUser(login, password);
         } catch (RemoteException e) {
             e.printStackTrace();
             return null;

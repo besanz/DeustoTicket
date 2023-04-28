@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="help" name="GuTicketServerUser">
+<project basedir="." default="help" name="GuTicketServer">
     <property environment="env"/>
     <property name="source.dir" location="src"/>
     <property name="build.dir" location="bin"/>
     <property name="dist.dir" location="dist"/>
     <property name="lib.dir" location="lib"/>
-    <property name="server.port" value="2000"/>
+    <property name="server.user" value="2000"/>
     <property name="server.IP" value="127.0.0.1"/>
     <property name="server.Name" value="GuTicketServer"/>
-    <property name="export.file" value="serveruser.jar"/>
+    <property name="export.file" value="server.jar"/>
     <property name="policy.file" location="security/java.policy"/>
 
     <path id="classpath">
@@ -33,8 +33,8 @@
     </target>
 
 
-    <target name="serverStaff" depends="build" description="Runs the ServerStaff">
-        <java classname="rmi.server.impl.ServerStaff" classpathref="classpath" fork="true">
+    <target name="serverUser" depends="build" description="Runs the Public Server">
+        <java classname="rmi.server.impl.ServerUser" classpathref="classpath" fork="true">
             <jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
             <jvmarg value="-Djava.security.policy=${policy.file}"/>
             <arg value="${server.IP}"/>
@@ -42,8 +42,8 @@
             <arg value="${server.Name}"/>
         </java>
     </target>
-    <target name="serverUser" depends="build" description="Runs the ServerUser">
-        <java classname="rmi.server.impl.ServerUser" classpathref="classpath" fork="true">
+    <target name="serverStaff" depends="build" description="Runs the Admin Server">
+        <java classname="rmi.server.impl.ServerStaff" classpathref="classpath" fork="true">
             <jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
             <jvmarg value="-Djava.security.policy=${policy.file}"/>
             <arg value="${server.IP}"/>

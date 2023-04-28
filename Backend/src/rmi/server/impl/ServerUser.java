@@ -4,9 +4,11 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import data.entidades.User;
+
+import data.entidades.*;
 import remote.IRemoteFacade;
-import rmi.server.api.IUserService;
+import rmi.server.api.*;
+import rmi.server.exceptions.InvalidUser;
 import service.UserService;
 
 public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
@@ -28,9 +30,20 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
         return userService.loginUser(login, password);
     }
 
+    @Override
+    public Staff loginStaff(String login, String password) throws RemoteException {
+        System.out.println("No es posible aqui");
+        return null;
+    }
+
     public String sayHello() throws RemoteException {
         return userService.sayHello();
     }
+
+    public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser {
+        return userService.sayMessage(login, password, message);
+    }
+
 
     public static void main(String[] args) {
         try {

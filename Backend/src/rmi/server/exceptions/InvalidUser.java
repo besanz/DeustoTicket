@@ -6,7 +6,7 @@ public class InvalidUser extends Exception
 
     public InvalidUser() {
         super();
-        this.message = "";        
+        this.message = "Invalid User";        
     }
 
     public InvalidUser(String exceptionMessage) {
