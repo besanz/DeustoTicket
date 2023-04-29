@@ -5,10 +5,10 @@ import data.entidades.Staff;
 import remote.ServiceLocator;
 import java.rmi.RemoteException;
 
-public class LoginController {
+public class StaffController {
     private StaffService staffService;
 
-    public LoginController(ServiceLocator serviceLocator) {
+    public StaffController(ServiceLocator serviceLocator) {
         this.staffService = StaffService.getInstance();
     }
 

@@ -13,13 +13,15 @@
     <property name="policy.file" location="security/java.policy"/>
 
     <path id="classpath">
-        <fileset dir="${lib.dir}" includes="*.jar"/>
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
         <pathelement location="${build.dir}"/>
-        <pathelement location="lib/mysql-connector-java-8.0.26.jar"/>
+        <pathelement location="resources"/>
     </path>
 
     <target name="help">
-        <echo>Usage: ant [build | export | server | setupDatabase]</echo>
+        <echo>Uso: ant [build | export | server]</echo>
     </target>
 
     <target name="build" description="Builds the project">
@@ -31,15 +33,24 @@
         <javac srcdir="${source.dir}" destdir="${build.dir}" classpathref="classpath" deprecation="true" fork="true" includeAntRuntime="no"/>
     </target>
 
+    <target name="enhance" depends="build" description="Enhance the project classes">
+    	<taskdef name="enhancer" classpathref="classpath" classname="org.datanucleus.enhancer.EnhancerTask"/>
+   		<enhancer classpathref="classpath" failonerror="true">
+            <sysproperty key="log4j.configuration" value="file:resources/log4j.properties"/>
+            <fileset dir="${build.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+   		</enhancer>
+    </target>
+
     <target name="export" depends="build" description="Export the project into a .jar file">
         <delete dir="${dist.dir}"/>
         <mkdir dir="${dist.dir}"/>
-        <jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" includes="**/*"/>
+        <jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" includes="**/*">
+            <zipfileset dir="resources" includes="**/*" prefix=""/>
+        </jar>
     </target>
 
-    <target name="setupDatabase" depends="build" description="Sets up the database">
-        <java classname="data.db.DBSetup" classpathref="classpath" fork="true"/>
-    </target>
 
     <target name="serverUser" depends="build" description="Runs the Public Server">
         <java classname="rmi.server.impl.ServerUser" classpathref="classpath" fork="true">
@@ -59,4 +70,5 @@
             <arg value="${server.Name}"/>
         </java>
     </target>
+
 </project>

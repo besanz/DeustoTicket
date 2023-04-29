@@ -1,6 +1,5 @@
 package data.entidades;
 
-
 import java.io.Serializable;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;

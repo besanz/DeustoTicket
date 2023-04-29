@@ -3,8 +3,10 @@ package rmi.client;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+
 import remote.ServiceLocator;
 import remote.IRemoteFacade;
+import gui.LoginUser;
 
 public class Client {
 
@@ -14,25 +16,33 @@ public class Client {
             System.exit(0);
         }
 
-        String serverIP = args[0];
-        int serverPort = Integer.parseInt(args[1]);
-        String serverName = args[2];
+        String serverIP = "127.0.0.1";
+        int serverPort = 2000;
+        String serverName = "GuTicketServer";
 
         String remoteUrl = String.format("//%s:%d/%s", serverIP, serverPort, serverName);
         System.out.println("Remote URL: " + remoteUrl);
 
         IRemoteFacade stubServer = null;
+        final ServiceLocator serviceLocator;
         try {
             Registry registry = LocateRegistry.getRegistry(serverPort);
             stubServer = (IRemoteFacade) registry.lookup(serverName);
 
             System.out.println("* Message coming from the server: '" + stubServer.sayHello() + "'");
+            serviceLocator = new ServiceLocator(registry);
 
         } catch (Exception e) {
             System.err.println("- Exception running the client: " + e.getMessage());
             e.printStackTrace();
+            return;
         }
 
-        // Agregar el resto del código de tu cliente.
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new LoginUser(serviceLocator).setVisible(true);
+            }
+        });
+
     }
 }

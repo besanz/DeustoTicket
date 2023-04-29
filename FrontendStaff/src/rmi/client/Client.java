@@ -23,6 +23,7 @@ public class Client {
 
         IRemoteFacade stubServer = null;
 
+
         try {
             Registry registry = LocateRegistry.getRegistry(serverPort);
             stubServer = (IRemoteFacade) registry.lookup(serverName);

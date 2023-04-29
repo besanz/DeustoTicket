@@ -27,7 +27,11 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
     }
 
     public User loginUser(String login, String password) throws RemoteException {
-        return userService.loginUser(login, password);
+        User user = userService.loginUser(login, password);
+        if (user != null) {
+            System.out.println("User " + login + " has logged in.");
+        }
+        return user;
     }
 
     @Override
@@ -51,7 +55,6 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
             int port = 2000;
             String serverName = "GuTicketServer";
 
-            //Establecer la política de seguridad para la conexión RMI
             System.setProperty("java.security.policy", "../security/java.policy");
 
             System.setProperty("java.rmi.server.hostname", host);
@@ -62,6 +65,7 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
 
             registry.rebind(serverName, objServer);
             System.out.println("* Server '" + "//" + host + ":" + port + "/" + serverName + "' active and waiting...");
+    
         } catch (Exception e) {
             System.err.println("- Exception running the server: " + e.getMessage());
             e.printStackTrace();

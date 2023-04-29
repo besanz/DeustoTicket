@@ -25,7 +25,13 @@ public class UserService implements IUserService {
     }
 
     public User loginUser(String login, String password) throws RemoteException {
-        return userDAO.findByLoginAndPassword(login, password);
+        User user = userDAO.findByLoginAndPassword(login, password);
+        if (user == null) {
+            System.out.println("UserService: User not found in the database.");
+        } else {
+            System.out.println("UserService: User found in the database.");
+        }
+        return user;
     }
 
     public String sayHello() throws RemoteException {

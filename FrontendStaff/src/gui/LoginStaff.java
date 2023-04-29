@@ -1,16 +1,16 @@
 package gui;
 
-import controller.LoginController;
+import controller.StaffController;
 import data.entidades.*;
 import remote.ServiceLocator;
 import javax.swing.*;
 
 public class LoginStaff extends javax.swing.JFrame {
-    private LoginController loginController;
+    private StaffController staffController;
 
     public LoginStaff(ServiceLocator serviceLocator) {
         initComponents();
-        loginController = new LoginController(serviceLocator);
+        staffController = new StaffController(serviceLocator);
     }
 
     private void initComponents() {
@@ -28,7 +28,7 @@ public class LoginStaff extends javax.swing.JFrame {
         String login = jTextFieldLogin.getText();
         String password = new String(jPasswordField.getPassword());
 
-        Staff staff = loginController.loginStaff(login, password);
+        Staff staff = staffController.loginStaff(login, password);
 
         if (staff != null) {
             JOptionPane.showMessageDialog(this, "Inicio de sesion exitoso");

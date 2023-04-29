@@ -1,4 +1,3 @@
-// IUserDAO.java
 package data.dao.impl;
 
 import data.DBConfig;
@@ -7,15 +6,16 @@ import data.entidades.User;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+import java.util.List;
 
 public class UserDAO implements IUserDAO {
     private static UserDAO instance;
 
-    // Constructor privado
+    // Private constructor
     private UserDAO() {
     }
 
-    // Método estático para obtener la instancia de la clase
+    // Static method to get the instance of the class
     public static UserDAO getInstance() {
         if (instance == null) {
             instance = new UserDAO();
@@ -23,24 +23,34 @@ public class UserDAO implements IUserDAO {
         return instance;
     }
 
-    @Override
-    public User findByLoginAndPassword(String login, String password) {
-        PersistenceManager pm = DBConfig.getPersistenceManager();
+    public User findByLoginAndPassword(String email, String password) {
         User user = null;
+        PersistenceManager pm = DBConfig.getPersistenceManager();
         Transaction tx = pm.currentTransaction();
+
         try {
             tx.begin();
             Query<User> query = pm.newNamedQuery(User.class, "findByLoginAndPassword");
-            query.setFilter("email == e && password == p");
-            query.declareParameters("String e, String p");
-            user = (User) query.execute(login, password);
+            List<User> results = (List<User>) query.execute(email, password);
+
+            if (!results.isEmpty()) {
+                user = results.get(0);
+                System.out.println("UserDAO: User found in the database.");
+            } else {
+                System.out.println("UserDAO: User not found in the database.");
+            }
+
             tx.commit();
+        } catch (Exception e) {
+            System.err.println("UserDAO: Exception occurred while finding user by email and password.");
+            e.printStackTrace();
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
             }
             pm.close();
         }
+
         return user;
     }
 }
