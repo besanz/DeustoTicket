@@ -5,7 +5,7 @@
     <property name="build.dir" location="bin"/>
     <property name="dist.dir" location="dist"/>
     <property name="lib.dir" location="lib"/>
-    <property name="server.port" value="2000"/> 
+    <property name="staff.port" value="1999"/> 
     <property name="server.IP" value="127.0.0.1"/> 
     <property name="server.Name" value="GuTicketServer"/>
     <property name="policy.file" location="security/java.policy"/>   
@@ -27,10 +27,10 @@
     </target>
 
     <target name="client" depends="build" description="Runs the Client">
-        <java classname="client.Client" classpathref="classpath" fork="true">
+        <java classname="rmi.client.Client" classpathref="classpath" fork="true">
             <jvmarg value="-Djava.security.policy=${policy.file}"/>          
             <arg value="${server.IP}"/> 
-            <arg value="${server.port}"/> 
+            <arg value="${staff.port}"/> 
             <arg value="${server.Name}"/> 
         </java>
     </target>

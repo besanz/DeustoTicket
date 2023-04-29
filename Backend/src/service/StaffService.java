@@ -1,8 +1,9 @@
 package service;
 
 import java.rmi.RemoteException;
-import data.dao.StaffDAO;
-import data.dao.impl.StaffDAOImpl;
+
+import data.dao.IStaffDAO;
+import data.dao.impl.StaffDAO;
 import data.entidades.Staff;
 import rmi.server.api.IStaffService;
 import rmi.server.exceptions.InvalidUser;
@@ -12,7 +13,7 @@ public class StaffService implements IStaffService {
     private static StaffService instance;
 
     public StaffService() {
-        staffDAO = StaffDAOImpl.getInstance();
+        staffDAO = StaffDAO.getInstance();
     }
 
     public static StaffService getInstance() {

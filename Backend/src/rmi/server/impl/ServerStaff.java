@@ -40,7 +40,7 @@ public class ServerStaff extends UnicastRemoteObject implements IStaffService {
     public static void main(String[] args) {
         try {
             String host = "127.0.0.1";
-            int port = 2000;
+            int port = 1999;
             String serverName = "GuTicketServer";
 
             //Establecer la política de seguridad para la conexión RMI

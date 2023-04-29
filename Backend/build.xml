@@ -5,6 +5,7 @@
     <property name="build.dir" location="bin"/>
     <property name="dist.dir" location="dist"/>
     <property name="lib.dir" location="lib"/>
+    <property name="staff.port" value="1999"/>
     <property name="server.port" value="2000"/>
     <property name="server.IP" value="127.0.0.1"/>
     <property name="server.Name" value="GuTicketServer"/>
@@ -54,7 +55,7 @@
             <jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
             <jvmarg value="-Djava.security.policy=${policy.file}"/>
             <arg value="${server.IP}"/>
-            <arg value="${server.port}"/>
+            <arg value="${staff.port}"/>
             <arg value="${server.Name}"/>
         </java>
     </target>

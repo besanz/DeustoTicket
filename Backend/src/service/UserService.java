@@ -3,8 +3,8 @@ package service;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import data.dao.UserDAO;
-import data.dao.impl.UserDAOImpl;
+import data.dao.IUserDAO;
+import data.dao.impl.UserDAO;
 import data.entidades.*;
 import rmi.server.exceptions.InvalidUser;
 import rmi.server.api.IUserService;
@@ -14,7 +14,7 @@ public class UserService implements IUserService {
     private static UserService instance;
 
     public UserService() {
-        userDAO = UserDAOImpl.getInstance();
+        userDAO = UserDAO.getInstance();
     }
 
     public static UserService getInstance() {

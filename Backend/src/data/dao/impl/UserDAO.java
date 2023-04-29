@@ -1,24 +1,24 @@
-// UserDAOImpl.java
+// IUserDAO.java
 package data.dao.impl;
 
 import data.DBConfig;
-import data.dao.UserDAO;
+import data.dao.IUserDAO;
 import data.entidades.User;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
-public class UserDAOImpl implements UserDAO {
-    private static UserDAOImpl instance;
+public class UserDAO implements IUserDAO {
+    private static UserDAO instance;
 
     // Constructor privado
-    private UserDAOImpl() {
+    private UserDAO() {
     }
 
     // Método estático para obtener la instancia de la clase
-    public static UserDAOImpl getInstance() {
+    public static UserDAO getInstance() {
         if (instance == null) {
-            instance = new UserDAOImpl();
+            instance = new UserDAO();
         }
         return instance;
     }

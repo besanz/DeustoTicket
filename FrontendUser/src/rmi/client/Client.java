@@ -1,4 +1,4 @@
-package client;
+package rmi.client;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -26,8 +26,6 @@ public class Client {
             Registry registry = LocateRegistry.getRegistry(serverPort);
             stubServer = (IRemoteFacade) registry.lookup(serverName);
 
-            // A partir de aquí, puedes llamar a los métodos de stubServer como en el ejemplo de la clase.
-            // Por ejemplo:
             System.out.println("* Message coming from the server: '" + stubServer.sayHello() + "'");
 
         } catch (Exception e) {
@@ -35,6 +33,6 @@ public class Client {
             e.printStackTrace();
         }
 
-        // Aquí puedes agregar el resto del código de tu cliente, como en el ejemplo de la clase.
+        // Agregar el resto del código de tu cliente.
     }
 }

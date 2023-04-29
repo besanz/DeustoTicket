@@ -1,24 +1,24 @@
-// StaffDAOImpl.java
+// StaffDAO.java
 package data.dao.impl;
 
 import data.DBConfig;
-import data.dao.StaffDAO;
+import data.dao.IStaffDAO;
 import data.entidades.Staff;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
-public class StaffDAOImpl implements StaffDAO {
-    private static StaffDAOImpl instance;
+public class StaffDAO implements IStaffDAO {
+    private static StaffDAO instance;
 
     // Constructor privado
-    private StaffDAOImpl() {
+    private StaffDAO() {
     }
 
     // Método estático para obtener la instancia de la clase
-    public static StaffDAOImpl getInstance() {
+    public static StaffDAO getInstance() {
         if (instance == null) {
-            instance = new StaffDAOImpl();
+            instance = new StaffDAO();
         }
         return instance;
     }
