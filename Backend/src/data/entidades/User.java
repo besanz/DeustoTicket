@@ -1,5 +1,6 @@
 package data.entidades;
 
+import java.io.Serializable;
 import javax.jdo.annotations.*;
 import lombok.*;
 
@@ -10,8 +11,8 @@ import lombok.*;
     name="findByLoginAndPassword",
     value="SELECT FROM data.entidades.User WHERE email == e && password == p PARAMETERS String e, String p"
 )
-public class User {
-    @PrimaryKey
+public class User implements Serializable{
+    @PrimaryKey @Persistent
     @Getter @Setter private String dni;
 
     @Persistent
@@ -26,7 +27,5 @@ public class User {
 
     @Persistent
     @Getter @Setter private String password;
-
-    @Persistent
-    @Getter @Setter private Ticket ticket;
 }
+

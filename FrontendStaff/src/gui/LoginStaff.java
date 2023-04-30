@@ -1,12 +1,15 @@
 package gui;
 
 import controller.StaffController;
-import data.entidades.*;
+import data.entidades.Staff;
 import remote.ServiceLocator;
 import javax.swing.*;
+import java.awt.*;
 
 public class LoginStaff extends javax.swing.JFrame {
     private StaffController staffController;
+    private JTextField jTextFieldLogin;
+    private JPasswordField jPasswordField;
 
     public LoginStaff(ServiceLocator serviceLocator) {
         initComponents();
@@ -14,14 +17,54 @@ public class LoginStaff extends javax.swing.JFrame {
     }
 
     private void initComponents() {
-        // Crea e inicializa los componentes faltantes
-        jTextFieldLogin = new JTextField();
-        jPasswordField = new JPasswordField();
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("GuTicket - Admin");
+
+        // Create components
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JLabel titleLabel = new JLabel("Iniciar sesion en GuTicket");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        mainPanel.add(titleLabel, gbc);
+
+        JLabel staffLabel = new JLabel("Usuario:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        mainPanel.add(staffLabel, gbc);
+
+        jTextFieldLogin = new JTextField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        mainPanel.add(jTextFieldLogin, gbc);
+
+        JLabel passwordLabel = new JLabel("Password:");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        mainPanel.add(passwordLabel, gbc);
+
+        jPasswordField = new JPasswordField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        mainPanel.add(jPasswordField, gbc);
+
         JButton jButtonLogin = new JButton("Iniciar sesion");
         jButtonLogin.addActionListener(evt -> jButtonLoginActionPerformed(evt));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        mainPanel.add(jButtonLogin, gbc);
 
-        // Añade los componentes a la ventana y establece su diseño
-        // ...
+        getContentPane().add(mainPanel);
+        pack();
     }
 
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {
@@ -31,15 +74,12 @@ public class LoginStaff extends javax.swing.JFrame {
         Staff staff = staffController.loginStaff(login, password);
 
         if (staff != null) {
+            System.out.println("LoginStaff: Login successful.");
             JOptionPane.showMessageDialog(this, "Inicio de sesion exitoso");
-            // Lanza la ventana principal y cierra la ventana de inicio de sesión
+            // Lanza la ventana principal y cierra la ventana de inicio de sesion
         } else {
+            System.out.println("LoginStaff: Login failed.");
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
         }
     }
-
-
-    // Aquí va el código generado por el diseñador de la ventana
-    private JTextField jTextFieldLogin;
-    private JPasswordField jPasswordField;
 }

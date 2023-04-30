@@ -14,7 +14,13 @@ public class StaffController {
 
     public Staff loginStaff(String login, String password) {
         try {
-            return staffService.loginStaff(login, password); // Directly call loginStaff() method on staffService object
+            Staff staff = staffService.loginStaff(login, password);
+            if (staff == null) {
+                System.out.println("StaffController: Staff not found in the database.");
+            } else {
+                System.out.println("StaffController: Staff found in the database.");
+            }
+            return staff;
         } catch (RemoteException e) {
             e.printStackTrace();
             return null;

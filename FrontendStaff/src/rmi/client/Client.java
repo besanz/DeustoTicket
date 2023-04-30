@@ -3,8 +3,10 @@ package rmi.client;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+
 import remote.ServiceLocator;
 import remote.IRemoteFacade;
+import gui.LoginStaff;
 
 public class Client {
 
@@ -22,19 +24,24 @@ public class Client {
         System.out.println("Remote URL: " + remoteUrl);
 
         IRemoteFacade stubServer = null;
-
-
+        final ServiceLocator serviceLocator;
         try {
             Registry registry = LocateRegistry.getRegistry(serverPort);
             stubServer = (IRemoteFacade) registry.lookup(serverName);
 
-            System.out.println("* Message coming from the admin server: Hello, Admin!");
+            System.out.println("* Message coming from the admin server: '" + stubServer.sayHello() + "'");
+            serviceLocator = new ServiceLocator(registry);
 
         } catch (Exception e) {
             System.err.println("- Exception running the client: " + e.getMessage());
             e.printStackTrace();
+            return;
         }
 
-        // Agregar el resto del código de tu cliente, como en el ejemplo de la clase.
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new LoginStaff(serviceLocator).setVisible(true);
+            }
+        });
     }
 }
