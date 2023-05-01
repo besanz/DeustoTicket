@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
-             version="2.1">
-    <persistence-unit name="myPersistenceUnit">
-        <class>data.entidades.User</class>
-        <class>data.entidades.Staff</class>
-        <properties>
-            <property name="javax.jdo.PersistenceManagerFactoryClass" value="org.datanucleus.api.jdo.JDOPersistenceManagerFactory"/>
-            <property name="javax.jdo.option.ConnectionURL" value="jdbc:mysql://db4free.net:3306/guticket"/>
-            <property name="javax.jdo.option.ConnectionDriverName" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.jdo.option.ConnectionUserName" value="guticket"/>
-            <property name="javax.jdo.option.ConnectionPassword" value="guticket23"/>
-            <property name="datanucleus.schema.autoCreateAll" value="true"/>
-        </properties>
-    </persistence-unit>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+  <persistence-unit name="MyPersistenceUni">
+    <class>data.entidades.User</class>
+    <class>data.entidades.Staff</class>
+    <exclude-unlisted-classes/>
+    <properties>
+        <property name="javax.jdo.PersistenceManagerFactoryClass" value="org.datanucleus.api.jdo.JDOPersistenceManagerFactory"/>
+        <property name="javax.jdo.option.ConnectionDriverName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="javax.jdo.option.ConnectionURL" value="jdbc:mysql://localhost:3306/guticket?useSSL=false"/>
+        <property name="javax.jdo.option.ConnectionUserName" value="guticket"/>
+        <property name="javax.jdo.option.ConnectionPassword" value="guticket23"/>
+        <property name="datanucleus.schema.autoCreateAll" value="true"/>
+        <property name="datanucleus.validateTables" value="false"/>
+        <property name="datanucleus.validateColumns" value="false"/>
+        <property name="datanucleus.validateConstraints" value="false"/>
+    </properties>
+  </persistence-unit>
 </persistence>

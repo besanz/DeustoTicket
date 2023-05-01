@@ -11,16 +11,23 @@ import java.util.List;
 public class UserDAO implements IUserDAO {
     private static UserDAO instance;
 
-    // Private constructor
     private UserDAO() {
     }
 
-    // Static method to get the instance of the class
     public static UserDAO getInstance() {
         if (instance == null) {
             instance = new UserDAO();
         }
         return instance;
+    }
+
+    public void addUser(User user) {
+    PersistenceManager pm = DBConfig.getPersistenceManager();
+        try {
+            pm.makePersistent(user);
+        } finally {
+            pm.close();
+        }
     }
 
     public User findByLoginAndPassword(String email, String password) {
@@ -43,6 +50,64 @@ public class UserDAO implements IUserDAO {
             tx.commit();
         } catch (Exception e) {
             System.err.println("UserDAO: Exception occurred while finding user by email and password.");
+            e.printStackTrace();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+        }
+
+        return user;
+    }
+
+    public User findByEmail(String email) {
+        User user = null;
+        PersistenceManager pm = DBConfig.getPersistenceManager();
+        Transaction tx = pm.currentTransaction();
+
+        try {
+            tx.begin();
+            Query<User> query = pm.newNamedQuery(User.class, "findByEmail");
+            query.setUnique(true);
+            user = (User) query.execute(email);
+
+            if (user != null) {
+                System.out.println("UserDAO: User found by email.");
+            } else {
+                System.out.println("UserDAO: User not found by email.");
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            System.err.println("UserDAO: Exception occurred while finding user by email.");
+            e.printStackTrace();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+        }
+
+        return user;
+    }
+
+    public User registerUser(User user) {
+        if (findByEmail(user.getEmail()) != null) {
+            System.err.println("UserDAO: A user with this email already exists.");
+            return null;
+        }
+
+        PersistenceManager pm = DBConfig.getPersistenceManager();
+        Transaction tx = pm.currentTransaction();
+
+        try {
+            tx.begin();
+            pm.makePersistent(user);
+            tx.commit();
+            System.out.println("UserDAO: User registered successfully.");
+        } catch (Exception e) {
+            System.err.println("UserDAO: Exception occurred while registering user.");
             e.printStackTrace();
         } finally {
             if (tx.isActive()) {

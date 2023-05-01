@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="help" name="GuTicketClient">    
+<project basedir="." default="help" name="FrontendUser">    
     <property environment="env"/>
     <property name="source.dir" location="src"/>
     <property name="build.dir" location="bin"/>
@@ -39,7 +39,11 @@
     </target>
 
     <target name="client" depends="build" description="Runs the Client">
-        <java classname="rmi.client.Client" classpathref="classpath" fork="true">
+        <java classname="rmi.client.Client" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="../Backend/dist/server.jar"/>
+            </classpath>
             <jvmarg value="-Djava.security.policy=${policy.file}"/>          
             <arg value="${server.IP}"/> 
             <arg value="${server.port}"/> 
@@ -50,5 +54,4 @@
     <target name="import-server-jar" description="Imports server.jar from the backend project">
     <copy file="../Backend/dist/server.jar" tofile="${server.jar.location}" overwrite="true"/>
     </target>
-
 </project>

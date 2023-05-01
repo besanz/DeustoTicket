@@ -8,6 +8,7 @@ import java.awt.*;
 
 public class LoginUser extends javax.swing.JFrame {
     private UserController userController;
+    private ServiceLocator serviceLocator;
     private JTextField jTextFieldLogin;
     private JPasswordField jPasswordField;
 
@@ -15,6 +16,7 @@ public class LoginUser extends javax.swing.JFrame {
         initComponents();
         userController = new UserController(serviceLocator);
     }
+    
 
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,9 +65,18 @@ public class LoginUser extends javax.swing.JFrame {
         gbc.gridwidth = 2;
         mainPanel.add(jButtonLogin, gbc);
 
+        // Add the "Registrarse" button
+        JButton jButtonRegister = new JButton("Registrarse");
+        jButtonRegister.addActionListener(evt -> jButtonRegisterActionPerformed(evt));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        mainPanel.add(jButtonRegister, gbc);
+
         getContentPane().add(mainPanel);
         pack();
     }
+
 
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String login = jTextFieldLogin.getText();
@@ -81,5 +92,11 @@ public class LoginUser extends javax.swing.JFrame {
             System.out.println("LoginUser: Login failed.");
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
         }
+    }
+
+    private void jButtonRegisterActionPerformed(java.awt.event.ActionEvent evt) {
+        RegisterUser registerUserWindow = new RegisterUser(serviceLocator);
+        registerUserWindow.setVisible(true);
+        this.dispose();
     }
 }

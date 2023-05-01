@@ -13,4 +13,5 @@
         <property name="datanucleus.validateColumns" value="false"/>
         <property name="datanucleus.validateConstraints" value="false"/>
     </persistence-manager-factory>
+        <package name="data.entidades"/>
 </jdoconfig>

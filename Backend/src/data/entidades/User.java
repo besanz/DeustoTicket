@@ -7,10 +7,16 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @PersistenceCapable
-@Query(
-    name="findByLoginAndPassword",
-    value="SELECT FROM data.entidades.User WHERE email == e && password == p PARAMETERS String e, String p"
-)
+@Queries({
+    @Query(
+        name="findByLoginAndPassword",
+        value="SELECT FROM data.entidades.User WHERE email == e && password == p PARAMETERS String e, String p"
+    ),
+    @Query(
+        name="findByEmail",
+        value="SELECT FROM data.entidades.User WHERE email == e PARAMETERS String e"
+    )
+})
 public class User implements Serializable{
     @PrimaryKey @Persistent
     @Getter @Setter private String dni;

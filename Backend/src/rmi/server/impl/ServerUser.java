@@ -50,6 +50,11 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
         return userService.sayMessage(login, password, message);
     }
 
+    public void registerUser(String dni, String nombre, String apellidos, String email, String password) throws RemoteException, InvalidUser {
+        userService.registerUser(dni, nombre, apellidos, email, password);
+        System.out.println("User " + email + " has registered.");
+    }
+
 
     public static void main(String[] args) {
         try {

@@ -10,11 +10,11 @@ import rmi.server.exceptions.InvalidUser;
 import rmi.server.api.IUserService;
 
 public class UserService implements IUserService {
-    private UserDAO userDAO;
     private static UserService instance;
+    private final UserDAO userDAO;
 
-    public UserService() {
-        userDAO = UserDAO.getInstance();
+    private UserService() {
+        this.userDAO = UserDAO.getInstance();
     }
 
     public static UserService getInstance() {
@@ -22,16 +22,6 @@ public class UserService implements IUserService {
             instance = new UserService();
         }
         return instance;
-    }
-
-    public User loginUser(String login, String password) throws RemoteException {
-        User user = userDAO.findByLoginAndPassword(login, password);
-        if (user == null) {
-            System.out.println("UserService: User not found in the database.");
-        } else {
-            System.out.println("UserService: User found in the database.");
-        }
-        return user;
     }
 
     public String sayHello() throws RemoteException {
@@ -42,44 +32,17 @@ public class UserService implements IUserService {
         return "Hello, " + login + "! Your message is: " + message;
     }
 
-    @Override
-    public void registrarUsuario(String login, String password) throws RemoteException, InvalidUser {
-        // Implementa la lógica para registrar un usuario aquí
+    public User loginUser(String login, String password) {
+        return userDAO.findByLoginAndPassword(login, password);
     }
 
-    @Override
-    public boolean validarUsuario(String login, String password) throws RemoteException, InvalidUser {
-        // Implementa la lógica para validar un usuario aquí
-        return false;
-    }
-
-    @Override
-    public void registrarCliente(String login, String password) throws RemoteException, InvalidUser {
-        // Implementa la lógica para registrar un cliente aquí
-    }
-
-    @Override
-    public Cliente crearCliente(String nombre) throws RemoteException {
-        // Implementa la lógica para crear un cliente aquí
-        return null;
-    }
-
-    @Override
-    public List<Cliente> obtenerClientes() throws RemoteException {
-        // Implementa la lógica para obtener clientes aquí
-        return null;
-    }
-
-    @Override
-    public Cliente actualizarCliente(int id, String nombre) throws RemoteException {
-        // Implementa la lógica para actualizar un cliente aquí
-        return null;
-    }
-
-    @Override
-    public boolean eliminarCliente(int id) throws RemoteException {
-        // Implementa la lógica para eliminar un cliente aquí
-        return false;
+    public User registerUser(String dni, String name, String surname, String email, String password) throws InvalidUser {
+        if (userDAO.findByEmail(email) != null) {
+            throw new InvalidUser("Email is already registered.");
+        }
+        User newUser = new User(dni, name, surname, email, password);
+        userDAO.addUser(newUser);
+        return newUser;
     }
 
     @Override
