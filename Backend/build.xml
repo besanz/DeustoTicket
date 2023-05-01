@@ -31,6 +31,9 @@
             <fileset file="lib/mysql-connector-java-8.0.26.jar"/>
         </copy>
         <javac srcdir="${source.dir}" destdir="${build.dir}" classpathref="classpath" deprecation="true" fork="true" includeAntRuntime="no"/>
+        <copy todir="${build.dir}">
+            <fileset dir="resources" includes="**/*"/>
+        </copy>
     </target>
 
     <target name="enhance" depends="build" description="Enhance the project classes">
@@ -43,7 +46,7 @@
    		</enhancer>
     </target>
 
-    <target name="export" depends="build" description="Export the project into a .jar file">
+    <target name="export" depends="enhance" description="Export the project into a .jar file">
         <delete dir="${dist.dir}"/>
         <mkdir dir="${dist.dir}"/>
         <jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" includes="**/*">
@@ -52,7 +55,7 @@
     </target>
 
 
-    <target name="serverUser" depends="build" description="Runs the Public Server">
+    <target name="serverUser" depends="enhance" description="Runs the Public Server">
         <java classname="rmi.server.impl.ServerUser" classpathref="classpath" fork="true">
             <jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
             <jvmarg value="-Djava.security.policy=${policy.file}"/>
@@ -61,7 +64,7 @@
             <arg value="${server.Name}"/>
         </java>
     </target>
-    <target name="serverStaff" depends="build" description="Runs the Admin Server">
+    <target name="serverStaff" depends="enhance" description="Runs the Admin Server">
         <java classname="rmi.server.impl.ServerStaff" classpathref="classpath" fork="true">
             <jvmarg value="-Djava.rmi.server.codebase=file:${build.dir}/"/>
             <jvmarg value="-Djava.security.policy=${policy.file}"/>

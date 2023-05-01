@@ -8,7 +8,8 @@
     <property name="staff.port" value="1999"/> 
     <property name="server.IP" value="127.0.0.1"/> 
     <property name="server.Name" value="GuTicketServer"/>
-    <property name="policy.file" location="security/java.policy"/>   
+    <property name="policy.file" location="security/java.policy"/>
+    <property name="server.jar.location" location="lib/server.jar"/>
 
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="*.jar"/>
@@ -35,4 +36,9 @@
             <arg value="${server.Name}"/> 
         </java>
     </target>
+
+    <target name="import-server-jar" description="Imports server.jar from the backend project">
+    <copy file="../Backend/dist/server.jar" tofile="${server.jar.location}" overwrite="true"/>
+    </target>
+    
 </project>

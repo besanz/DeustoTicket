@@ -5,6 +5,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import javax.jdo.*;
+
 import data.entidades.*;
 import remote.IRemoteFacade;
 import rmi.server.api.*;
@@ -51,6 +53,7 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
 
     public static void main(String[] args) {
         try {
+
             String host = "127.0.0.1";
             int port = 2000;
             String serverName = "GuTicketServer";

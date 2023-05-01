@@ -35,7 +35,7 @@ public class LoginUser extends javax.swing.JFrame {
         gbc.gridwidth = 2;
         mainPanel.add(titleLabel, gbc);
 
-        JLabel userLabel = new JLabel("Usuario:");
+        JLabel userLabel = new JLabel("Email:");
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;

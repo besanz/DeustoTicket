@@ -8,7 +8,8 @@
     <property name="server.port" value="2000"/> 
     <property name="server.IP" value="127.0.0.1"/> 
     <property name="server.Name" value="GuTicketServer"/>
-    <property name="policy.file" location="security/java.policy"/>   
+    <property name="policy.file" location="security/java.policy"/>
+    <property name="server.jar.location" location="lib/server.jar"/>
 
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="*.jar"/>
@@ -21,10 +22,20 @@
         <echo>Usage: ant [build | client]</echo>
     </target>   
     
-    <target name="build" description="Builds the project">
+    <target name="build" depends="import-server-jar" description="Builds the project">
         <delete dir="${build.dir}"/>
         <mkdir dir="${build.dir}"/>
         <javac srcdir="${source.dir}" destdir="${build.dir}" classpathref="classpath" deprecation="true" fork="true" includeAntRuntime="no"/>
+    </target>
+
+    <target name="enhance" depends="build" description="Enhance the project classes">
+    	<taskdef name="enhancer" classpathref="classpath" classname="org.datanucleus.enhancer.EnhancerTask"/>
+   		<enhancer classpathref="classpath" failonerror="true">
+            <sysproperty key="log4j.configuration" value="file:resources/log4j.properties"/>
+            <fileset dir="${build.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+   		</enhancer>
     </target>
 
     <target name="client" depends="build" description="Runs the Client">
@@ -35,4 +46,9 @@
             <arg value="${server.Name}"/> 
         </java>
     </target>
+
+    <target name="import-server-jar" description="Imports server.jar from the backend project">
+    <copy file="../Backend/dist/server.jar" tofile="${server.jar.location}" overwrite="true"/>
+    </target>
+
 </project>
