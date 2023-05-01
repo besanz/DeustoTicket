@@ -47,25 +47,25 @@ public class UserService implements IUserService {
 
     @Override
     public List<Artista> obtenerArtistas() throws RemoteException {
-        // Implementa la lógica para obtener artistas aquí
+        // Implementa la logica para obtener artistas aqui
         return null;
     }
 
     @Override
     public List<Evento> obtenerEventos() throws RemoteException {
-        // Implementa la lógica para obtener eventos aquí
+        // Implementa la logica para obtener eventos aqui
         return null;
     }
 
     @Override
     public Evento obtenerEventoPorID(int id) throws RemoteException {
-        // Implementa la lógica para obtener un evento por ID aquí
+        // Implementa la logica para obtener un evento por ID aqui
         return null;
     }
 
     @Override
     public List<Evento> obtenerEventosDestacados() throws RemoteException {
-        // Implementa la lógica para obtener eventos destacados aquí
+        // Implementa la logica para obtener eventos destacados aqui
         return null;
     }
 }

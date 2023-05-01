@@ -7,10 +7,16 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @PersistenceCapable
-@Query(
-    name="findByUsernameAndPassword",
-    value="SELECT FROM data.entidades.Staff WHERE username == u && password == p PARAMETERS String u, String p"
-)
+@Queries({
+    @Query(
+        name="findByUsernameAndPassword",
+        value="SELECT FROM data.entidades.Staff WHERE username == u && password == p PARAMETERS String u, String p"
+    ),
+    @Query(
+        name="findByUsername",
+        value="SELECT FROM data.entidades.Staff WHERE username == u PARAMETERS String u"
+    )
+})
 public class Staff implements Serializable {
 
     @PrimaryKey @Persistent
@@ -21,4 +27,11 @@ public class Staff implements Serializable {
 
     @Persistent
     @Getter @Setter private String password;
+
+    public Staff(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }
+
+

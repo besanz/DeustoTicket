@@ -8,6 +8,7 @@ import java.awt.*;
 
 public class LoginStaff extends javax.swing.JFrame {
     private StaffController staffController;
+    private ServiceLocator serviceLocator;
     private JTextField jTextFieldLogin;
     private JPasswordField jPasswordField;
 
@@ -15,6 +16,7 @@ public class LoginStaff extends javax.swing.JFrame {
         initComponents();
         staffController = new StaffController(serviceLocator);
     }
+    
 
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,9 +65,18 @@ public class LoginStaff extends javax.swing.JFrame {
         gbc.gridwidth = 2;
         mainPanel.add(jButtonLogin, gbc);
 
+        // Add the "Registrarse" button
+        JButton jButtonRegister = new JButton("Registrarse");
+        jButtonRegister.addActionListener(evt -> jButtonRegisterActionPerformed(evt));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        mainPanel.add(jButtonRegister, gbc);
+
         getContentPane().add(mainPanel);
         pack();
     }
+
 
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String login = jTextFieldLogin.getText();
@@ -77,9 +88,17 @@ public class LoginStaff extends javax.swing.JFrame {
             System.out.println("LoginStaff: Login successful.");
             JOptionPane.showMessageDialog(this, "Inicio de sesion exitoso");
             // Lanza la ventana principal y cierra la ventana de inicio de sesion
+            //new MainStaffWindow(staff).setVisible(true);
+            this.dispose();
         } else {
             System.out.println("LoginStaff: Login failed.");
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
         }
+    }
+
+    private void jButtonRegisterActionPerformed(java.awt.event.ActionEvent evt) {
+        RegisterStaff registerStaffWindow = new RegisterStaff(serviceLocator);
+        registerStaffWindow.setVisible(true);
+        this.dispose();
     }
 }

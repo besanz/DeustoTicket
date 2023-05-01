@@ -37,13 +37,18 @@ public class ServerStaff extends UnicastRemoteObject implements IStaffService {
         return staffService.loginStaff(login, password);
     }
 
+    public Staff registerStaff(String username, String password) throws RemoteException, InvalidUser {
+        Staff newStaff = staffService.registerStaff(username, password);
+        System.out.println("Staff " + username + " has registered.");
+        return newStaff;
+    }
+
     public static void main(String[] args) {
         try {
             String host = "127.0.0.1";
             int port = 1999;
             String serverName = "GuTicketServer";
 
-            //Establecer la política de seguridad para la conexión RMI
             System.setProperty("java.security.policy", "../security/java.policy");
 
             System.setProperty("java.rmi.server.hostname", host);

@@ -34,4 +34,13 @@ public class StaffService implements IStaffService {
     public Staff loginStaff(String login, String password) throws RemoteException {
         return staffDAO.findByUsernameAndPassword(login, password);
     }
+
+    public Staff registerStaff(String username, String password) throws InvalidUser {
+        if (staffDAO.findByUsername(username) != null) {
+            throw new InvalidUser("Username is already registered.");
+        }
+        Staff newStaff = new Staff(username, password);
+        staffDAO.addStaff(newStaff);
+        return newStaff;
+    }
 }

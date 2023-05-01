@@ -88,6 +88,8 @@ public class LoginUser extends javax.swing.JFrame {
             System.out.println("LoginUser: Login successful.");
             JOptionPane.showMessageDialog(this, "Inicio de sesion exitoso");
             // Lanza la ventana principal y cierra la ventana de inicio de sesion
+            new MainUserWindow(user).setVisible(true);
+            this.dispose();
         } else {
             System.out.println("LoginUser: Login failed.");
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas");

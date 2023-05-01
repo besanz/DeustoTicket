@@ -4,6 +4,7 @@ import service.StaffService;
 import data.entidades.Staff;
 import remote.ServiceLocator;
 import java.rmi.RemoteException;
+import rmi.server.exceptions.InvalidUser;
 
 public class StaffController {
     private StaffService staffService;
@@ -26,4 +27,20 @@ public class StaffController {
             return null;
         }
     }
+
+    public Staff registerStaff(String username, String password) {
+        try {
+            Staff newStaff = staffService.registerStaff(username, password);
+            if (newStaff == null) {
+                System.out.println("StaffController: Staff registration failed.");
+            } else {
+                System.out.println("StaffController: Staff registration successful.");
+            }
+            return newStaff;
+        } catch (InvalidUser e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

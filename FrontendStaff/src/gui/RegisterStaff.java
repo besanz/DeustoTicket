@@ -1,67 +1,40 @@
 package gui;
 
-import controller.UserController;
-import data.entidades.User;
+import controller.StaffController;
+import data.entidades.Staff;
 import remote.ServiceLocator;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class RegisterUser extends JFrame {
-    private UserController userController;
-    private JTextField jTextFieldDNI;
-    private JTextField jTextFieldName;
-    private JTextField jTextFieldSurname;
-    private JTextField jTextFieldEmail;
+public class RegisterStaff extends JFrame {
+    private StaffController staffController;
+    private JTextField jTextFieldUsername;
     private JPasswordField jPasswordField;
     private JPasswordField jPasswordFieldConfirm;
 
-    public RegisterUser(ServiceLocator serviceLocator) {
+    public RegisterStaff(ServiceLocator serviceLocator) {
         initComponents();
-        userController = new UserController(serviceLocator);
+        staffController = new StaffController(serviceLocator);
     }
 
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("GuTicket - Registro de usuario");
+        setTitle("GuTicket - Registro de Staff");
 
         JPanel contentPane = new JPanel(new GridBagLayout());
         setContentPane(contentPane);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 4, 4, 4);
 
-        // DNI label and text field
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        contentPane.add(new JLabel("DNI:"), gbc);
-        jTextFieldDNI = new JTextField(20);
-        gbc.gridx = 1;
-        contentPane.add(jTextFieldDNI, gbc);
-
-        // Name label and text field
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        contentPane.add(new JLabel("Nombre:"), gbc);
-        jTextFieldName = new JTextField(20);
-        gbc.gridx = 1;
-        contentPane.add(jTextFieldName, gbc);
-
-        // Surname label and text field
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        contentPane.add(new JLabel("Apellidos:"), gbc);
-        jTextFieldSurname = new JTextField(20);
-        gbc.gridx = 1;
-        contentPane.add(jTextFieldSurname, gbc);
-
-        // Email label and text field
+        // Username label and text field
         gbc.gridx = 0;
         gbc.gridy = 3;
-        contentPane.add(new JLabel("Email:"), gbc);
-        jTextFieldEmail = new JTextField(20);
+        contentPane.add(new JLabel("Usuario:"), gbc);
+        jTextFieldUsername = new JTextField(20);
         gbc.gridx = 1;
-        contentPane.add(jTextFieldEmail, gbc);
+        contentPane.add(jTextFieldUsername, gbc);
 
         // Password label and password field
         gbc.gridx = 0;
@@ -93,10 +66,7 @@ public class RegisterUser extends JFrame {
     }
 
     private void jButtonRegisterActionPerformed(ActionEvent evt) {
-        String dni = jTextFieldDNI.getText();
-        String name = jTextFieldName.getText();
-        String surname = jTextFieldSurname.getText();
-        String email = jTextFieldEmail.getText();
+        String username = jTextFieldUsername.getText();
         String password = new String(jPasswordField.getPassword());
         String confirmPassword = new String(jPasswordFieldConfirm.getPassword());
 
@@ -105,11 +75,11 @@ public class RegisterUser extends JFrame {
             return;
         }
 
-        User newUser = userController.registerUser(dni, name, surname, email, password);
-                if (newUser != null) {
-            JOptionPane.showMessageDialog(this, "Usuario registrado con exito");
+        Staff newStaff = staffController.registerStaff(username, password);
+                if (newStaff != null) {
+            JOptionPane.showMessageDialog(this, "Staff registrado con exito");
             // Lanza la ventana principal y cierra la ventana de registro
-            // Ejemplo: new MainUserWindow(newUser).setVisible(true);
+            // Ejemplo: new MainStaffWindow(newStaff).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Error al registrar usuario");
         }
