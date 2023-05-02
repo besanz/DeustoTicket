@@ -32,8 +32,8 @@ public class TicketProviderClient {
 
     public List<Evento> getEventos() throws IOException {
         String jsonResponse = makeApiRequest("/api/eventos");
-        Type listType = new TypeToken<ArrayList<Evento>>() {}.getType();
-        return new Gson().fromJson(jsonResponse, listType);
+        ApiResponse apiResponse = new Gson().fromJson(jsonResponse, ApiResponse.class);
+        return apiResponse.getEventos();
     }
 
     private String makeApiRequest(String endpoint) throws IOException {
@@ -58,5 +58,3 @@ public class TicketProviderClient {
         return sb.toString();
     }
 }
-
-

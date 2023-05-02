@@ -27,7 +27,7 @@ public class RegisterUser extends JFrame {
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GuTicket - Registro de usuario");
-        setBounds(100, 100, 800, 600);
+        setBounds(100, 100, 1000, 900);
 
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
