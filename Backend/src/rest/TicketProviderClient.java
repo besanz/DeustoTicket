@@ -16,14 +16,6 @@ public class TicketProviderClient {
     private static final String API_BASE_URL = "https://deusto-api.arambarri.eus";
     private static final String TOKEN = "258c263f485581b788b509f2499f49418c640fa412a19ae2a96a7d93a38354f1b06e577ec301a213027acbcde59a9a8ce709862b8e8e6f59c90dbbe6f2a4c43582fa58f384bd7c45016bcd1e61c25358c0e3a9d592dc5e39d60b5825b931ec77ccb228ce133e1360902eb3ec8948aa13ba66bbd8f92df5e1cc5acd00848f1cce";
 
-    public static void main(String[] args) throws IOException {
-        TicketProviderClient client = new TicketProviderClient();
-        List<Evento> eventos = client.getEventos();
-        for (Evento evento : eventos) {
-            System.out.println(evento);
-        }
-    }
-
     public List<Artista> getArtistas() throws IOException {
         String jsonResponse = makeApiRequest("/api/artistas");
         Type listType = new TypeToken<ArrayList<Artista>>() {}.getType();
@@ -32,8 +24,15 @@ public class TicketProviderClient {
 
     public List<Evento> getEventos() throws IOException {
         String jsonResponse = makeApiRequest("/api/eventos");
-        ApiResponse apiResponse = new Gson().fromJson(jsonResponse, ApiResponse.class);
-        return apiResponse.getEventos();
+        ResponseData responseData = new Gson().fromJson(jsonResponse, ResponseData.class);
+        List<Evento.Attributes> eventAttributes = responseData.getData();
+
+        List<Evento> eventos = new ArrayList<>();
+        for (int i = 0; i < eventAttributes.size(); i++) {
+            eventos.add(new Evento(i + 1, eventAttributes.get(i)));
+        }
+
+        return eventos;
     }
 
     private String makeApiRequest(String endpoint) throws IOException {

@@ -53,7 +53,7 @@ public class LoginUser extends JFrame {
         panel.setBackground(new Color(47, 49, 54));
         panel.setLayout(new GridBagLayout());
         panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(114, 137, 218), 2),
+        BorderFactory.createLineBorder(new Color(114, 137, 218), 2),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         GridBagConstraints gbc_panel = new GridBagConstraints();
         gbc_panel.gridx = 0;

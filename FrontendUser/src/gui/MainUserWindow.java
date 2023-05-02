@@ -5,11 +5,12 @@ import data.entidades.User;
 import rest.TicketProviderClient;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 
 public class MainUserWindow extends JFrame {
     private User user;
@@ -22,7 +23,7 @@ public class MainUserWindow extends JFrame {
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GuTicket - Ventana Principal");
-        setSize(new Dimension(800, 600));
+        setSize(new Dimension(1400, 900));
         getContentPane().setLayout(new BorderLayout(0, 0));
         getContentPane().setBackground(new Color(54, 57, 63));
 
@@ -33,37 +34,18 @@ public class MainUserWindow extends JFrame {
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         getContentPane().add(welcomeLabel, BorderLayout.NORTH);
 
-        // Crea la tabla y el modelo de datos
-        String[] columnNames = {"ID", "Titulo", "Descripcion", "Fecha", "Aforo"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        JTable eventosTable = new JTable(tableModel);
-        eventosTable.getTableHeader().setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
-        eventosTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        eventosTable.setRowHeight(25);
+        // Crea un panel contenedor para los eventos
+        JPanel eventosPanel = new JPanel();
+        eventosPanel.setLayout(new GridLayout(0, 2, 20, 20));
+        eventosPanel.setBackground(new Color(54, 57, 63));
+        eventosPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Ajusta el color y la alineación de las celdas
-        eventosTable.setForeground(new Color(114, 137, 218));
-        eventosTable.setBackground(new Color(54, 57, 63));
-        eventosTable.getTableHeader().setForeground(new Color(54, 57, 63));
-        eventosTable.getTableHeader().setBackground(new Color(114, 137, 218));
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < eventosTable.getColumnCount(); i++) {
-            eventosTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        // Llama al método getEventos y llena la tabla con los eventos
         TicketProviderClient client = new TicketProviderClient();
         try {
             List<Evento> eventos = client.getEventos();
             for (Evento evento : eventos) {
-                Object[] rowData = {evento.getId(), evento.getTitulo(), evento.getDescripcion(), evento.getFecha(), evento.getAforo()};
-                tableModel.addRow(rowData);
+                System.out.println("Evento: " + evento.getTitulo() + ", Fecha: " + evento.getFecha() + ", Imagen URL: " + evento.getImagenUrl());
+                eventosPanel.add(createEventoPanel(evento));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,28 +53,65 @@ public class MainUserWindow extends JFrame {
             return; // Return to avoid showing an empty window when there's an error
         }
 
-        // Agrega la tabla a la ventana
-        JScrollPane tableScrollPane = new JScrollPane(eventosTable);
-        tableScrollPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        getContentPane().add(tableScrollPane, BorderLayout.CENTER);
-
-        // Secciones inferiores
-        JPanel bottomPanel = new JPanel(new GridLayout(1, 2));
-        getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-
-        JPanel section1Panel = new JPanel();
-        section1Panel.setBorder(BorderFactory.createLineBorder(new Color(114, 137, 218)));
-        section1Panel.setBackground(new Color(47, 49, 54));
-        bottomPanel.add(section1Panel);
-
-        JPanel section2Panel = new JPanel();
-        section2Panel.setBorder(BorderFactory.createLineBorder(new Color(114, 137, 218)));
-        section2Panel.setBackground(new Color(47, 49, 54));
-        section2Panel.setBackground(new Color(47, 49, 54));
-        bottomPanel.add(section2Panel);
+        // Agrega el panel de eventos a un JScrollPane
+        JScrollPane scrollPane = new JScrollPane(eventosPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setBorder(null);
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
 
         pack();
         setLocationRelativeTo(null);
+    }
+
+    private JPanel createEventoPanel(Evento evento) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        JPanel eventoPanel = new JPanel();
+        eventoPanel.setLayout(new BorderLayout());
+        eventoPanel.setBackground(new Color(47, 49, 54));
+        eventoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Muestra la imagen del evento
+        JLabel imageLabel = new JLabel();
+        if (evento.getImagenUrl() != null && !evento.getImagenUrl().isEmpty()) {
+            try {
+                ImageIcon icon = new ImageIcon(new URL(evento.getImagenUrl()));
+                icon = new ImageIcon(icon.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+                imageLabel.setIcon(icon);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            imageLabel.setText("Sin imagen");
+            imageLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+            imageLabel.setForeground(new Color(114, 137, 218));
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        }
+        eventoPanel.add(imageLabel, BorderLayout.CENTER);
+
+        // Panel de información del evento
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBackground(new Color(47, 49, 54));
+        eventoPanel.add(infoPanel, BorderLayout.SOUTH);
+
+        // Muestra el título del evento
+        JLabel titleLabel = new JLabel(evento.getTitulo());
+        titleLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(114, 137, 218));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        infoPanel.add(titleLabel);
+
+        // Muestra la fecha del evento
+        if (evento.getFecha() != null) {
+            JLabel fechaLabel = new JLabel("Fecha: " + sdf.format(evento.getFecha()));
+            fechaLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+            fechaLabel.setForeground(new Color(114, 137, 218));
+            fechaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            infoPanel.add(fechaLabel);
+        }
+
+        return eventoPanel;
     }
 }
 

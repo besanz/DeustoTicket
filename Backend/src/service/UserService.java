@@ -8,13 +8,18 @@ import data.dao.impl.UserDAO;
 import data.entidades.*;
 import rmi.server.exceptions.InvalidUser;
 import rmi.server.api.IUserService;
+import rest.TicketProviderClient;
+import java.io.IOException;
+
 
 public class UserService implements IUserService {
     private static UserService instance;
     private final UserDAO userDAO;
+    private final TicketProviderClient ticketProviderClient;
 
     private UserService() {
         this.userDAO = UserDAO.getInstance();
+        this.ticketProviderClient = new TicketProviderClient();
     }
 
     public static UserService getInstance() {
@@ -47,25 +52,34 @@ public class UserService implements IUserService {
 
     @Override
     public List<Artista> obtenerArtistas() throws RemoteException {
-        // Implementa la logica para obtener artistas aqui
-        return null;
+        try {
+            return ticketProviderClient.getArtistas();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al obtener artistas de la API", e);
+        }
     }
 
     @Override
     public List<Evento> obtenerEventos() throws RemoteException {
-        // Implementa la logica para obtener eventos aqui
-        return null;
+        try {
+            return ticketProviderClient.getEventos();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al obtener eventos de la API", e);
+        }
     }
 
     @Override
     public Evento obtenerEventoPorID(int id) throws RemoteException {
-        // Implementa la logica para obtener un evento por ID aqui
+        // Implementa la lógica para obtener un evento por ID utilizando la instancia de TicketProviderClient
         return null;
     }
 
     @Override
     public List<Evento> obtenerEventosDestacados() throws RemoteException {
-        // Implementa la logica para obtener eventos destacados aqui
+        // Implementa la lógica para obtener eventos destacados utilizando la instancia de TicketProviderClient
         return null;
     }
+
 }
