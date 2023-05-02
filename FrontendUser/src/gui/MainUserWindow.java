@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 
 public class MainUserWindow extends JFrame {
@@ -27,11 +25,12 @@ public class MainUserWindow extends JFrame {
         getContentPane().setLayout(new BorderLayout(0, 0));
         getContentPane().setBackground(new Color(54, 57, 63));
 
-        // Bienvenida al usuario
+        // Update the welcomeLabel's margin
         JLabel welcomeLabel = new JLabel("Bienvenido a GuTicket, " + user.getNombre());
         welcomeLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 24));
         welcomeLabel.setForeground(new Color(114, 137, 218));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        welcomeLabel.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0));
         getContentPane().add(welcomeLabel, BorderLayout.NORTH);
 
         // Crea un panel contenedor para los eventos
@@ -44,7 +43,6 @@ public class MainUserWindow extends JFrame {
         try {
             List<Evento> eventos = client.getEventos();
             for (Evento evento : eventos) {
-                System.out.println("Evento: " + evento.getTitulo() + ", Fecha: " + evento.getFecha() + ", Imagen URL: " + evento.getImagenUrl());
                 eventosPanel.add(createEventoPanel(evento));
             }
         } catch (IOException e) {
@@ -68,47 +66,36 @@ public class MainUserWindow extends JFrame {
 
         JPanel eventoPanel = new JPanel();
         eventoPanel.setLayout(new BorderLayout());
-        eventoPanel.setBackground(new Color(47, 49, 54));
-        eventoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Muestra la imagen del evento
-        JLabel imageLabel = new JLabel();
-        if (evento.getImagenUrl() != null && !evento.getImagenUrl().isEmpty()) {
-            try {
-                ImageIcon icon = new ImageIcon(new URL(evento.getImagenUrl()));
-                icon = new ImageIcon(icon.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
-                imageLabel.setIcon(icon);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            imageLabel.setText("Sin imagen");
-            imageLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
-            imageLabel.setForeground(new Color(114, 137, 218));
-            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        }
-        eventoPanel.add(imageLabel, BorderLayout.CENTER);
+        eventoPanel.setBackground(new Color(52, 54, 59));
+        eventoPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(114, 137, 218), 2),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         // Panel de información del evento
         JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(new Color(47, 49, 54));
-        eventoPanel.add(infoPanel, BorderLayout.SOUTH);
+        infoPanel.setLayout(new GridBagLayout());
+        infoPanel.setBackground(new Color(52, 54, 59));
+        eventoPanel.add(infoPanel, BorderLayout.CENTER);
 
         // Muestra el título del evento
         JLabel titleLabel = new JLabel(evento.getTitulo());
         titleLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 18));
         titleLabel.setForeground(new Color(114, 137, 218));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        infoPanel.add(titleLabel);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        infoPanel.add(titleLabel, gbc);
 
         // Muestra la fecha del evento
         if (evento.getFecha() != null) {
-            JLabel fechaLabel = new JLabel("Fecha: " + sdf.format(evento.getFecha()));
+            JLabel fechaLabel = new JLabel("Dia: " + sdf.format(evento.getFecha()));
             fechaLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
             fechaLabel.setForeground(new Color(114, 137, 218));
-            fechaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            infoPanel.add(fechaLabel);
+
+            gbc.gridy = 1;
+            infoPanel.add(fechaLabel, gbc);
         }
 
         return eventoPanel;
