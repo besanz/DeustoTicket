@@ -1,6 +1,7 @@
 package gui;
 
 import controller.StaffController;
+import data.entidades.Staff;
 import remote.ServiceLocator;
 
 import javax.swing.*;
@@ -8,16 +9,16 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-import data.entidades.Staff;
-
 public class RegisterStaff extends JFrame {
     private StaffController staffController;
     private JTextField jUsernameField;
     private JPasswordField jPasswordField;
     private JPasswordField jPasswordFieldConfirm;
+    private ServiceLocator serviceLocator;
 
     public RegisterStaff(ServiceLocator serviceLocator) {
         initComponents();
+        this.serviceLocator = serviceLocator;
         staffController = new StaffController(serviceLocator);
     }
 
@@ -127,8 +128,8 @@ private void initComponents() {
         Staff newStaff = staffController.registerStaff(username, password);
                 if (newStaff != null) {
             JOptionPane.showMessageDialog(this, "Staff registrado con exito");
-            // Lanza la ventana principal y cierra la ventana de registro
-            // Ejemplo: new MainStaffWindow(newStaff).setVisible(true);
+            this.dispose();
+            new LoginStaff(serviceLocator).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Error al registrar usuario");
         }

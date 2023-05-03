@@ -20,12 +20,10 @@ Para ejecutar este proyecto, necesitarás tener instalado lo siguiente:
 
 ## Compilar y ejecutar
 
-Para compilar el proyecto, abre una terminal en el directorio raíz de FrontendStaff y ejecuta el siguiente comando:
-
-```ant build```
-
 Para ejecutar el cliente, ejecuta el siguiente comando en la misma terminal:
 
 ```ant client```
+
+Importará información del Backend, para posteriormente compilar y abrir el cliente.
 
 **Universidad de Deusto, San Sebastián**

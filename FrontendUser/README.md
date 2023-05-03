@@ -4,7 +4,7 @@ GuTicket es un proyecto para crear una aplicación de venta de entradas para eve
 
 ## Características
 
-El FrontendUser permite a los consumidores:
+El FrontendUser permitirá a los consumidores:
 
 1. Buscar eventos y conciertos disponibles.
 2. Comprar entradas y recibir un código QR único para cada entrada adquirida.
@@ -21,12 +21,10 @@ Para ejecutar este proyecto, necesitarás tener instalado lo siguiente:
 
 ## Compilar y ejecutar
 
-Para compilar el proyecto, abre una terminal en el directorio raíz de FrontendUser y ejecuta el siguiente comando:
-
-```ant build```
-
 Para ejecutar el cliente, ejecuta el siguiente comando en la misma terminal:
 
 ```ant client```
+
+Importará información del Backend, para posteriormente compilar y abrir el cliente.
 
 **Universidad de Deusto, San Sebastián**

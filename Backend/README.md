@@ -34,14 +34,10 @@ Para ejecutar este proyecto, necesitarás tener instalado lo siguiente:
 
 ## Compilar y ejecutar
 
-Para compilar el proyecto, abre una terminal en el directorio raíz del backend y ejecuta el siguiente comando:
-
-```ant build```
-
-Para ejecutar el proyecto, ejecuta el siguiente comando en la misma terminal:
+Abre una terminal en el directorio raíz del backend y ejecuta el siguiente comando:
 
 ```ant serverUser``` o ```ant serveStaff```
 
-Dependiendo de qué parte del servidor deseas ejecutar.
+Dependiendo de qué parte del servidor deseas ejecutar. Se compilará automáticamente.
 
 **Universidad de Deusto, San Sebastián**

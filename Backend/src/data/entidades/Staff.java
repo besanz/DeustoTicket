@@ -19,10 +19,11 @@ import lombok.*;
 })
 public class Staff implements Serializable {
 
-    @PrimaryKey @Persistent
+    @PrimaryKey 
+    @Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT)
     @Getter @Setter private int id;
 
-    @Persistent
+    @Persistent 
     @Getter @Setter private String username;
 
     @Persistent

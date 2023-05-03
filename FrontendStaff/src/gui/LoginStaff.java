@@ -127,9 +127,8 @@ public class LoginStaff extends JFrame {
         if (staff != null) {
             System.out.println("LoginStaff: Login successful.");
             JOptionPane.showMessageDialog(this, "Inicio de sesion exitoso");
-            // Lanza la ventana principal y cierra la ventana de inicio de sesion
-            //new MainStaffWindow(staff).setVisible(true);
             this.dispose();
+            new LoginStaff(serviceLocator).setVisible(true);
         } else {
             System.out.println("LoginStaff: Login failed.");
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
