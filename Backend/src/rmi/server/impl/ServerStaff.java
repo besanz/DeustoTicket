@@ -9,7 +9,7 @@ import data.entidades.*;
 import remote.IRemoteFacade;
 import rmi.server.api.*;
 import rmi.server.exceptions.InvalidUser;
-import service.StaffService;
+import remote.service.StaffService;
 
 public class ServerStaff extends UnicastRemoteObject implements IStaffService {
     private static final long serialVersionUID = 1L;

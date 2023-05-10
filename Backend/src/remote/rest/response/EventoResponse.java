@@ -1,4 +1,4 @@
-package rest.response;
+package remote.rest.response;
 
 import com.google.gson.annotations.SerializedName;
 import data.entidades.Evento;

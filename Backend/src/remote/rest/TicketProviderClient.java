@@ -1,4 +1,4 @@
-package rest;
+package remote.rest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.entidades.*;
-import rest.response.EventoResponse;
+import remote.rest.response.EventoResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

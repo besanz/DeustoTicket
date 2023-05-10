@@ -6,12 +6,13 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import javax.jdo.*;
+import java.util.List;
 
 import data.entidades.*;
 import remote.IRemoteFacade;
 import rmi.server.api.*;
 import rmi.server.exceptions.InvalidUser;
-import service.UserService;
+import remote.service.UserService;
 
 public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
     private static ServerUser instance;
@@ -50,11 +51,31 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
         return userService.sayMessage(login, password, message);
     }
 
-    public void registerUser(String dni, String nombre, String apellidos, String email, String password) throws RemoteException, InvalidUser {
-        userService.registerUser(dni, nombre, apellidos, email, password);
+    public User registerUser(String dni, String nombre, String apellidos, String email, String password) throws RemoteException, InvalidUser {
+        User newUser = userService.registerUser(dni, nombre, apellidos, email, password);
         System.out.println("User " + email + " has registered.");
+        return newUser;
     }
 
+    @Override
+    public List<Artista> obtenerArtistas() throws RemoteException {
+        return userService.obtenerArtistas();
+    }
+
+    @Override
+    public List<Evento> obtenerEventos() throws RemoteException {
+        return userService.obtenerEventos();
+    }
+
+    @Override
+    public Evento obtenerEventoPorID(int id) throws RemoteException {
+        return userService.obtenerEventoPorID(id);
+    }
+
+    @Override
+    public List<Evento> obtenerEventosDestacados() throws RemoteException {
+        return userService.obtenerEventosDestacados();
+    }
 
     public static void main(String[] args) {
         try {
@@ -80,4 +101,3 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
         }
     }
 }
-

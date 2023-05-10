@@ -1,4 +1,4 @@
-package service;
+package remote.service;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -8,7 +8,7 @@ import data.dao.impl.UserDAO;
 import data.entidades.*;
 import rmi.server.exceptions.InvalidUser;
 import rmi.server.api.IUserService;
-import rest.TicketProviderClient;
+import remote.rest.TicketProviderClient;
 import java.io.IOException;
 
 

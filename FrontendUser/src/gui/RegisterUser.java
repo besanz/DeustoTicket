@@ -170,7 +170,7 @@ public class RegisterUser extends JFrame {
                 if (newUser != null) {
             JOptionPane.showMessageDialog(this, "Usuario registrado con exito");
             this.dispose();
-            new MainUserWindow(newUser).setVisible(true);
+            new MainUserWindow(newUser, userController).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Error al registrar usuario");
         }

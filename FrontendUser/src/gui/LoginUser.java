@@ -19,10 +19,10 @@ public class LoginUser extends JFrame {
 	private JPasswordField passwordField;
 
     public LoginUser(ServiceLocator serviceLocator) {
-        initComponents();
+        this.serviceLocator = serviceLocator;
         userController = new UserController(serviceLocator);
+        initComponents();
     }
-    
 
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -135,7 +135,7 @@ public class LoginUser extends JFrame {
         if (user != null) {
             System.out.println("LoginUser: Login successful.");
             JOptionPane.showMessageDialog(this, "Inicio de sesion exitoso");
-            MainUserWindow mw = new MainUserWindow(user);
+            MainUserWindow mw = new MainUserWindow(user, userController);
             mw.setVisible(true);
             this.dispose();
         } else {

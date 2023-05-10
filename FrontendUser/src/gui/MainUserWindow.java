@@ -2,7 +2,8 @@ package gui;
 
 import data.entidades.Evento;
 import data.entidades.User;
-import rest.TicketProviderClient;
+import controller.UserController;
+import java.rmi.RemoteException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +13,11 @@ import java.text.SimpleDateFormat;
 
 public class MainUserWindow extends JFrame {
     private User user;
+    private UserController userController;
 
-    public MainUserWindow(User user) {
+    public MainUserWindow(User user, UserController userController) {
         this.user = user;
+        this.userController = userController;
         initComponents();
     }
 
@@ -39,16 +42,15 @@ public class MainUserWindow extends JFrame {
         eventosPanel.setBackground(new Color(54, 57, 63));
         eventosPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        TicketProviderClient client = new TicketProviderClient();
         try {
-            List<Evento> eventos = client.getEventos();
+            List<Evento> eventos = userController.getRemoteFacade().obtenerEventos();
             for (Evento evento : eventos) {
                 eventosPanel.add(createEventoPanel(evento));
             }
-        } catch (IOException e) {
+        } catch (RemoteException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al cargar eventos");
-            return; // Return to avoid showing an empty window when there's an error
+            return;
         }
 
         // Agrega el panel de eventos a un JScrollPane
@@ -101,4 +103,3 @@ public class MainUserWindow extends JFrame {
         return eventoPanel;
     }
 }
-

@@ -1,6 +1,6 @@
 package controller;
 
-import service.StaffService;
+import remote.service.StaffService;
 import data.entidades.Staff;
 import remote.ServiceLocator;
 import java.rmi.RemoteException;
