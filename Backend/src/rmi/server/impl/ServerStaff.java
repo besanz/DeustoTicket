@@ -10,19 +10,26 @@ import remote.IRemoteFacade;
 import rmi.server.api.*;
 import rmi.server.exceptions.InvalidUser;
 import remote.service.StaffService;
+import java.util.List;
 
-public class ServerStaff extends UnicastRemoteObject implements IStaffService {
+
+public class ServerStaff extends UnicastRemoteObject implements IRemoteFacade {
     private static final long serialVersionUID = 1L;
-    private StaffService staffService;
+    private IStaffService staffService;
+
+    private static ServerStaff instance;
 
     private ServerStaff() throws RemoteException {
-        super();
-        staffService = new StaffService();
+        staffService = StaffService.getInstance();
     }
 
     public static ServerStaff getInstance() throws RemoteException {
-        return new ServerStaff();
+        if (instance == null) {
+            instance = new ServerStaff();
+        }
+        return instance;
     }
+
 
     public String sayHello() throws RemoteException {
         return staffService.sayHello();
@@ -42,6 +49,39 @@ public class ServerStaff extends UnicastRemoteObject implements IStaffService {
         System.out.println("Staff " + username + " has registered.");
         return newStaff;
     }
+    
+    @Override
+    public List<Evento> obtenerEventosDestacados() throws RemoteException {
+        
+        return null;
+    }
+    
+    @Override
+    public Evento obtenerEventoPorID(int id) throws RemoteException {
+        
+        return null;
+    }
+    
+    @Override
+    public List<Evento> obtenerEventos() throws RemoteException {
+        
+        return null;
+    }
+    
+    @Override
+    public List<Artista> obtenerArtistas() throws RemoteException {
+        
+        return null;
+    }
+    @Override
+    public User registerUser(String dni, String nombre, String apellidos, String email, String password) throws RemoteException {
+        
+        return null;
+    }
+    @Override
+    public User loginUser(String login, String password) throws RemoteException{
+        return null;
+    }
 
     public static void main(String[] args) {
         try {
@@ -52,7 +92,7 @@ public class ServerStaff extends UnicastRemoteObject implements IStaffService {
             System.setProperty("java.security.policy", "../security/java.policy");
 
             System.setProperty("java.rmi.server.hostname", host);
-            IRemoteFacade objServer = ServerUser.getInstance();
+            IRemoteFacade objServer = ServerStaff.getInstance();
 
             Registry registry = LocateRegistry.createRegistry(port);
             System.out.println("RMI Registry created on port " + port);

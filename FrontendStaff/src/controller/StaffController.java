@@ -1,21 +1,22 @@
 package controller;
 
-import remote.service.StaffService;
 import data.entidades.Staff;
 import remote.ServiceLocator;
 import java.rmi.RemoteException;
 import rmi.server.exceptions.InvalidUser;
+import remote.IRemoteFacade;
 
 public class StaffController {
-    private StaffService staffService;
+    
+    private IRemoteFacade remoteFacade;
 
     public StaffController(ServiceLocator serviceLocator) {
-        this.staffService = StaffService.getInstance();
+        this.remoteFacade = serviceLocator.getRemoteFacade();
     }
 
     public Staff loginStaff(String login, String password) {
         try {
-            Staff staff = staffService.loginStaff(login, password);
+            Staff staff = remoteFacade.loginStaff(login, password);
             if (staff == null) {
                 System.out.println("StaffController: Staff not found in the database.");
             } else {
@@ -30,17 +31,20 @@ public class StaffController {
 
     public Staff registerStaff(String username, String password) {
         try {
-            Staff newStaff = staffService.registerStaff(username, password);
+            Staff newStaff = remoteFacade.registerStaff(username, password);
             if (newStaff == null) {
                 System.out.println("StaffController: Staff registration failed.");
             } else {
                 System.out.println("StaffController: Staff registration successful.");
             }
             return newStaff;
-        } catch (InvalidUser e) {
+        } catch (RemoteException | InvalidUser e) {
             e.printStackTrace();
             return null;
         }
     }
-
+        
+    public IRemoteFacade getRemoteFacade() {
+        return remoteFacade;
+    }
 }

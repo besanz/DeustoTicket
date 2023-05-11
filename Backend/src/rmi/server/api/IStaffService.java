@@ -17,8 +17,9 @@ public interface IStaffService extends Remote {
      * @throws RemoteException
      * @throws InvalidUser
      */
+    String sayHello() throws RemoteException;
+    String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser;
     Staff loginStaff(String username, String password) throws RemoteException;
-
     Staff registerStaff(String username, String password) throws RemoteException, InvalidUser;
 
 }

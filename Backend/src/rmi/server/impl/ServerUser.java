@@ -42,7 +42,11 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
         System.out.println("No es posible aqui");
         return null;
     }
-
+    @Override
+    public Staff registerStaff(String username, String password) throws RemoteException, InvalidUser{
+        System.out.println("No es posible aqui");
+        return null;
+    }
     public String sayHello() throws RemoteException {
         return userService.sayHello();
     }

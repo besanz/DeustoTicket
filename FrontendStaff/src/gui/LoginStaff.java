@@ -19,8 +19,10 @@ public class LoginStaff extends JFrame {
 	private JPasswordField passwordField;
 
     public LoginStaff(ServiceLocator serviceLocator) {
-        initComponents();
+       
+        this.serviceLocator = serviceLocator;
         staffController = new StaffController(serviceLocator);
+         initComponents();
     }
     
 
