@@ -25,4 +25,3 @@ public interface IRemoteFacade extends Remote {
     List<User> findAllUsers() throws RemoteException;
     void deleteUserByDni(String dni) throws RemoteException;
 }
-
