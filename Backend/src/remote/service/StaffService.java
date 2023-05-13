@@ -4,16 +4,25 @@ import java.rmi.RemoteException;
 
 import data.dao.IStaffDAO;
 import data.dao.impl.StaffDAO;
+import data.dao.IUserDAO;
+import data.dao.impl.UserDAO;
+
 import data.entidades.Staff;
-import rmi.server.api.IStaffService;
+import data.entidades.User;
+import rmi.remote.api.IStaffService;
 import rmi.server.exceptions.InvalidUser;
+
+import java.util.List;
 
 public class StaffService implements IStaffService {
     private StaffDAO staffDAO;
+    private UserDAO userDAO;
+
     private static StaffService instance;
 
     public StaffService() {
         staffDAO = StaffDAO.getInstance();
+        userDAO = UserDAO.getInstance();
     }
 
     public static StaffService getInstance() {
@@ -21,14 +30,6 @@ public class StaffService implements IStaffService {
             instance = new StaffService();
         }
         return instance;
-    }
-
-    public String sayHello() throws RemoteException {
-        return "Hello!";
-    }
-
-    public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser {
-        return "Hello, admin" + login + "! Your message is: " + message;
     }
 
     public Staff loginStaff(String login, String password) throws RemoteException {
@@ -42,5 +43,15 @@ public class StaffService implements IStaffService {
         Staff newStaff = new Staff(username, password);
         staffDAO.addStaff(newStaff);
         return newStaff;
+    }
+
+    @Override
+    public List<User> findAllUsers() throws RemoteException {
+        return userDAO.findAllUsers();
+    }
+
+    @Override
+    public void deleteUserByDni(String dni) throws RemoteException {
+        userDAO.deleteUserByDni(dni);
     }
 }

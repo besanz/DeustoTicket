@@ -10,7 +10,7 @@ import java.util.List;
 
 import data.entidades.*;
 import remote.IRemoteFacade;
-import rmi.server.api.*;
+import rmi.remote.api.*;
 import rmi.server.exceptions.InvalidUser;
 import remote.service.UserService;
 
@@ -47,13 +47,6 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
         System.out.println("No es posible aqui");
         return null;
     }
-    public String sayHello() throws RemoteException {
-        return userService.sayHello();
-    }
-
-    public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser {
-        return userService.sayMessage(login, password, message);
-    }
 
     public User registerUser(String dni, String nombre, String apellidos, String email, String password) throws RemoteException, InvalidUser {
         User newUser = userService.registerUser(dni, nombre, apellidos, email, password);
@@ -79,6 +72,21 @@ public class ServerUser extends UnicastRemoteObject implements IRemoteFacade {
     @Override
     public List<Evento> obtenerEventosDestacados() throws RemoteException {
         return userService.obtenerEventosDestacados();
+    }
+
+    @Override
+    public List<Espacio> obtenerEspaciosDeEvento(int eventoId) throws RemoteException {
+        return userService.obtenerEspaciosDeEvento(eventoId);
+    }
+
+     @Override
+    public List<User> findAllUsers() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public void deleteUserByDni(String dni) throws RemoteException {
+
     }
 
     public static void main(String[] args) {

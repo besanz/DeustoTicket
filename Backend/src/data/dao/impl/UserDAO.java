@@ -118,5 +118,56 @@ public class UserDAO implements IUserDAO {
 
         return user;
     }
+
+    @Override
+    public List<User> findAllUsers() {
+        List<User> users = null;
+        PersistenceManager pm = DBConfig.getPersistenceManager();
+        Transaction tx = pm.currentTransaction();
+
+        try {
+            tx.begin();
+            Query<User> query = pm.newNamedQuery(User.class, "findAllUsers");
+            users = (List<User>) query.execute();
+            tx.commit();
+        } catch (Exception e) {
+            System.err.println("UserDAO: Exception occurred while finding all users.");
+            e.printStackTrace();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+        }
+
+        return users;
+    }
+
+    @Override
+    public void deleteUserByDni(String dni) {
+        PersistenceManager pm = DBConfig.getPersistenceManager();
+        Transaction tx = pm.currentTransaction();
+
+        try {
+            tx.begin();
+            Query<User> query = pm.newQuery(User.class, "dni == d");
+            query.declareParameters("String d");
+            long deleted = query.deletePersistentAll(dni);
+            if (deleted > 0) {
+                System.out.println("UserDAO: User deleted successfully.");
+            } else {
+                System.out.println("UserDAO: User not found.");
+            }
+            tx.commit();
+        } catch (Exception e) {
+            System.err.println("UserDAO: Exception occurred while deleting user by DNI.");
+            e.printStackTrace();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+        }
+    }
 }
 

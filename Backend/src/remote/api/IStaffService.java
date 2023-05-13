@@ -1,10 +1,12 @@
-package rmi.server.api;
+package rmi.remote.api;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
 import data.entidades.Staff;
+import data.entidades.User;
+
 import rmi.server.exceptions.InvalidUser;
 
 public interface IStaffService extends Remote {
@@ -17,9 +19,9 @@ public interface IStaffService extends Remote {
      * @throws RemoteException
      * @throws InvalidUser
      */
-    String sayHello() throws RemoteException;
-    String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser;
     Staff loginStaff(String username, String password) throws RemoteException;
     Staff registerStaff(String username, String password) throws RemoteException, InvalidUser;
+    List<User> findAllUsers() throws RemoteException;
+    void deleteUserByDni(String dni) throws RemoteException;
 
 }

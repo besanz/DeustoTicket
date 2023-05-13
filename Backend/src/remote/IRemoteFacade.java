@@ -4,6 +4,7 @@ import data.entidades.Artista;
 import data.entidades.Evento;
 import data.entidades.Staff;
 import data.entidades.User;
+import data.entidades.Espacio;
 
 import rmi.server.exceptions.InvalidUser;
 
@@ -16,11 +17,12 @@ public interface IRemoteFacade extends Remote {
     User registerUser(String dni, String nombre, String apellidos, String email, String password) throws RemoteException, InvalidUser;
     Staff registerStaff(String username, String password) throws RemoteException, InvalidUser;
     Staff loginStaff(String login, String password) throws RemoteException;
-    String sayHello() throws RemoteException;
-    String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser;
     List<Artista> obtenerArtistas() throws RemoteException;
     List<Evento> obtenerEventos() throws RemoteException;
     Evento obtenerEventoPorID(int id) throws RemoteException;
     List<Evento> obtenerEventosDestacados() throws RemoteException;
+    List<Espacio> obtenerEspaciosDeEvento(int eventoId) throws RemoteException;
+    List<User> findAllUsers() throws RemoteException;
+    void deleteUserByDni(String dni) throws RemoteException;
 }
 

@@ -15,6 +15,10 @@ import lombok.*;
     @Query(
         name="findByEmail",
         value="SELECT FROM data.entidades.User WHERE email == e PARAMETERS String e"
+    ),
+     @Query(
+        name="findAllUsers",
+        value="SELECT FROM data.entidades.User"
     )
 })
 public class User implements Serializable{

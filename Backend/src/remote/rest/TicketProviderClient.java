@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.entidades.*;
-import remote.rest.response.EventoResponse;
+import remote.rest.dto.ArtistaDTO;
+import remote.rest.dto.EventoDTO;
+import remote.rest.dto.EspacioDTO;
+import remote.rest.dto.PrecioDTO;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -24,8 +27,21 @@ public class TicketProviderClient {
 
     public List<Artista> getArtistas() throws IOException {
         String jsonResponse = makeApiRequest("/api/artistas");
-        Type listType = new TypeToken<ArrayList<Artista>>() {}.getType();
-        return new Gson().fromJson(jsonResponse, listType);
+        
+        // Parse the JSON response to extract the "data" key
+        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+        JsonArray dataArray = jsonObject.getAsJsonArray("data");
+
+        Type listType = new TypeToken<ArrayList<ArtistaDTO>>() {}.getType();
+        List<ArtistaDTO> artistaResponses = new Gson().fromJson(dataArray, listType);
+
+        List<Artista> artistas = new ArrayList<>();
+        for (ArtistaDTO artistaResponse : artistaResponses) {
+            Artista artista = artistaResponse.getArtista();
+            artistas.add(artista);
+        }
+
+        return artistas;
     }
 
     public List<Evento> getEventos() throws IOException {
@@ -35,17 +51,69 @@ public class TicketProviderClient {
         JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
         JsonArray dataArray = jsonObject.getAsJsonArray("data");
 
-        Type listType = new TypeToken<ArrayList<EventoResponse>>() {}.getType();
-        List<EventoResponse> eventoResponses = new Gson().fromJson(dataArray, listType);
+        Type listType = new TypeToken<ArrayList<EventoDTO>>() {}.getType();
+        List<EventoDTO> eventoResponses = new Gson().fromJson(dataArray, listType);
 
         List<Evento> eventos = new ArrayList<>();
-        for (EventoResponse eventoResponse : eventoResponses) {
+        for (EventoDTO eventoResponse : eventoResponses) {
             Evento evento = eventoResponse.getEvento();
             eventos.add(evento);
         }
 
         return eventos;
     }
+
+    public List<Espacio> getEspacios() throws IOException {
+        String jsonResponse = makeApiRequest("/api/espacios");
+
+        // Parse the JSON response to extract the "data" key
+        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+        JsonArray dataArray = jsonObject.getAsJsonArray("data");
+
+        Type listType = new TypeToken<ArrayList<EspacioDTO>>() {}.getType();
+        List<EspacioDTO> espacioResponses = new Gson().fromJson(dataArray, listType);
+
+        List<Espacio> espacios = new ArrayList<>();
+        for (EspacioDTO espacioResponse : espacioResponses) {
+            Espacio espacio = espacioResponse.getEspacio();
+            espacios.add(espacio);
+        }
+
+        return espacios;
+    }
+
+     public List<Precio> getPrecios() throws IOException {
+        String jsonResponse = makeApiRequest("/api/precios");
+
+        // Parse the JSON response to extract the "data" key
+        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+        JsonArray dataArray = jsonObject.getAsJsonArray("data");
+
+        Type listType = new TypeToken<ArrayList<PrecioDTO>>() {}.getType();
+        List<PrecioDTO> precioResponses = new Gson().fromJson(dataArray, listType);
+
+        List<Precio> precios = new ArrayList<>();
+        for (PrecioDTO precioResponse : precioResponses) {
+            Precio precio = precioResponse.getPrecio();
+            precios.add(precio);
+        }
+
+        return precios;
+    }
+
+    public Evento getEventoById(int id) throws IOException {
+        String jsonResponse = makeApiRequest("/api/eventos/" + id);
+
+        // Parse the JSON response to extract the "data" key
+        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+        JsonObject dataObject = jsonObject.getAsJsonObject("data");
+
+        EventoDTO eventoResponse = new Gson().fromJson(dataObject, EventoDTO.class);
+        Evento evento = eventoResponse.getEvento();
+
+        return evento;
+    }
+
 
     private String makeApiRequest(String endpoint) throws IOException {
         URL url = new URL(API_BASE_URL + endpoint);
@@ -67,5 +135,24 @@ public class TicketProviderClient {
 
         connection.disconnect();
         return sb.toString();
+    }
+
+    public List<Espacio> getEspaciosByEventoId(int eventoId) throws IOException {
+    String jsonResponse = makeApiRequest("/api/eventos/" + eventoId + "/espacios");
+
+    // Parse the JSON response to extract the "data" key
+    JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+    JsonArray dataArray = jsonObject.getAsJsonArray("data");
+
+    Type listType = new TypeToken<ArrayList<EspacioDTO>>() {}.getType();
+    List<EspacioDTO> espacioResponses = new Gson().fromJson(dataArray, listType);
+
+    List<Espacio> espacios = new ArrayList<>();
+    for (EspacioDTO espacioResponse : espacioResponses) {
+        Espacio espacio = espacioResponse.getEspacio();
+        espacios.add(espacio);
+    }
+
+    return espacios;
     }
 }

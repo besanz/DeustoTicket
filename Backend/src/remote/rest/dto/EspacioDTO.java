@@ -1,15 +1,15 @@
-package remote.rest.response;
+package remote.rest.dto;
 
 import com.google.gson.annotations.SerializedName;
-import data.entidades.Evento;
+import data.entidades.Espacio;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class EventoResponse {
+public class EspacioDTO {
     private int id;
 
     @SerializedName("attributes")
-    private Evento evento;
+    private Espacio espacio;
 }

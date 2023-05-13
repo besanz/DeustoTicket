@@ -7,10 +7,9 @@ import data.dao.IUserDAO;
 import data.dao.impl.UserDAO;
 import data.entidades.*;
 import rmi.server.exceptions.InvalidUser;
-import rmi.server.api.IUserService;
+import rmi.remote.api.IUserService;
 import remote.rest.TicketProviderClient;
 import java.io.IOException;
-
 
 public class UserService implements IUserService {
     private static UserService instance;
@@ -27,14 +26,6 @@ public class UserService implements IUserService {
             instance = new UserService();
         }
         return instance;
-    }
-
-    public String sayHello() throws RemoteException {
-        return "Hello!";
-    }
-
-    public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser {
-        return "Hello, " + login + "! Your message is: " + message;
     }
 
     public User loginUser(String login, String password) {
@@ -72,14 +63,32 @@ public class UserService implements IUserService {
 
     @Override
     public Evento obtenerEventoPorID(int id) throws RemoteException {
-        // Implementa la lógica para obtener un evento por ID utilizando la instancia de TicketProviderClient
-        return null;
+        try {
+            return ticketProviderClient.getEventoById(id);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al obtener el evento por ID de la API", e);
+        }
     }
 
     @Override
     public List<Evento> obtenerEventosDestacados() throws RemoteException {
-        // Implementa la lógica para obtener eventos destacados utilizando la instancia de TicketProviderClient
-        return null;
+        try {
+            return ticketProviderClient.getEventos(); // Utiliza el mismo método getEventos para obtener eventos destacados
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al obtener eventos destacados de la API", e);
+        }
+    }
+
+    @Override
+    public List<Espacio> obtenerEspaciosDeEvento(int eventoId) throws RemoteException {
+        try {
+            return ticketProviderClient.getEspaciosByEventoId(eventoId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al obtener espacios de la API", e);
+        }
     }
 
 }

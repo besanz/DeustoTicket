@@ -7,6 +7,8 @@ import java.rmi.RemoteException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
 import java.text.SimpleDateFormat;
@@ -99,6 +101,14 @@ public class MainUserWindow extends JFrame {
             gbc.gridy = 1;
             infoPanel.add(fechaLabel, gbc);
         }
+
+        eventoPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                EventDetail eventDetailWindow = new EventDetail(evento, userController.getRemoteFacade());
+                eventDetailWindow.setVisible(true);
+            }
+        });
 
         return eventoPanel;
     }

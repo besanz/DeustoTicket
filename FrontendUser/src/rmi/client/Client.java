@@ -28,8 +28,6 @@ public class Client {
         try {
             Registry registry = LocateRegistry.getRegistry(serverPort);
             stubServer = (IRemoteFacade) registry.lookup(serverName);
-
-            System.out.println("* Message coming from the server: '" + stubServer.sayHello() + "'");
             serviceLocator = new ServiceLocator(registry);
 
         } catch (Exception e) {

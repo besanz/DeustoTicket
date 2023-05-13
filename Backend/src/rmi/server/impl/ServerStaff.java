@@ -7,7 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import data.entidades.*;
 import remote.IRemoteFacade;
-import rmi.server.api.*;
+import rmi.remote.api.*;
 import rmi.server.exceptions.InvalidUser;
 import remote.service.StaffService;
 import java.util.List;
@@ -28,15 +28,6 @@ public class ServerStaff extends UnicastRemoteObject implements IRemoteFacade {
             instance = new ServerStaff();
         }
         return instance;
-    }
-
-
-    public String sayHello() throws RemoteException {
-        return staffService.sayHello();
-    }
-
-    public String sayMessage(String login, String password, String message) throws RemoteException, InvalidUser {
-        return staffService.sayMessage(login, password, message);
     }
 
     @Override
@@ -67,6 +58,11 @@ public class ServerStaff extends UnicastRemoteObject implements IRemoteFacade {
         
         return null;
     }
+
+    @Override
+    public List<Espacio> obtenerEspaciosDeEvento(int eventoId) throws RemoteException {
+        return null;
+    }
     
     @Override
     public List<Artista> obtenerArtistas() throws RemoteException {
@@ -81,6 +77,16 @@ public class ServerStaff extends UnicastRemoteObject implements IRemoteFacade {
     @Override
     public User loginUser(String login, String password) throws RemoteException{
         return null;
+    }
+
+    @Override
+    public List<User> findAllUsers() throws RemoteException {
+        return staffService.findAllUsers();
+    }
+
+    @Override
+    public void deleteUserByDni(String dni) throws RemoteException {
+        staffService.deleteUserByDni(dni);
     }
 
     public static void main(String[] args) {
