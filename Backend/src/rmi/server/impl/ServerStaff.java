@@ -36,6 +36,10 @@ public class ServerStaff extends UnicastRemoteObject {
 
             registry.rebind(serverName, objServer);
             System.out.println("* Server '" + "//" + host + ":" + port + "/" + serverName + "' active and waiting...");
+
+            while (true) {
+                Thread.sleep(1000);
+            }
         } catch (Exception e) {
             System.err.println("- Exception running the server: " + e.getMessage());
             e.printStackTrace();

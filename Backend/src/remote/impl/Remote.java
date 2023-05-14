@@ -7,11 +7,14 @@ import rmi.server.exceptions.InvalidUser;
 import remote.IRemoteFacade;
 import remote.service.StaffService;
 import remote.service.UserService;
+import java.rmi.server.UnicastRemoteObject;
+import java.io.Serializable;
+
 
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class Remote implements IRemoteFacade {
+public class Remote extends UnicastRemoteObject implements IRemoteFacade, Serializable {
     private static Remote instance;
     private IStaffService staffService;
     private IUserService userService;
