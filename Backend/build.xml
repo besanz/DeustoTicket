@@ -50,10 +50,10 @@
         <delete dir="${dist.dir}"/>
         <mkdir dir="${dist.dir}"/>
         <jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" includes="**/*.class">
-            <fileset dir="resources" includes="**/*"/>
+            <fileset dir="resources" includes="META-INF/persistence.xml"/>
+            <fileset dir="src" excludes="remote/rest/**/*"/>
         </jar>
     </target>
-
 
     <target name="serverUser" depends="export" description="Runs the Public Server">
         <java classname="rmi.server.impl.ServerUser" classpathref="classpath" fork="true">
