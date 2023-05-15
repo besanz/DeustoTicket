@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.entidades.*;
-import remote.rest.dto.ArtistaDTO;
-import remote.rest.dto.EventoDTO;
-import remote.rest.dto.EspacioDTO;
-import remote.rest.dto.PrecioDTO;
+import remote.rest.dto.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -155,4 +152,68 @@ public class TicketProviderClient {
 
     return espacios;
     }
+
+public Detail getEventDetailById(int id) throws IOException {
+    String endpoint = "/api/eventos/" + id + "?populate=*";
+    String jsonResponse = makeApiRequest(endpoint);
+
+    // Parse the JSON response to extract the "data" key
+    JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
+    JsonObject dataObject = jsonObject.getAsJsonObject("data");
+
+    EventoDTO eventoResponse = new Gson().fromJson(dataObject, EventoDTO.class);
+    Evento evento = eventoResponse.getEvento();
+
+    // Extract additional attributes from the JSON response
+    JsonObject attributesObject = dataObject.getAsJsonObject("attributes");
+    String titulo = attributesObject.get("titulo").getAsString();
+    String descripcion = attributesObject.get("descripcion").getAsString();
+    // Extract other attributes as needed
+
+    // Extract the artistas information
+    JsonObject artistasObject = attributesObject.getAsJsonObject("artistas");
+    JsonArray artistasDataArray = artistasObject.getAsJsonArray("data");
+    List<Artista> artistas = new ArrayList<>();
+    for (JsonElement element : artistasDataArray) {
+        JsonObject artistaObject = element.getAsJsonObject();
+        int artistaId = artistaObject.get("id").getAsInt();
+        JsonObject artistaAttributesObject = artistaObject.getAsJsonObject("attributes");
+        String nombreArtista = artistaAttributesObject.get("nombre").getAsString();
+        // Extract other artistas attributes as needed
+        Artista artista = new Artista(artistaId, nombreArtista);
+        artistas.add(artista);
+    }
+
+    // Extract the espacio information
+    JsonObject espacioObject = attributesObject.getAsJsonObject("espacio");
+    int espacioId = espacioObject.get("id").getAsInt();
+    JsonObject espacioAttributesObject = espacioObject.getAsJsonObject("attributes");
+    String nombreEspacio = espacioAttributesObject.get("nombre").getAsString();
+    // Extract other espacio attributes as needed
+    Espacio espacio = new Espacio(espacioId, nombreEspacio);
+
+    // Extract the precio information
+    JsonObject preciosObject = attributesObject.getAsJsonObject("precios");
+    JsonArray preciosDataArray = preciosObject.getAsJsonArray("data");
+    Precio precio = null;
+    for (JsonElement element : preciosDataArray) {
+        JsonObject precioObject = element.getAsJsonObject();
+        int precioId = precioObject.get("id").getAsInt();
+        if (precioId == 1) {
+            JsonObject precioAttributesObject = precioObject.getAsJsonObject("attributes");
+            String nombrePrecio = precioAttributesObject.get("nombre").getAsString();
+            double precioValue = precioAttributesObject.get("precio").getAsDouble();
+            int disponibles = precioAttributesObject.get("disponibles").getAsInt();
+            int ofertadas = precioAttributesObject.get("ofertadas").getAsInt();
+            // Extract other precio attributes as needed
+            precio = new Precio(precioId, nombrePrecio, precioValue, disponibles, ofertadas);
+            break;
+        }
+    }
+
+    // Create the Detail object with all the extracted information
+    Detail detail = new Detail(evento, titulo, descripcion, artistas, espacio, precio);
+    return detail;
+}
+
 }

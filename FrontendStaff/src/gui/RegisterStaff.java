@@ -24,7 +24,7 @@ public class RegisterStaff extends JFrame {
 
 private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("GuTicket - Registro de usuario");
+        setTitle("Admin - Registro de Staff");
         setBounds(100, 100, 800, 600);
 
         JPanel contentPane = new JPanel();

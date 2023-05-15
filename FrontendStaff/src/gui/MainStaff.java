@@ -1,111 +1,92 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import data.entidades.Staff;
 import controller.StaffController;
 import remote.ServiceLocator;
 
 public class MainStaff extends JFrame {
-	private Staff staff;
-	private StaffController staffController;
-	private ServiceLocator serviceLocator;
+    private Staff staff;
+    private StaffController staffController;
+    private ServiceLocator serviceLocator;
 
-	private JPanel contentPane;
+    private JPanel contentPane;
+    private JPanel mainPanel;
 
-	public MainStaff(Staff staff, StaffController staffController, ServiceLocator serviceLocator) {
-		this.staff = staff;
-		this.staffController = staffController;
-		this.serviceLocator = serviceLocator;
-		initComponents();
-	}
+    public MainStaff(Staff staff, StaffController staffController, ServiceLocator serviceLocator) {
+        this.staff = staff;
+        this.staffController = staffController;
+        this.serviceLocator = serviceLocator;
+        initComponents();
+    }
 
-	private void initComponents() {
-		setTitle("Staff Inicio");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1400, 499);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new GridBagLayout());
-		setContentPane(contentPane);
+    private void initComponents() {
+        setTitle("Admin - Inicio");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 600, 400);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(new BorderLayout());
+        contentPane.setBackground(new Color(54, 57, 63));
+        setContentPane(contentPane);
 
-		GridBagConstraints c = new GridBagConstraints();
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new GridBagLayout());
+        mainPanel.setBackground(new Color(54, 57, 63));
+        contentPane.add(mainPanel, BorderLayout.CENTER);
 
-		JButton btnNewButton = new JButton("Control de usuarios");
-		btnNewButton.setForeground(Color.WHITE);
-		btnNewButton.setBackground(new Color(0, 153, 255));
-		btnNewButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 20));
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				StaffControlUsuarios cu = new StaffControlUsuarios(serviceLocator);
-				cu.setVisible(true);
-				dispose();
-			}
-		});
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 0;
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.insets = new Insets(5, 5, 5, 5);
+
+        JLabel title = new JLabel("Bienvenido a la interfaz de Staff", SwingConstants.CENTER);
+        title.setForeground(new Color(114, 137, 218));
+        title.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 24));
+        c.gridwidth = 2;
+        c.gridx = 0;
+        c.gridy = 0;
+        mainPanel.add(title, c);
+
+        c.gridwidth = 1;
 		c.gridy = 1;
-		c.gridwidth = 1;
-		c.gridheight = 2;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.insets = new Insets(10, 10, 10, 5);
-		contentPane.add(btnNewButton, c);
+    	c.weighty = 0;
+        addButton("Control de usuarios", new Color(114, 137, 218), c, 0, 1, new StaffControlUsuarios(serviceLocator));
+        addButton("Control de tickets", new Color(114, 137, 218), c, 1, 1, new StaffControlTickets());
+
+        c.gridwidth = 2;
+        c.gridy = 2;
+    	c.weighty = 0;
+        addButton("Escanear QR", new Color(114, 137, 218), c, 0, 2, new StaffEscanearQR());
+    }
+
+    private void addButton(String text, Color color, GridBagConstraints c, int gridx, int gridy, JFrame frame) {
+        JButton button = new JButton(text);
+        button.setForeground(Color.WHITE);
+        button.setBackground(color);
+        button.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 20));
+        button.setBorder(new RoundedBorder(10)); //10 is the radius
+        button.setFocusPainted(false);
+		Dimension buttonSize = gridy == 2 ? new Dimension(200, 60) : new Dimension(100, 60);
+        
+        button.setPreferredSize(buttonSize);
+        button.setMaximumSize(buttonSize);
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(true);
+            }
+        });
+        c.gridx = gridx;
+        c.gridy = gridy;
 		
-		JButton btnNewButton_1 = new JButton("Control de tickets");
-		btnNewButton_1.setForeground(Color.WHITE);
-		btnNewButton_1.setBackground(new Color(0, 153, 255));
-		btnNewButton_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 20));
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				StaffControlTickets ct = new StaffControlTickets();
-				ct.setVisible(true);
-				dispose();
-			}
-		});
-		c.gridx = 1;
-		c.gridy = 1;
-		c.gridwidth = 1;
-		c.gridheight = 2;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.insets = new Insets(10, 5, 10, 5);
-		contentPane.add(btnNewButton_1, c);
-		
-		JButton btnEscanearQr = new JButton("Escanear QR");
-		btnEscanearQr.setForeground(Color.WHITE);
-		btnEscanearQr.setBackground(new Color(0, 153, 255));
-		btnEscanearQr.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 20));
-		btnEscanearQr.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				StaffEscanearQR eq = new StaffEscanearQR();
-				eq.setVisible(true);
-				dispose();
-			
-			}
-		});
-		c.gridx = 2;
-		c.gridy = 1;
-		c.gridwidth = 1;
-		c.gridheight = 2;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.insets = new Insets(10, 5, 10, 10);
-		contentPane.add(btnEscanearQr, c);
-	}
-
+        mainPanel.add(button, c);
+    }
 }
+
+

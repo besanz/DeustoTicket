@@ -32,8 +32,8 @@ public class StaffControlUsuarios extends JFrame {
     }
 
     private void initComponents() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("GuTicket - Staff");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Admin - Control de Usarios");
         setPreferredSize(new Dimension(800, 600));
         getContentPane().setBackground(new Color(54, 57, 63));
 

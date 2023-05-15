@@ -17,8 +17,8 @@ public class StaffControlTickets extends JFrame {
 
 	
 	public StaffControlTickets() {
-		setTitle("Control de Tickets");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Admin - Control de Tickets");
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 812, 571);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

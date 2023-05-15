@@ -13,7 +13,8 @@ public class StaffEscanearQR extends JFrame {
 
 
 	public StaffEscanearQR() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Admin - Escanear QR");
 		setBounds(100, 100, 858, 516);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -30,7 +30,7 @@ public class LoginStaff extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GuTicket - Iniciar sesion");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 600);
+        setBounds(0, 0, 600, 450);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -48,7 +48,7 @@ public class LoginStaff extends JFrame {
         gbc_lblInicioDeSesion.gridx = 0;
         gbc_lblInicioDeSesion.gridy = 0;
         gbc_lblInicioDeSesion.anchor = GridBagConstraints.CENTER;
-        gbc_lblInicioDeSesion.insets = new Insets(130, 0, 20, 0); // Incrementa el espacio superior a 60
+        gbc_lblInicioDeSesion.insets = new Insets(0, 0, 20, 0); // Incrementa el espacio superior a 60
         mainPanel.add(lblInicioDeSesion, gbc_lblInicioDeSesion);
 
         JPanel panel = new JPanel();
@@ -103,7 +103,7 @@ public class LoginStaff extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(btnIniciarSesion, gbc);
 
-        JButton btnRegistro = new JButton("No tienes cuenta? Registrate");
+        JButton btnRegistro = new JButton("Nuevo empleado? Registrate");
         btnRegistro.addActionListener(evt -> jButtonRegisterActionPerformed(evt));
         btnRegistro.setFont(new Font("Tahoma", Font.BOLD, 16));
         btnRegistro.setForeground(Color.WHITE);
