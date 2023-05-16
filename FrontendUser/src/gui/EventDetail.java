@@ -1,18 +1,32 @@
 package gui;
 
+import data.entidades.Artista;
+import data.entidades.Espacio;
 import data.entidades.Evento;
 import remote.IRemoteFacade;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.List;
 
 public class EventDetail extends JFrame {
     private Evento evento;
     private IRemoteFacade remoteFacade;
+    private List<Artista> artistas;
+    private Espacio espacio;
 
     public EventDetail(Evento evento, IRemoteFacade remoteFacade) {
-        this.evento = evento;
         this.remoteFacade = remoteFacade;
+        this.evento = evento;
+        try {
+            this.artistas = this.remoteFacade.obtenerArtistas(evento.getId());
+            this.espacio = this.remoteFacade.obtenerEspacioDeEvento(evento.getId());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar detalles del evento.");
+        }
         initComponents();
     }
 
@@ -31,15 +45,23 @@ public class EventDetail extends JFrame {
         getContentPane().add(titleLabel, BorderLayout.NORTH);
 
         JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(0, 2));
+        infoPanel.setLayout(new GridLayout(0, 1));
         infoPanel.setBackground(new Color(54, 57, 63));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        getContentPane().add(infoPanel, BorderLayout.CENTER);
 
-        JLabel aforoLabel = new JLabel("Aforo: " + evento.getAforo());
-        aforoLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 18));
-        aforoLabel.setForeground(new Color(114, 137, 218));
-        infoPanel.add(aforoLabel);
+        JLabel descripcionLabel = new JLabel("Descripción: " + evento.getDescripcion());
+        descripcionLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 18));
+        descripcionLabel.setForeground(new Color(114, 137, 218));
+        infoPanel.add(descripcionLabel);
+
+        // Como Artista no tiene un atributo de precio, no podemos mostrar el precio de cada Artista. 
+
+        JLabel espacioLabel = new JLabel("Espacio: " + espacio.getNombre());
+        espacioLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 18));
+        espacioLabel.setForeground(new Color(114, 137, 218));
+        infoPanel.add(espacioLabel);
+
+        getContentPane().add(infoPanel, BorderLayout.CENTER);
 
         pack();
         setLocationRelativeTo(null);

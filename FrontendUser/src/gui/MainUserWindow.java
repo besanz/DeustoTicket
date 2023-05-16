@@ -2,6 +2,7 @@ package gui;
 
 import data.entidades.Evento;
 import data.entidades.User;
+
 import controller.UserController;
 import java.rmi.RemoteException;
 
@@ -105,8 +106,14 @@ public class MainUserWindow extends JFrame {
         eventoPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                EventDetail eventDetailWindow = new EventDetail(evento, userController.getRemoteFacade());
-                eventDetailWindow.setVisible(true);
+                try {
+                    // Aquí está el cambio: simplemente no necesitas declarar una nueva variable
+                    Evento fetchedEvento = userController.getRemoteFacade().obtenerEventoPorID(evento.getId());
+                    EventDetail eventDetailWindow = new EventDetail(fetchedEvento, userController.getRemoteFacade());
+                    eventDetailWindow.setVisible(true);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 

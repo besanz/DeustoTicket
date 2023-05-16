@@ -9,7 +9,7 @@ import data.dao.impl.UserDAO;
 
 import data.entidades.Staff;
 import data.entidades.User;
-import rmi.remote.api.IStaffService;
+import remote.api.IStaffService;
 import rmi.server.exceptions.InvalidUser;
 
 import java.util.List;

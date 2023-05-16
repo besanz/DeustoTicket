@@ -7,18 +7,18 @@ import data.dao.IUserDAO;
 import data.dao.impl.UserDAO;
 import data.entidades.*;
 import rmi.server.exceptions.InvalidUser;
-import rmi.remote.api.IUserService;
-import remote.rest.TicketProviderClient;
+import remote.api.IUserService;
+import remote.rest.gateway.TicketProviderClient;
 import java.io.IOException;
 
 public class UserService implements IUserService {
     private static UserService instance;
-    private final UserDAO userDAO;
+    private final IUserDAO userDAO;
     private final TicketProviderClient ticketProviderClient;
 
     private UserService() {
         this.userDAO = UserDAO.getInstance();
-        this.ticketProviderClient = new TicketProviderClient();
+        this.ticketProviderClient = TicketProviderClient.getInstance();
     }
 
     public static UserService getInstance() {
@@ -42,12 +42,22 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<Artista> obtenerArtistas() throws RemoteException {
+    public List<Artista> obtenerArtistas(int eventoID) throws RemoteException {
         try {
-            return ticketProviderClient.getArtistas();
+            return ticketProviderClient.getArtistasByEventoID(eventoID);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RemoteException("Error al obtener artistas de la API", e);
+        }
+    }
+
+    @Override
+    public Artista obtenerArtistaPorID(int artistaID) throws RemoteException {
+        try {
+            return ticketProviderClient.getArtistaByID(artistaID);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al obtener el artista por ID de la API", e);
         }
     }
 
@@ -62,9 +72,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Evento obtenerEventoPorID(int id) throws RemoteException {
+    public Evento obtenerEventoPorID(int eventoID) throws RemoteException {
         try {
-            return ticketProviderClient.getEventoById(id);
+            return ticketProviderClient.getEventoByID(eventoID);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RemoteException("Error al obtener el evento por ID de la API", e);
@@ -82,13 +92,22 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<Espacio> obtenerEspaciosDeEvento(int eventoId) throws RemoteException {
+    public Espacio obtenerEspacioDeEvento(int eventoID) throws RemoteException {
         try {
-            return ticketProviderClient.getEspaciosByEventoId(eventoId);
+            return ticketProviderClient.getEspacioByEventoID(eventoID);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RemoteException("Error al obtener espacios de la API", e);
         }
     }
 
+    @Override
+    public Precio obtenerPrecioDeEvento(int eventoID) throws RemoteException {
+        try {
+            return ticketProviderClient.getPrecioByEventoID(eventoID);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al obtener espacios de la API", e);
+        }
+    }
 }

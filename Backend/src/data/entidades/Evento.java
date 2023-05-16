@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 public class Evento implements Serializable {
 
+    @Getter @Setter private int id;
+
     @Getter @Setter private String titulo;
 
     @Getter @Setter private String descripcion;
