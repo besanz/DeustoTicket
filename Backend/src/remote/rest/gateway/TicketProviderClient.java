@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import data.entidades.*;
 import remote.rest.dto.*;
@@ -44,26 +46,115 @@ public class TicketProviderClient {
     EventoTransformer eventoTransformer = EventoTransformer.getInstance();
     PrecioTransformer precioTransformer = PrecioTransformer.getInstance();
 
-    //Obtener la lista de eventos total para el main. 
+    // Obtener la lista de eventos total para el main.
     public List<Evento> getEventos() throws IOException {
-        String jsonResponse = makeApiRequest("/api/eventos");
+        // Primera llamada: obtener los precios que tienen un cliente con ID 1
+        String jsonPreciosResponse = makeApiRequest("/api/precios?populate=cliente&filters[cliente][id][$eq]=1");
+        JsonObject jsonObjectPrecios = new Gson().fromJson(jsonPreciosResponse, JsonObject.class);
+        if (jsonObjectPrecios == null) {
+            throw new NullPointerException("Error en el parseo del JSON de precios");
+        }
+        JsonArray dataPreciosArray = jsonObjectPrecios.getAsJsonArray("data");
+        if (dataPreciosArray == null) {
+            return new ArrayList<>();
+        }
+        Type listPreciosType = new TypeToken<ArrayList<PrecioDTO>>() {
+        }.getType();
+        List<PrecioDTO> precioResponses = new Gson().fromJson(dataPreciosArray, listPreciosType);
+
+        List<Precio> precios = precioTransformer.transform(precioResponses);
+
+        // Segunda llamada: obtener todos los eventos con precios y clientes
+        String jsonResponse = makeApiRequest("/api/eventos?populate=precios.cliente");
         JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
         if (jsonObject == null) {
-            throw new NullPointerException("Error en el parseo del JSON");
+            throw new NullPointerException("Error en el parseo del JSON de eventos");
         }
         JsonArray dataArray = jsonObject.getAsJsonArray("data");
         if (dataArray == null) {
-            return new ArrayList<>(); 
+            return new ArrayList<>();
         }
-        Type listType = new TypeToken<ArrayList<EventoDTO>>() {}.getType();
-        List<EventoDTO> eventoResponses = new Gson().fromJson(dataArray, listType);
+        List<Evento> eventos = new ArrayList<>();
+        for (JsonElement element : dataArray) {
+            JsonObject eventoObject = element.getAsJsonObject();
+            JsonObject attributesObject = eventoObject.getAsJsonObject("attributes");
+            if (attributesObject != null) {
+                int eventoID = eventoObject.get("id").getAsInt();
+                String titulo = attributesObject.get("titulo").getAsString();
+                String descripcion = attributesObject.get("descripcion").getAsString();
+                String fechaString = attributesObject.get("fecha").getAsString();
+                Date fecha = parseFecha(fechaString);
+                String createdAt = attributesObject.get("createdAt").getAsString();
+                String updatedAt = attributesObject.get("updatedAt").getAsString();
+                String publishedAt = attributesObject.get("publishedAt").getAsString();
+                int aforo = attributesObject.get("aforo").getAsInt();
 
-        List<Evento> eventos = eventoTransformer.transform(eventoResponses);
+                List<Precio> preciosEvento = new ArrayList<>();
+                JsonObject preciosObject = attributesObject.getAsJsonObject("precios");
+                if (preciosObject != null) {
+                    JsonElement preciosDataElement = preciosObject.get("data");
+                    if (preciosDataElement != null && preciosDataElement.isJsonArray()) {
+                        JsonArray preciosDataArray = preciosDataElement.getAsJsonArray();
+                        for (JsonElement precioElement : preciosDataArray) {
+                            JsonObject precioObject = precioElement.getAsJsonObject();
+                            JsonObject precioAttributesObject = precioObject.getAsJsonObject("attributes");
+                            if (precioAttributesObject != null) {
+                                int precioID = precioObject.get("id").getAsInt();
+                                String nombre = precioAttributesObject.get("nombre").getAsString();
+                                double precio = precioAttributesObject.get("precio").getAsDouble();
+                                int disponibles = precioAttributesObject.get("disponibles").getAsInt();
+                                int ofertadas = precioAttributesObject.get("ofertadas").getAsInt();
+                                Cliente cliente = null;
+                                JsonObject clienteObject = precioAttributesObject.getAsJsonObject("cliente");
+                                if (clienteObject != null) {
+                                    JsonObject clienteDataObject = clienteObject.getAsJsonObject("data");
+                                    if (clienteDataObject != null) {
+                                        int clienteID = clienteDataObject.get("id").getAsInt();
+                                        String nombreCliente = clienteDataObject.getAsJsonObject("attributes")
+                                                .get("nombre").getAsString();
+                                        String clienteCreatedAt = clienteDataObject.getAsJsonObject("attributes")
+                                                .get("createdAt").getAsString();
+                                        String clienteUpdatedAt = clienteDataObject.getAsJsonObject("attributes")
+                                                .get("updatedAt").getAsString();
+                                        String clientePublishedAt = clienteDataObject.getAsJsonObject("attributes")
+                                                .get("publishedAt").getAsString();
+                                        cliente = new Cliente(clienteID, nombreCliente, clienteCreatedAt,
+                                                clienteUpdatedAt, clientePublishedAt);
+                                    }
+                                }
+                                Precio precioEntity = new Precio(precioID, nombre, precio, disponibles, ofertadas,
+                                        cliente);
+                                preciosEvento.add(precioEntity);
+                            }
+                        }
+                    }
+                }
 
-        return eventos;
+                Evento evento = new Evento(eventoID, titulo, descripcion, fecha, createdAt, updatedAt, publishedAt,
+                        aforo, preciosEvento);
+                eventos.add(evento);
+            }
+        }
+
+        // Filtrar eventos que tienen un precio con cliente ID 1
+        List<Evento> filteredEventos = new ArrayList<>();
+        for (Evento evento : eventos) {
+            boolean hasPrecioWithCliente1 = false;
+            for (Precio precio : evento.getPrecios()) {
+                if (precio.getCliente() != null && precio.getCliente().getId() == 1) {
+                    hasPrecioWithCliente1 = true;
+                    break;
+                }
+            }
+            if (hasPrecioWithCliente1) {
+                filteredEventos.add(evento);
+            }
+        }
+
+        return filteredEventos;
     }
 
-    //Obtiene la información de evento por su ID.
+    // Obtiene la información de evento por su ID.
     public Evento getEventoByID(int eventoID) throws IOException {
         String jsonResponse = makeApiRequest("/api/eventos/" + eventoID);
         JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
@@ -72,7 +163,7 @@ public class TicketProviderClient {
         }
         JsonObject dataObject = jsonObject.getAsJsonObject("data");
         if (dataObject == null) {
-            return null; 
+            return null;
         }
 
         EventoDTO eventoResponse = new Gson().fromJson(dataObject, EventoDTO.class);
@@ -89,18 +180,19 @@ public class TicketProviderClient {
         }
         JsonObject dataObject = jsonObject.getAsJsonObject("data");
         if (dataObject == null) {
-            return new ArrayList<>(); 
+            return new ArrayList<>();
         }
         JsonObject artistasObject = dataObject.getAsJsonObject("attributes").getAsJsonObject("artistas");
         if (artistasObject == null) {
-            return new ArrayList<>(); 
+            return new ArrayList<>();
         }
         JsonArray dataArray = artistasObject.getAsJsonArray("data");
         if (dataArray == null) {
-            return new ArrayList<>(); 
+            return new ArrayList<>();
         }
 
-        Type listType = new TypeToken<ArrayList<ArtistaDTO>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<ArtistaDTO>>() {
+        }.getType();
         List<ArtistaDTO> artistaResponses = new Gson().fromJson(dataArray, listType);
 
         List<Artista> artistas = artistaTransformer.transform(artistaResponses);
@@ -116,7 +208,7 @@ public class TicketProviderClient {
         }
         JsonObject dataObject = jsonObject.getAsJsonObject("data");
         if (dataObject == null) {
-            return null; 
+            return null;
         }
 
         ArtistaDTO artistaResponse = new Gson().fromJson(dataObject, ArtistaDTO.class);
@@ -144,7 +236,8 @@ public class TicketProviderClient {
             return null;
         }
 
-        Type listType = new TypeToken<ArrayList<PrecioDTO>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<PrecioDTO>>() {
+        }.getType();
         List<PrecioDTO> precioResponses = new Gson().fromJson(preciosArray, listType);
 
         Precio precio = null;
@@ -166,18 +259,19 @@ public class TicketProviderClient {
         }
         JsonObject dataObject = jsonObject.getAsJsonObject("data");
         if (dataObject == null) {
-            return null; 
+            return null;
         }
         JsonObject attributesObject = dataObject.getAsJsonObject("attributes");
         if (attributesObject == null) {
-            return null; 
+            return null;
         }
         JsonObject espacioObject = attributesObject.getAsJsonObject("espacio").getAsJsonObject("data");
         if (espacioObject == null) {
-            return null; 
+            return null;
         }
 
-        Type type = new TypeToken<EspacioDTO>() {}.getType();
+        Type type = new TypeToken<EspacioDTO>() {
+        }.getType();
         EspacioDTO espacioResponse = new Gson().fromJson(espacioObject, type);
 
         EspacioTransformer espacioTransformer = EspacioTransformer.getInstance();
@@ -212,4 +306,13 @@ public class TicketProviderClient {
         return sb.toString();
     }
 
+    private Date parseFecha(String fechaString) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return dateFormat.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null; // O manejar el error de alguna otra manera
+        }
+    }
 }

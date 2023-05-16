@@ -1,12 +1,11 @@
 package rmi.server.exceptions;
 
-public class InvalidUser extends Exception 
-{
+public class InvalidUser extends Exception {
     private String message;
 
     public InvalidUser() {
         super();
-        this.message = "Invalid User";        
+        this.message = "Invalid User";
     }
 
     public InvalidUser(String exceptionMessage) {

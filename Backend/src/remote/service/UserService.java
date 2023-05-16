@@ -32,7 +32,8 @@ public class UserService implements IUserService {
         return userDAO.findByLoginAndPassword(login, password);
     }
 
-    public User registerUser(String dni, String name, String surname, String email, String password) throws InvalidUser {
+    public User registerUser(String dni, String name, String surname, String email, String password)
+            throws InvalidUser {
         if (userDAO.findByEmail(email) != null) {
             throw new InvalidUser("Email is already registered.");
         }
@@ -84,7 +85,8 @@ public class UserService implements IUserService {
     @Override
     public List<Evento> obtenerEventosDestacados() throws RemoteException {
         try {
-            return ticketProviderClient.getEventos(); // Utiliza el mismo método getEventos para obtener eventos destacados
+            return ticketProviderClient.getEventos(); // Utiliza el mismo método getEventos para obtener eventos
+                                                      // destacados
         } catch (IOException e) {
             e.printStackTrace();
             throw new RemoteException("Error al obtener eventos destacados de la API", e);

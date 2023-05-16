@@ -22,7 +22,7 @@ public class UserDAO implements IUserDAO {
     }
 
     public void addUser(User user) {
-    PersistenceManager pm = DBConfig.getPersistenceManager();
+        PersistenceManager pm = DBConfig.getPersistenceManager();
         try {
             pm.makePersistent(user);
         } finally {
@@ -170,4 +170,3 @@ public class UserDAO implements IUserDAO {
         }
     }
 }
-

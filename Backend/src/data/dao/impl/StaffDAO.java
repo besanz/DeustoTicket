@@ -23,7 +23,7 @@ public class StaffDAO implements IStaffDAO {
     }
 
     public void addStaff(Staff staff) {
-    PersistenceManager pm = DBConfig.getPersistenceManager();
+        PersistenceManager pm = DBConfig.getPersistenceManager();
         try {
             pm.makePersistent(staff);
         } finally {

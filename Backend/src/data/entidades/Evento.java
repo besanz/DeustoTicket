@@ -1,6 +1,8 @@
 package data.entidades;
 
 import java.util.Date;
+import java.util.List;
+
 import java.io.Serializable;
 import lombok.*;
 
@@ -23,4 +25,7 @@ public class Evento implements Serializable {
     @Getter @Setter private String publishedAt;
 
     @Getter @Setter private int aforo;
+
+    @Getter @Setter private List<Precio> precios;
+
 }

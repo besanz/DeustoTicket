@@ -44,7 +44,5 @@ public class ServerUser extends UnicastRemoteObject {
             System.err.println("- Exception running the server: " + e.getMessage());
             e.printStackTrace();
         }
-
-        
     }
 }
