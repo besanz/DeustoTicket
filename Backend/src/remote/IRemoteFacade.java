@@ -18,7 +18,7 @@ public interface IRemoteFacade extends Remote {
 
     Staff loginStaff(String login, String password) throws RemoteException;
 
-    // Metodos para obtener datos de la API
+    // Metodos para obtener datos de la API pasandole un eventoID
     List<Artista> obtenerArtistas(int eventoID) throws RemoteException;
 
     Artista obtenerArtistaPorID(int artistaID) throws RemoteException;
