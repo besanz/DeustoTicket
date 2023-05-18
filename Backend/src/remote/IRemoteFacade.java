@@ -25,10 +25,6 @@ public interface IRemoteFacade extends Remote {
 
     List<Evento> obtenerEventos() throws RemoteException;
 
-    Evento obtenerEventoPorID(int eventoID) throws RemoteException;
-
-    List<Evento> obtenerEventosDestacados() throws RemoteException;
-
     Espacio obtenerEspacioDeEvento(int eventoID) throws RemoteException;
 
     // Metodos que van al DAO

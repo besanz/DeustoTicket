@@ -126,7 +126,6 @@ public class TicketProviderClient {
                 // Agregar el evento a la lista de eventos filtrados si tiene precios con cliente ID 1
                 if (!preciosEvento.isEmpty()) {
                     Evento evento = new Evento(eventoID, titulo, descripcion, fecha, createdAt, updatedAt, publishedAt, aforo, preciosEvento);
-                    System.out.println("Precios del evento " + eventoID + ": " + preciosEvento);  // Añadir esta línea
                     eventosFiltrados.add(evento);
                 }
 
@@ -134,26 +133,6 @@ public class TicketProviderClient {
         }
 
         return eventosFiltrados;
-    }
-
-
-
-    // Obtiene la información de evento por su ID.
-    public Evento getEventoByID(int eventoID) throws IOException {
-        String jsonResponse = makeApiRequest("/api/eventos/" + eventoID);
-        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
-        if (jsonObject == null) {
-            throw new NullPointerException("Error en el parseo del JSON");
-        }
-        JsonObject dataObject = jsonObject.getAsJsonObject("data");
-        if (dataObject == null) {
-            return null;
-        }
-
-        EventoDTO eventoResponse = new Gson().fromJson(dataObject, EventoDTO.class);
-        Evento evento = eventoTransformer.transform(eventoResponse);
-
-        return evento;
     }
 
     public List<Artista> getArtistasByEventoID(int eventoID) throws IOException {
@@ -199,40 +178,6 @@ public class TicketProviderClient {
         Artista artista = artistaTransformer.transform(artistaResponse);
 
         return artista;
-    }
-
-    public Precio getPrecioByEventoID(int eventoID) throws IOException {
-        String jsonResponse = makeApiRequest("/api/eventos/" + eventoID + "?populate=precios");
-        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
-        if (jsonObject == null) {
-            throw new NullPointerException("Error en el parseo del JSON");
-        }
-        JsonObject dataObject = jsonObject.getAsJsonObject("data");
-        if (dataObject == null) {
-            return null;
-        }
-        JsonObject preciosObject = dataObject.getAsJsonObject("attributes").getAsJsonObject("precios");
-        if (preciosObject == null) {
-            return null;
-        }
-        JsonArray preciosArray = preciosObject.getAsJsonArray("data");
-        if (preciosArray == null) {
-            return null;
-        }
-
-        Type listType = new TypeToken<ArrayList<PrecioDTO>>() {
-        }.getType();
-        List<PrecioDTO> precioResponses = new Gson().fromJson(preciosArray, listType);
-
-        Precio precio = null;
-        for (PrecioDTO precioResponse : precioResponses) {
-            if (precioResponse.getId() == 1) {
-                precio = precioResponse.getPrecio();
-                break;
-            }
-        }
-
-        return precio;
     }
 
     public Espacio getEspacioByEventoID(int eventoID) throws IOException {

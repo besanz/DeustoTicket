@@ -15,10 +15,7 @@ public interface IUserService extends Remote {
     Artista obtenerArtistaPorID(int artistaID) throws RemoteException;
     
     List<Evento> obtenerEventos() throws RemoteException;
-    Evento obtenerEventoPorID(int eventoID) throws RemoteException;
     List<Evento> obtenerEventosDestacados() throws RemoteException;
 
     Espacio obtenerEspacioDeEvento(int eventoID) throws RemoteException;
-
-    Precio obtenerPrecioDeEvento(int eventoID) throws RemoteException;
 }

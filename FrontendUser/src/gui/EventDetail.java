@@ -56,7 +56,7 @@ public class EventDetail extends JFrame {
         tituloLabel.setForeground(new Color(114, 137, 218));
         eventoPanel.add(tituloLabel);
 
-        JTextArea descripcionArea = new JTextArea("Descripción: " + evento.getDescripcion());
+        JTextArea descripcionArea = new JTextArea("Descripcion: " + evento.getDescripcion());
         descripcionArea.setLineWrap(true);
         descripcionArea.setWrapStyleWord(true);
         descripcionArea.setEditable(false);

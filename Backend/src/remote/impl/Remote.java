@@ -77,16 +77,6 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
     }
 
     @Override
-    public Evento obtenerEventoPorID(int eventoID) throws RemoteException {
-        return userService.obtenerEventoPorID(eventoID);
-    }
-
-    @Override
-    public List<Evento> obtenerEventosDestacados() throws RemoteException {
-        return userService.obtenerEventosDestacados();
-    }
-
-    @Override
     public Espacio obtenerEspacioDeEvento(int eventoID) throws RemoteException {
         return userService.obtenerEspacioDeEvento(eventoID);
     }

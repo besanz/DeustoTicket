@@ -73,16 +73,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Evento obtenerEventoPorID(int eventoID) throws RemoteException {
-        try {
-            return ticketProviderClient.getEventoByID(eventoID);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RemoteException("Error al obtener el evento por ID de la API", e);
-        }
-    }
-
-    @Override
     public List<Evento> obtenerEventosDestacados() throws RemoteException {
         try {
             return ticketProviderClient.getEventos(); // Utiliza el mismo método getEventos para obtener eventos
@@ -97,16 +87,6 @@ public class UserService implements IUserService {
     public Espacio obtenerEspacioDeEvento(int eventoID) throws RemoteException {
         try {
             return ticketProviderClient.getEspacioByEventoID(eventoID);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RemoteException("Error al obtener espacios de la API", e);
-        }
-    }
-
-    @Override
-    public Precio obtenerPrecioDeEvento(int eventoID) throws RemoteException {
-        try {
-            return ticketProviderClient.getPrecioByEventoID(eventoID);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RemoteException("Error al obtener espacios de la API", e);
