@@ -103,19 +103,13 @@ public class MainUserWindow extends JFrame {
             infoPanel.add(fechaLabel, gbc);
         }
 
-        eventoPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    // Aquí está el cambio: simplemente no necesitas declarar una nueva variable
-                    Evento fetchedEvento = userController.getRemoteFacade().obtenerEventoPorID(evento.getId());
-                    EventDetail eventDetailWindow = new EventDetail(fetchedEvento, userController.getRemoteFacade());
-                    eventDetailWindow.setVisible(true);
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+    eventoPanel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            EventDetail eventDetailWindow = new EventDetail(evento, userController.getRemoteFacade());
+            eventDetailWindow.setVisible(true);
+        }
+    });
 
         return eventoPanel;
     }

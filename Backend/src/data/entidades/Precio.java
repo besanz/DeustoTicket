@@ -5,6 +5,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Precio implements Serializable {
 
     @Getter @Setter private int id;
@@ -17,4 +18,12 @@ public class Precio implements Serializable {
     public double getValor() {
         return this.precio;
     }
+
+    @Override
+    public String toString() {
+        return "Precio [id=" + id + ", nombre=" + nombre + ", precio=" + precio
+                + ", disponibles=" + disponibles + ", ofertadas=" + ofertadas
+                + ", cliente=" + cliente + "]";
+    }
+
 }

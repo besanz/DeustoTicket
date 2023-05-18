@@ -8,6 +8,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
+
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
@@ -46,25 +49,8 @@ public class TicketProviderClient {
     EventoTransformer eventoTransformer = EventoTransformer.getInstance();
     PrecioTransformer precioTransformer = PrecioTransformer.getInstance();
 
-    // Obtener la lista de eventos total para el main.
     public List<Evento> getEventos() throws IOException {
-        // Primera llamada: obtener los precios que tienen un cliente con ID 1
-        String jsonPreciosResponse = makeApiRequest("/api/precios?populate=cliente&filters[cliente][id][$eq]=1");
-        JsonObject jsonObjectPrecios = new Gson().fromJson(jsonPreciosResponse, JsonObject.class);
-        if (jsonObjectPrecios == null) {
-            throw new NullPointerException("Error en el parseo del JSON de precios");
-        }
-        JsonArray dataPreciosArray = jsonObjectPrecios.getAsJsonArray("data");
-        if (dataPreciosArray == null) {
-            return new ArrayList<>();
-        }
-        Type listPreciosType = new TypeToken<ArrayList<PrecioDTO>>() {
-        }.getType();
-        List<PrecioDTO> precioResponses = new Gson().fromJson(dataPreciosArray, listPreciosType);
-
-        List<Precio> precios = precioTransformer.transform(precioResponses);
-
-        // Segunda llamada: obtener todos los eventos con precios y clientes
+        // Obtener todos los eventos con precios y clientes
         String jsonResponse = makeApiRequest("/api/eventos?populate=precios.cliente");
         JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
         if (jsonObject == null) {
@@ -74,7 +60,9 @@ public class TicketProviderClient {
         if (dataArray == null) {
             return new ArrayList<>();
         }
-        List<Evento> eventos = new ArrayList<>();
+        
+        // Filtrar eventos que tienen un precio con cliente ID 1 y construir la lista de eventos filtrados
+        List<Evento> eventosFiltrados = new ArrayList<>();
         for (JsonElement element : dataArray) {
             JsonObject eventoObject = element.getAsJsonObject();
             JsonObject attributesObject = eventoObject.getAsJsonObject("attributes");
@@ -89,6 +77,7 @@ public class TicketProviderClient {
                 String publishedAt = attributesObject.get("publishedAt").getAsString();
                 int aforo = attributesObject.get("aforo").getAsInt();
 
+                // Obtener precios del evento
                 List<Precio> preciosEvento = new ArrayList<>();
                 JsonObject preciosObject = attributesObject.getAsJsonObject("precios");
                 if (preciosObject != null) {
@@ -101,9 +90,11 @@ public class TicketProviderClient {
                             if (precioAttributesObject != null) {
                                 int precioID = precioObject.get("id").getAsInt();
                                 String nombre = precioAttributesObject.get("nombre").getAsString();
-                                double precio = precioAttributesObject.get("precio").getAsDouble();
+                                double precioValue = precioAttributesObject.get("precio").getAsDouble();
                                 int disponibles = precioAttributesObject.get("disponibles").getAsInt();
                                 int ofertadas = precioAttributesObject.get("ofertadas").getAsInt();
+
+                                // Obtener el objeto "cliente"
                                 Cliente cliente = null;
                                 JsonObject clienteObject = precioAttributesObject.getAsJsonObject("cliente");
                                 if (clienteObject != null) {
@@ -122,37 +113,30 @@ public class TicketProviderClient {
                                                 clienteUpdatedAt, clientePublishedAt);
                                     }
                                 }
-                                Precio precioEntity = new Precio(precioID, nombre, precio, disponibles, ofertadas,
-                                        cliente);
-                                preciosEvento.add(precioEntity);
+
+                                // Filtrar precios con cliente ID 1
+                                if (cliente != null && cliente.getId() == 1) {
+                                    Precio precioEntity = new Precio(precioID, nombre, precioValue, disponibles, ofertadas, cliente);
+                                    preciosEvento.add(precioEntity);
+                                }
                             }
                         }
                     }
                 }
-
-                Evento evento = new Evento(eventoID, titulo, descripcion, fecha, createdAt, updatedAt, publishedAt,
-                        aforo, preciosEvento);
-                eventos.add(evento);
-            }
-        }
-
-        // Filtrar eventos que tienen un precio con cliente ID 1
-        List<Evento> filteredEventos = new ArrayList<>();
-        for (Evento evento : eventos) {
-            boolean hasPrecioWithCliente1 = false;
-            for (Precio precio : evento.getPrecios()) {
-                if (precio.getCliente() != null && precio.getCliente().getId() == 1) {
-                    hasPrecioWithCliente1 = true;
-                    break;
+                // Agregar el evento a la lista de eventos filtrados si tiene precios con cliente ID 1
+                if (!preciosEvento.isEmpty()) {
+                    Evento evento = new Evento(eventoID, titulo, descripcion, fecha, createdAt, updatedAt, publishedAt, aforo, preciosEvento);
+                    System.out.println("Precios del evento " + eventoID + ": " + preciosEvento);  // Añadir esta línea
+                    eventosFiltrados.add(evento);
                 }
-            }
-            if (hasPrecioWithCliente1) {
-                filteredEventos.add(evento);
+
             }
         }
 
-        return filteredEventos;
+        return eventosFiltrados;
     }
+
+
 
     // Obtiene la información de evento por su ID.
     public Evento getEventoByID(int eventoID) throws IOException {
@@ -295,7 +279,7 @@ public class TicketProviderClient {
             throw new IOException("Error en la llamada a la API: codigo de respuesta " + responseCode);
         }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         StringBuilder sb = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {

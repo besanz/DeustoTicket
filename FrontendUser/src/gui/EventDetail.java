@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.ArrayList;
+
 
 public class EventDetail extends JFrame {
     private Evento evento;
@@ -24,7 +26,10 @@ public class EventDetail extends JFrame {
         try {
             this.artistas = this.remoteFacade.obtenerArtistas(evento.getId());
             this.espacio = this.remoteFacade.obtenerEspacioDeEvento(evento.getId());
-            //this.precios = evento.getPrecios();
+            this.precios = evento.getPrecios();
+            if (this.precios == null) {
+                this.precios = new ArrayList<>();
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al cargar detalles del evento.");
@@ -32,9 +37,10 @@ public class EventDetail extends JFrame {
         initComponents();
     }
 
+
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("GuTicket - Detalle del Evento");
+        setTitle("GuTicket - "+ evento.getTitulo());
         setSize(new Dimension(800, 600));
         getContentPane().setLayout(new GridLayout(2, 2));
         getContentPane().setBackground(new Color(54, 57, 63));
@@ -89,7 +95,7 @@ public class EventDetail extends JFrame {
         artistasPanel.setBackground(new Color(54, 57, 63));
         artistasPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel artistasLabel = new JLabel("En " + evento.getTitulo() + " disfrutarás de la música de:");
+        JLabel artistasLabel = new JLabel("En " + evento.getTitulo() + " disfrutaras de la musica de:");
         artistasLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
         artistasLabel.setForeground(new Color(114, 137, 218));
         artistasPanel.add(artistasLabel);
@@ -118,15 +124,14 @@ public class EventDetail extends JFrame {
         preciosLabel.setForeground(new Color(114, 137, 218));
         preciosPanel.add(preciosLabel);
 
-        // for (Precio precio : precios) {
-        //     JLabel precioLabel = new JLabel(precio.getNombre() + ": " + precio.getValor());
-        //     precioLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
-        //     precioLabel.setForeground(new Color(114, 137, 218));
-        //     preciosPanel.add(precioLabel);
-        // }
+        for (Precio precio : precios) {
+            JLabel precioLabel = new JLabel(precio.getNombre() + ": " + precio.getValor());
+            precioLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+            precioLabel.setForeground(new Color(114, 137, 218));
+            preciosPanel.add(precioLabel);
+        }
 
         getContentPane().add(preciosPanel);
-
         pack();
         setLocationRelativeTo(null);
     }
