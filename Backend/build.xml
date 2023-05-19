@@ -73,5 +73,16 @@
             <arg value="${server.Name}"/>
         </java>
     </target>
-
+    <target name="enviarmail" depends="build" description="Runs the Client">
+        <java classname="mail.mainPrueba" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="../Backend/dist/server.jar"/>
+            </classpath>
+            <jvmarg value="-Djava.security.policy=${policy.file}"/>          
+            <arg value="${server.IP}"/> 
+            <arg value="${server.port}"/> 
+            <arg value="${server.Name}"/> 
+        </java>
+    </target>
 </project>
