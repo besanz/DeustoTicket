@@ -103,13 +103,13 @@ public class MainUserWindow extends JFrame {
             infoPanel.add(fechaLabel, gbc);
         }
 
-    eventoPanel.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            EventDetail eventDetailWindow = new EventDetail(evento, userController.getRemoteFacade());
-            eventDetailWindow.setVisible(true);
-        }
-    });
+        eventoPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                EventDetail eventDetailWindow = new EventDetail(evento, userController.getRemoteFacade());
+                eventDetailWindow.setVisible(true);
+            }
+        });
 
         return eventoPanel;
     }
