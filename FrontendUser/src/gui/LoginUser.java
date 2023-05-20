@@ -131,6 +131,7 @@ public class LoginUser extends JFrame {
         String password = new String(passwordField.getPassword());
 
         User user = userController.loginUser(login, password);
+        System.out.println("Nombre: " + user.getNombre());
 
         if (user != null) {
             System.out.println("LoginUser: Login successful.");

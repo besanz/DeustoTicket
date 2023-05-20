@@ -141,27 +141,59 @@ public class TicketProviderClient {
         if (jsonObject == null) {
             throw new NullPointerException("Error en el parseo del JSON");
         }
+
         JsonObject dataObject = jsonObject.getAsJsonObject("data");
         if (dataObject == null) {
             return new ArrayList<>();
         }
-        JsonObject artistasObject = dataObject.getAsJsonObject("attributes").getAsJsonObject("artistas");
+
+        JsonObject attributesObject = dataObject.getAsJsonObject("attributes");
+        if (attributesObject == null) {
+            return new ArrayList<>();
+        }
+
+        JsonObject artistasObject = attributesObject.getAsJsonObject("artistas");
         if (artistasObject == null) {
             return new ArrayList<>();
         }
-        JsonArray dataArray = artistasObject.getAsJsonArray("data");
-        if (dataArray == null) {
+
+        JsonArray artistasArray = artistasObject.getAsJsonArray("data");
+        if (artistasArray == null) {
             return new ArrayList<>();
         }
 
-        Type listType = new TypeToken<ArrayList<ArtistaDTO>>() {
-        }.getType();
-        List<ArtistaDTO> artistaResponses = new Gson().fromJson(dataArray, listType);
+        List<Artista> artistas = new ArrayList<>();
+        for (JsonElement artistaElement : artistasArray) {
+            JsonObject artistaObject = artistaElement.getAsJsonObject();
 
-        List<Artista> artistas = artistaTransformer.transform(artistaResponses);
+            int id = artistaObject.get("id").getAsInt();
+
+            JsonObject artistaAttributes = artistaObject.getAsJsonObject("attributes");
+
+            String nombre = artistaAttributes.get("nombre").getAsString();
+            String descripcion = artistaAttributes.get("descripcion").getAsString();
+            String fechaNacimiento = artistaAttributes.get("fecha_nacimiento").getAsString();
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+                date = formatter.parse(fechaNacimiento);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Artista artista = new Artista();
+            artista.setId(id);
+            artista.setNombre(nombre);
+            artista.setDescripcion(descripcion);
+            artista.setFechaNacimiento(date);
+
+            artistas.add(artista);
+        }
 
         return artistas;
     }
+
 
     public Artista getArtistaByID(int artistaID) throws IOException {
         String jsonResponse = makeApiRequest("/api/artistas/" + artistaID);
@@ -174,8 +206,24 @@ public class TicketProviderClient {
             return null;
         }
 
-        ArtistaDTO artistaResponse = new Gson().fromJson(dataObject, ArtistaDTO.class);
-        Artista artista = artistaTransformer.transform(artistaResponse);
+        JsonObject attributesObject = dataObject.getAsJsonObject("attributes");
+        if (attributesObject == null) {
+            return null;
+        }
+
+        Artista artista = new Artista();
+        artista.setId(dataObject.get("id").getAsInt());
+        artista.setNombre(attributesObject.get("nombre").getAsString());
+        artista.setDescripcion(attributesObject.get("descripcion").getAsString());
+
+        String fechaNacimiento = attributesObject.get("fecha_nacimiento").getAsString();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = formatter.parse(fechaNacimiento);
+            artista.setFechaNacimiento(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return artista;
     }

@@ -5,7 +5,7 @@ import java.util.List;
 import data.entidades.User;
 
 public interface IUserDAO {
-    User findByLoginAndPassword(String login, String password);
+    User findByLoginAndPassword(String email, String password);
 
     User registerUser(User user);
 

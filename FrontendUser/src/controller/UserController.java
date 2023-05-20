@@ -8,6 +8,7 @@ import rmi.server.exceptions.InvalidUser;
 
 public class UserController {
     private IRemoteFacade remoteFacade;
+    private User user;
 
     public UserController(ServiceLocator serviceLocator) {
         this.remoteFacade = serviceLocator.getRemoteFacade();
@@ -15,11 +16,15 @@ public class UserController {
 
     public User loginUser(String login, String password) {
         try {
-            User user = remoteFacade.loginUser(login, password);
+            this.user = remoteFacade.loginUser(login, password);
             if (user == null) {
                 System.out.println("UserController: User not found in the database.");
             } else {
                 System.out.println("UserController: User found in the database.");
+                System.out.println("DNI: " + user.getDni());
+                System.out.println("NOMBRE: " + user.getNombre());
+                System.out.println("EMAIL: " + user.getEmail());
+
             }
             return user;
         } catch (RemoteException e) {
@@ -41,6 +46,11 @@ public class UserController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void logoutUser() {
+        this.user = null;
+        System.out.println("User has been logged out.");
     }
     
     public IRemoteFacade getRemoteFacade() {

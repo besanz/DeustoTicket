@@ -4,7 +4,10 @@ import data.entidades.Artista;
 import data.entidades.Espacio;
 import data.entidades.Evento;
 import data.entidades.Precio;
+import data.entidades.User;
+
 import remote.IRemoteFacade;
+import controller.UserController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,10 +21,14 @@ public class EventDetail extends JFrame {
     private final List<Artista> artistas;
     private final Espacio espacio;
     private final List<Precio> precios;
+    private final User user;
+    private UserController userController;
 
-    public EventDetail(Evento evento, IRemoteFacade remoteFacade) {
+    public EventDetail(Evento evento, IRemoteFacade remoteFacade, User user, UserController userController) {
+        this.user = user;
         this.remoteFacade = remoteFacade;
         this.evento = evento;
+        this.userController = userController;
         List<Artista> tempArtistas = new ArrayList<>();
         Espacio tempEspacio = null;
         List<Precio> tempPrecios = new ArrayList<>();
@@ -39,12 +46,11 @@ public class EventDetail extends JFrame {
         this.artistas = tempArtistas;
         this.espacio = tempEspacio;
         this.precios = tempPrecios;
-
         initComponents();
     }
 
     private void initComponents() {
-        this.setTitle("GuTicket - " + evento.getTitulo());
+        this.setTitle("GuTicket - " + user.getNombre());
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -54,7 +60,7 @@ public class EventDetail extends JFrame {
         mainPanel.setBackground(new Color(54, 57, 63));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel titleLabel = new JLabel("GuTicket - V1", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("GuTicket - " + user.getNombre(), SwingConstants.CENTER);
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 24));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
@@ -76,7 +82,7 @@ public class EventDetail extends JFrame {
         descripcionArea.setBorder(BorderFactory.createLineBorder(new Color(114, 137, 218), 2));
         topPanel.add(descripcionArea);
 
-        JButton espacioButton = new JButton("¿Donde? " + espacio.getNombre());
+        JButton espacioButton = new JButton("Donde? " + espacio.getNombre());
         espacioButton.setBackground(new Color(114, 137, 218));
         espacioButton.setFont(new Font("Tahoma", Font.BOLD, 16));
         espacioButton.setForeground(Color.WHITE);
@@ -106,7 +112,7 @@ public class EventDetail extends JFrame {
             artistaButton.setBorder(BorderFactory.createLineBorder(new Color(114, 137, 218), 2)); // Borde morado
             artistaButton.setMargin(new Insets(10,20,10,20));
             artistaButton.addActionListener(e -> {
-            ArtistDetail artistaDetail = new ArtistDetail(artista);
+            ArtistDetail artistaDetail = new ArtistDetail(artista.getId(), remoteFacade);
             artistaDetail.setVisible(true);
             });
             buttonPanel.add(artistaButton);

@@ -1,6 +1,8 @@
 package gui;
 
 import data.entidades.Artista;
+import remote.IRemoteFacade;
+import java.rmi.RemoteException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,9 +10,18 @@ import java.text.SimpleDateFormat;
 
 public class ArtistDetail extends JFrame {
     private final Artista artista;
+    private final IRemoteFacade remoteFacade;
 
-    public ArtistDetail(Artista artista) {
-        this.artista = artista;
+    public ArtistDetail(int artistaID, IRemoteFacade remoteFacade) {
+        this.remoteFacade = remoteFacade;
+        Artista tempArtista = null;
+        try {
+            tempArtista = this.remoteFacade.obtenerArtistaPorID(artistaID);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar el artista.");
+        }
+        artista = tempArtista;
         initComponents();
     }
 

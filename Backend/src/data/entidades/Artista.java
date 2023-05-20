@@ -15,7 +15,5 @@ public class Artista implements Serializable {
     @Getter @Setter private String descripcion;
 
     @Getter @Setter private Date fechaNacimiento;
-    
-    @Getter @Setter private String foto;
 
 }

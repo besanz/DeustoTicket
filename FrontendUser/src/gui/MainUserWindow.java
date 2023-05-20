@@ -10,17 +10,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import java.io.IOException;
 import java.util.List;
 import java.text.SimpleDateFormat;
 
 public class MainUserWindow extends JFrame {
-    private User user;
+    private final User user;
     private UserController userController;
 
     public MainUserWindow(User user, UserController userController) {
         this.user = user;
         this.userController = userController;
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                userController.logoutUser();
+            }
+        });
         initComponents();
     }
 
@@ -106,7 +115,7 @@ public class MainUserWindow extends JFrame {
         eventoPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                EventDetail eventDetailWindow = new EventDetail(evento, userController.getRemoteFacade());
+                EventDetail eventDetailWindow = new EventDetail(evento, userController.getRemoteFacade(), user, userController);
                 eventDetailWindow.setVisible(true);
             }
         });
