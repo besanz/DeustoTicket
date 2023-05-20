@@ -131,10 +131,9 @@ public class LoginUser extends JFrame {
         String password = new String(passwordField.getPassword());
 
         User user = userController.loginUser(login, password);
-        System.out.println("Nombre: " + user.getNombre());
 
-        if (user != null) {
-            System.out.println("LoginUser: Login successful.");
+        if (user != null) {        
+            System.out.println("Ha entrado: " + user.getNombre());
             JOptionPane.showMessageDialog(this, "Inicio de sesion exitoso");
             MainUserWindow mw = new MainUserWindow(user, userController);
             mw.setVisible(true);

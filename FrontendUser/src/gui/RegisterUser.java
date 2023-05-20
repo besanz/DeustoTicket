@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import data.entidades.User;
 
 public class RegisterUser extends JFrame {
+    private ServiceLocator serviceLocator;
     private UserController userController;
     private JTextField jTextFieldDNI;
     private JTextField jTextFieldName;
@@ -25,7 +26,7 @@ public class RegisterUser extends JFrame {
     }
 
     private void initComponents() {
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("GuTicket - Registro de usuario");
         setBounds(100, 100, 1000, 900);
 
@@ -160,19 +161,23 @@ public class RegisterUser extends JFrame {
         String email = jTextFieldEmail.getText();
         String password = new String(jPasswordField.getPassword());
         String confirmPassword = new String(jPasswordFieldConfirm.getPassword());
-
-        if (!password.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden");
-            return;
-        }
-
-        User newUser = userController.registerUser(dni, name, surname, email, password);
-                if (newUser != null) {
-            JOptionPane.showMessageDialog(this, "Usuario registrado con exito");
-            this.dispose();
-            new MainUserWindow(newUser, userController).setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al registrar usuario");
+      
+        if(dni != null && name != null && email != null && surname != null && password != null)
+        {
+            if (!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden");
+                return;
+            }
+            User newUser = userController.registerUser(dni, name, surname, email, password);
+                    if (newUser != null) {
+                JOptionPane.showMessageDialog(this, "Usuario registrado con exito");
+                new LoginUser(serviceLocator).setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al registrar usuario");
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Por favor, rellena todos los campos");
         }
     }
 }

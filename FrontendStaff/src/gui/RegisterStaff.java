@@ -119,19 +119,23 @@ private void initComponents() {
         String username = jUsernameField.getText();
         String password = new String(jPasswordField.getPassword());
         String confirmPassword = new String(jPasswordFieldConfirm.getPassword());
+        if(username != null && password != null)
+        {
+            if (!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden");
+                return;
+            }
 
-        if (!password.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden");
-            return;
-        }
-
-        Staff newStaff = staffController.registerStaff(username, password);
-                if (newStaff != null) {
-            JOptionPane.showMessageDialog(this, "Staff registrado con exito");
-            this.dispose();
-            new LoginStaff(serviceLocator).setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al registrar usuario");
+            Staff newStaff = staffController.registerStaff(username, password);
+                    if (newStaff != null) {
+                JOptionPane.showMessageDialog(this, "Staff registrado con exito");
+                this.dispose();
+                new LoginStaff(serviceLocator).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al registrar usuario");
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Por favor, rellena todos los campos");
         }
     }
 }

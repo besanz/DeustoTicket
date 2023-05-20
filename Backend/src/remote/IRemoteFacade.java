@@ -31,4 +31,12 @@ public interface IRemoteFacade extends Remote {
     List<User> findAllUsers() throws RemoteException;
 
     void deleteUserByDni(String dni) throws RemoteException;
+
+    void addTicket(Ticket ticket) throws RemoteException;
+
+    void generateQRCodeImage(String text, String filePath, int size) throws RemoteException;
+
+    String readQRCodeImage(String filePath) throws RemoteException;
+
+    void sendEmailWithPDFAndQR(String recipientEmail, String subject, String body, Ticket ticket) throws RemoteException;
 }

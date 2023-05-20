@@ -1,12 +1,13 @@
 package remote.impl;
 
+import data.dao.*;
+import data.dao.impl.*;
 import data.entidades.*;
 import remote.api.IStaffService;
 import remote.api.IUserService;
 import rmi.server.exceptions.InvalidUser;
 import remote.IRemoteFacade;
-import remote.service.StaffService;
-import remote.service.UserService;
+import remote.service.*;
 import remote.rest.gateway.TicketProviderClient;
 
 import java.rmi.RemoteException;
@@ -18,12 +19,20 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
     private static Remote instance;
     private IStaffService staffService;
     private IUserService userService;
+    private QRService qrService;
+    private PDFService pdfService;
+    private EmailService emailService;
     private TicketProviderClient ticketProviderClient;
+    private ITicketDAO ticketDAO;
 
     private Remote() throws RemoteException {
         staffService = StaffService.getInstance();
         userService = UserService.getInstance();
-        ticketProviderClient = TicketProviderClient.getInstance(); // Utilizar la instancia singleton
+        qrService = new QRService();
+        pdfService = new PDFService(qrService);
+        emailService = new EmailService(pdfService);
+        ticketProviderClient = TicketProviderClient.getInstance();
+        ticketDAO = TicketDAO.getInstance();
     }
 
     public static synchronized Remote getInstance() throws RemoteException {
@@ -89,5 +98,25 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
     @Override
     public void deleteUserByDni(String dni) throws RemoteException {
         staffService.deleteUserByDni(dni);
+    }
+
+    @Override
+    public void addTicket(Ticket ticket) throws RemoteException {
+        ticketDAO.addTicket(ticket);
+    }
+
+    @Override
+    public void generateQRCodeImage(String text, String filePath, int size) throws RemoteException {
+        qrService.generateQRCodeImage(text, filePath, size);
+    }
+
+    @Override
+    public String readQRCodeImage(String filePath) throws RemoteException {
+        return qrService.readQRCodeImage(filePath);
+    }
+
+    @Override
+    public void sendEmailWithPDFAndQR(String recipientEmail, String subject, String body, Ticket ticket) throws RemoteException {
+        emailService.sendEmailWithPDFAndQR(recipientEmail, subject, body, ticket);
     }
 }

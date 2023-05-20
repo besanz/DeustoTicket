@@ -134,6 +134,10 @@ public class EventDetail extends JFrame {
             precioButton.setBackground(new Color(114, 137, 218));
             precioButton.setFont(new Font("Tahoma", Font.BOLD, 14));
             precioButton.setForeground(Color.WHITE);
+            precioButton.addActionListener(e -> {
+                TicketDetail ticketDetail = new TicketDetail(evento, espacio, precio, user, userController);
+                ticketDetail.setVisible(true);
+            });
             bottomPanel.add(precioButton);
         }
 
