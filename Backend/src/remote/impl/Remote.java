@@ -119,4 +119,14 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
     public void sendEmailWithPDFAndQR(String recipientEmail, String subject, String body, Ticket ticket) throws RemoteException {
         emailService.sendEmailWithPDFAndQR(recipientEmail, subject, body, ticket);
     }
+
+    @Override
+    public Precio getPrecioByID(int precioId) throws RemoteException {
+        return userService.getPrecioByID(precioId);
+    }
+
+    @Override
+    public void updateTickets(Precio precio) throws RemoteException {
+        userService.updateTickets(precio);
+    }
 }

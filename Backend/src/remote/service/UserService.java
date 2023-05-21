@@ -75,8 +75,7 @@ public class UserService implements IUserService {
     @Override
     public List<Evento> obtenerEventosDestacados() throws RemoteException {
         try {
-            return ticketProviderClient.getEventos(); // Utiliza el mismo método getEventos para obtener eventos
-                                                      // destacados
+            return ticketProviderClient.getEventos();
         } catch (IOException e) {
             e.printStackTrace();
             throw new RemoteException("Error al obtener eventos destacados de la API", e);
@@ -90,6 +89,26 @@ public class UserService implements IUserService {
         } catch (IOException e) {
             e.printStackTrace();
             throw new RemoteException("Error al obtener espacios de la API", e);
+        }
+    }
+
+    @Override
+    public Precio getPrecioByID(int precioId) throws RemoteException {
+        try {
+            return ticketProviderClient.getPrecioByID(precioId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al obtener precio de la API", e);
+        }
+    }
+
+    @Override
+    public void updateTickets(Precio precio) throws RemoteException {
+        try {
+            ticketProviderClient.updateTickets(precio);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error al actualizar precios de la API", e);
         }
     }
 }

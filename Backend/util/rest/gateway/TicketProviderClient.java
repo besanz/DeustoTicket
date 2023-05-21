@@ -3,11 +3,9 @@ package remote.rest.gateway;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
-import java.io.OutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.util.TimeZone;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -288,8 +286,7 @@ public class TicketProviderClient {
 
     private Date parseFecha(String fechaString) {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // este formato está en tiempo UTC
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             return dateFormat.parse(fechaString);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -297,79 +294,17 @@ public class TicketProviderClient {
         }
     }
 
-    public Precio getPrecioByID(int precioID) throws IOException {
-        String jsonResponse = makeApiRequest("/api/precios/" + precioID);
-        JsonObject jsonObject = new Gson().fromJson(jsonResponse, JsonObject.class);
-        if (jsonObject == null) {
-            throw new NullPointerException("Error en el parseo del JSON");
-        }
-
-        JsonObject dataObject = jsonObject.getAsJsonObject("data");
-        if (dataObject == null) {
-            return null;
-        }
-
-        JsonObject attributesObject = dataObject.getAsJsonObject("attributes");
-        if (attributesObject == null) {
-            return null;
-        }
-
-        Precio precio = new Precio();
-        precio.setId(dataObject.get("id").getAsInt());
-        precio.setNombre(attributesObject.get("nombre").getAsString());
-        precio.setPrecio(attributesObject.get("precio").getAsDouble());
-
-        // Convert the strings to integers
-        precio.setDisponibles(Integer.parseInt(attributesObject.get("disponibles").getAsString()));
-        precio.setOfertadas(Integer.parseInt(attributesObject.get("ofertadas").getAsString()));
-
-        // Convert the strings to Date objects using your parseFecha method
-        precio.setCreatedAt(parseFecha(attributesObject.get("createdAt").getAsString()));
-        precio.setUpdatedAt(parseFecha(attributesObject.get("updatedAt").getAsString()));
-        precio.setPublishedAt(parseFecha(attributesObject.get("publishedAt").getAsString()));
-
-        // Set current date and time if any of the dates are null
-        Date currentDateTime = new Date();
-        if (precio.getCreatedAt() == null) precio.setCreatedAt(currentDateTime);
-        if (precio.getUpdatedAt() == null) precio.setUpdatedAt(currentDateTime);
-        if (precio.getPublishedAt() == null) precio.setPublishedAt(currentDateTime);
-
-        System.out.println("Precio obtenido: " + precio);
-
-        return precio;
-    }
-
     public void updateTickets(Precio precio) throws IOException {
-        int precioId = precio.getId();
-        int nuevosDisponibles = precio.getDisponibles() - 1;
-
-        // Construye el objeto JSON para la actualización
-        JsonObject attributesJson = new JsonObject();
-        attributesJson.addProperty("nombre", precio.getNombre());
-        attributesJson.addProperty("precio", precio.getPrecio());
-        
-        // Convert the Date objects to strings
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC")); // este formato está en tiempo UTC
-
-        // Pone la última fecha de updatedAt
-        precio.setUpdatedAt(new Date());
-
-        attributesJson.addProperty("createdAt", sdf.format(precio.getCreatedAt()));
-        attributesJson.addProperty("updatedAt", sdf.format(precio.getUpdatedAt()));
-        attributesJson.addProperty("publishedAt", sdf.format(precio.getPublishedAt()));
-
-        attributesJson.addProperty("disponibles", nuevosDisponibles);
-        attributesJson.addProperty("ofertadas", precio.getOfertadas());
-
-        JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("id", precioId);
-        dataJson.add("attributes", attributesJson);
-
+        // Convierte el objeto a JSON
+        Gson gson = new Gson();
         JsonObject ticketUpdateJson = new JsonObject();
+        JsonObject dataJson = new JsonObject();
+        JsonObject attributesJson = new JsonObject();
+        attributesJson.addProperty("disponibles", newAvailableTickets);
+        dataJson.add("attributes", attributesJson);
+        dataJson.addProperty("id", precioId);
         ticketUpdateJson.add("data", dataJson);
-
-        System.out.println("JSON para actualizar: " + ticketUpdateJson.toString());
+        String jsonInputString = gson.toJson(ticketUpdateJson);
 
         // Crea la conexión y configura los headers
         URL url = new URL(API_BASE_URL + "/api/precios/" + precioId);
@@ -381,41 +316,18 @@ public class TicketProviderClient {
         connection.setDoOutput(true);
 
         // Escribe el objeto JSON a la conexión
-        try (OutputStream outputStream = connection.getOutputStream()) {
-            outputStream.write(ticketUpdateJson.toString().getBytes("UTF-8"));
-            outputStream.flush();
-        } catch (Exception e) {
-            System.out.println("Excepción al intentar escribir el JSON en el OutputStream: " + e.getMessage());
-            e.printStackTrace();
+        try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"))) {
+            writer.write(jsonInputString);
+            writer.flush();
         }
 
         // Verifica la respuesta
-        int responseCode = -1;
-        try {
-            responseCode = connection.getResponseCode();
-        } catch (Exception e) {
-            System.out.println("Excepción al obtener el código de respuesta: " + e.getMessage());
-            e.printStackTrace();
-        }
-        if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_NO_CONTENT) {
-            System.out.println("Error en la llamada a la API: código de respuesta " + responseCode);
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), "utf-8"))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                System.out.println("Mensaje de error: " + response.toString());
-            } catch (Exception e) {
-                System.out.println("Excepción al leer el mensaje de error: " + e.getMessage());
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("La respuesta de la API es: " + responseCode);
+        int responseCode = connection.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new IOException("Error en la llamada a la API: codigo de respuesta " + responseCode);
         }
 
         connection.disconnect();
     }
-
 
 }

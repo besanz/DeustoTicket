@@ -1,18 +1,15 @@
 package remote.rest.dto;
 
 import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
-
-import data.entidades.Precio;
+import data.entidades.Espacio;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PrecioDTO  implements Serializable {
+public class EspacioDTO {
     private int id;
 
     @SerializedName("attributes")
-    private Precio precio;
-
+    private Espacio espacio;
 }

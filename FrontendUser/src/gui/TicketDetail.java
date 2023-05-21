@@ -6,9 +6,14 @@ import data.entidades.Precio;
 import data.entidades.User;
 
 import remote.IRemoteFacade;
+import java.io.IOException;
+
 import controller.UserController;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class TicketDetail extends JFrame {
     private final Evento evento;
@@ -16,6 +21,7 @@ public class TicketDetail extends JFrame {
     private final Precio precio;
     private final User user;
     private final UserController userController;
+    private IRemoteFacade remoteFacade;
 
     public TicketDetail(Evento evento, Espacio espacio, Precio precio, User user, UserController userController) {
         this.evento = evento;
@@ -23,34 +29,68 @@ public class TicketDetail extends JFrame {
         this.precio = precio;
         this.user = user;
         this.userController = userController;
+        this.remoteFacade = userController.getRemoteFacade();
         initComponents();
     }
 
     private void initComponents() {
-        this.setTitle("GuTicket - Confirmación de compra");
-        this.setSize(400, 300);
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setTitle("GuTicket - Confirmación de compra");
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(new Color(255, 255, 255));
+        mainPanel.setLayout(new BorderLayout());
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridLayout(4, 1));
+        infoPanel.setBackground(new Color(230, 230, 230));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel eventLabel = new JLabel("Evento: " + evento.getTitulo());
-        JLabel dateLabel = new JLabel("Fecha: " + evento.getFecha()); // fecha del evento
-        JLabel venueLabel = new JLabel("Lugar: " + espacio.getNombre()); // lugar del evento
-        JLabel priceLabel = new JLabel("Precio: " + precio.getNombre() + " - " + precio.getValor());
+        eventLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+        JLabel dateLabel = new JLabel("Fecha: " + evento.getFecha());
+        dateLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        JLabel venueLabel = new JLabel("Lugar: " + espacio.getNombre());
+        venueLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        JLabel priceLabel = new JLabel("Precio: $" + precio.getValor());
+        priceLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        infoPanel.add(eventLabel);
+        infoPanel.add(dateLabel);
+        infoPanel.add(venueLabel);
+        infoPanel.add(priceLabel);
+
         JButton buyButton = new JButton("Comprar ticket");
-        buyButton.addActionListener(e -> {
-            // Llamar al método buyTicket en UserController
-            userController.buyTicket(evento, espacio, precio, user);
+        buyButton.setBackground(new Color(114, 137, 218));
+        buyButton.setForeground(Color.WHITE);
+        buyButton.setFont(new Font("Arial", Font.BOLD, 16));
+        buyButton.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
+        buyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                userController.buyTicket(evento, espacio, precio, user);
+                System.out.println("Precio ID: " + precio.getId());
+                try {
+                    Precio updatedPrecio = remoteFacade.getPrecioByID(precio.getId());
+                    remoteFacade.updateTickets(updatedPrecio);
+                } catch (IOException ex) {
+                    System.out.println("Error al actualizar los tickets: " + ex.getMessage());
+                }
+            }
         });
 
-        mainPanel.add(eventLabel);
-        mainPanel.add(dateLabel);
-        mainPanel.add(venueLabel);
-        mainPanel.add(priceLabel);
-        mainPanel.add(buyButton);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(255, 255, 255));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        buttonPanel.add(buyButton);
 
-        this.getContentPane().add(mainPanel);
+        mainPanel.add(infoPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        getContentPane().add(mainPanel);
     }
 }
