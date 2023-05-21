@@ -23,5 +23,6 @@ public interface IStaffService extends Remote {
     Staff registerStaff(String username, String password) throws RemoteException, InvalidUser;
     List<User> findAllUsers() throws RemoteException;
     void deleteUserByDni(String dni) throws RemoteException;
+    void updateTicketValido(String ticketId) throws RemoteException;
 
 }

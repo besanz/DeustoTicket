@@ -129,4 +129,10 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
     public void updateTickets(Precio precio) throws RemoteException {
         userService.updateTickets(precio);
     }
+
+    @Override
+    public void updateTicketValido(String ticketId) throws RemoteException {
+    staffService.updateTicketValido(ticketId);
+    }
+
 }

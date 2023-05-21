@@ -22,6 +22,26 @@ public class TicketDAO implements ITicketDAO {
         return instance;
     }
 
+    public void updateTicketValido(String ticketId) {
+        PersistenceManager pm = DBConfig.getPersistenceManager();
+        Transaction tx = pm.currentTransaction();
+        try {
+            tx.begin();
+            Ticket ticket = pm.getObjectById(Ticket.class, ticketId);
+            if (ticket.getValido() == 1) {
+                ticket.setValido(0);
+                System.out.println("El QR del ticket " + ticketId + " ha sido validado exitosamente");
+            }
+            tx.commit();
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+        }
+    }
+
+
     public void addTicket(Ticket ticket) {
         PersistenceManager pm = DBConfig.getPersistenceManager();
         try {

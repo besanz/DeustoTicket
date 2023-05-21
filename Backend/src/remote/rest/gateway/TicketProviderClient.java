@@ -253,9 +253,7 @@ public class TicketProviderClient {
         Type type = new TypeToken<EspacioDTO>() {
         }.getType();
         EspacioDTO espacioResponse = new Gson().fromJson(espacioObject, type);
-
         EspacioTransformer espacioTransformer = EspacioTransformer.getInstance();
-
         Espacio espacio = espacioTransformer.transform(espacioResponse);
 
         return espacio;
@@ -382,7 +380,7 @@ public class TicketProviderClient {
 
         // Escribe el objeto JSON a la conexión
         try (OutputStream outputStream = connection.getOutputStream()) {
-            outputStream.write(ticketUpdateJson.toString().getBytes("UTF-8"));
+            connection.getOutputStream().write(ticketUpdateJson.toString().getBytes("UTF-8"));
             outputStream.flush();
         } catch (Exception e) {
             System.out.println("Excepción al intentar escribir el JSON en el OutputStream: " + e.getMessage());

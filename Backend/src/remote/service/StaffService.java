@@ -2,10 +2,8 @@ package remote.service;
 
 import java.rmi.RemoteException;
 
-import data.dao.IStaffDAO;
-import data.dao.impl.StaffDAO;
-import data.dao.IUserDAO;
-import data.dao.impl.UserDAO;
+import data.dao.*;
+import data.dao.impl.*;
 
 import data.entidades.Staff;
 import data.entidades.User;
@@ -17,6 +15,8 @@ import java.util.List;
 public class StaffService implements IStaffService {
     private StaffDAO staffDAO;
     private UserDAO userDAO;
+    private TicketDAO ticketDAO;
+
 
     private static StaffService instance;
 
@@ -54,4 +54,9 @@ public class StaffService implements IStaffService {
     public void deleteUserByDni(String dni) throws RemoteException {
         userDAO.deleteUserByDni(dni);
     }
+    @Override
+    public void updateTicketValido(String ticketId) throws RemoteException {
+        ticketDAO.getInstance().updateTicketValido(ticketId);
+    }
+
 }

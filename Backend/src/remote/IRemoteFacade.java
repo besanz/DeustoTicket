@@ -43,4 +43,6 @@ public interface IRemoteFacade extends Remote {
     Precio getPrecioByID(int precioId) throws RemoteException;
     
     void updateTickets(Precio precio) throws RemoteException;
+
+    void updateTicketValido(String ticketId) throws RemoteException;
 }

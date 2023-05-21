@@ -46,9 +46,9 @@ public class StaffDAO implements IStaffDAO {
 
             if (!results.isEmpty()) {
                 staff = results.get(0);
-                System.out.println("StaffDAO: Staff found in the database.");
+                System.out.println("Admin: Welcome back, "+ username +"!");
             } else {
-                System.out.println("StaffDAO: Staff not found in the database.");
+                System.out.println("Admin: Staff not found.");
             }
 
             tx.commit();

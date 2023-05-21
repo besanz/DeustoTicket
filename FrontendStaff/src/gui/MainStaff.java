@@ -55,15 +55,15 @@ public class MainStaff extends JFrame {
         mainPanel.add(title, c);
 
         c.gridwidth = 1;
-		c.gridy = 1;
-    	c.weighty = 0;
+        c.gridy = 1;
+        c.weighty = 0;
         addButton("Control de usuarios", new Color(114, 137, 218), c, 0, 1, new StaffControlUsuarios(serviceLocator));
         addButton("Control de tickets", new Color(114, 137, 218), c, 1, 1, new StaffControlTickets());
 
         c.gridwidth = 2;
         c.gridy = 2;
-    	c.weighty = 0;
-        addButton("Escanear QR", new Color(114, 137, 218), c, 0, 2, new StaffEscanearQR());
+        c.weighty = 0;
+        addButton("Escanear QR", new Color(114, 137, 218), c, 0, 2, new StaffEscanearQR(staffController));
     }
 
     private void addButton(String text, Color color, GridBagConstraints c, int gridx, int gridy, JFrame frame) {
@@ -73,20 +73,20 @@ public class MainStaff extends JFrame {
         button.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 20));
         button.setBorder(new RoundedBorder(10)); //10 is the radius
         button.setFocusPainted(false);
-		Dimension buttonSize = gridy == 2 ? new Dimension(200, 60) : new Dimension(100, 60);
+        Dimension buttonSize = gridy == 2 ? new Dimension(200, 60) : new Dimension(100, 60);
         
         button.setPreferredSize(buttonSize);
         button.setMaximumSize(buttonSize);
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.setVisible(true);
+                if (frame instanceof StaffEscanearQR) {
+                    ((StaffEscanearQR) frame).initializeWebcam();
+                }
             }
         });
         c.gridx = gridx;
         c.gridy = gridy;
-		
         mainPanel.add(button, c);
     }
 }
-
-
