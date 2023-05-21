@@ -63,7 +63,7 @@ public class PDFService {
 
         // Add the QR code to the PDF
         PDImageXObject qrCodeImage = PDImageXObject.createFromFile(qrCodeImagePath, document);
-        contentStream.drawImage(qrCodeImage, 25, 600, 100, 100); // Adjust the coordinates and size according to your needs
+        contentStream.drawImage(qrCodeImage, 25, 150, 150, 150); // Adjust the coordinates and size according to your needs
         contentStream.close();
 
         // Save the PDF document to a file
