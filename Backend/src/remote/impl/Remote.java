@@ -8,6 +8,7 @@ import remote.api.IUserService;
 import rmi.server.exceptions.InvalidUser;
 import remote.IRemoteFacade;
 import remote.service.*;
+import remote.api.paypal.PaypalService;
 import remote.rest.gateway.TicketProviderClient;
 
 import java.rmi.RemoteException;
@@ -22,6 +23,7 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
     private QRService qrService;
     private PDFService pdfService;
     private EmailService emailService;
+    private PaypalService paypalService;
     private TicketProviderClient ticketProviderClient;
     private ITicketDAO ticketDAO;
 
@@ -133,6 +135,11 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
     @Override
     public void updateTicketValido(String ticketId) throws RemoteException {
     staffService.updateTicketValido(ticketId);
+    }
+
+    @Override
+    public void createPayment(String precio) throws RemoteException{
+        paypalService.createPayment(precio);
     }
 
 }

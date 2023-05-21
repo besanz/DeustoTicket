@@ -6,7 +6,12 @@ import data.entidades.Precio;
 import data.entidades.User;
 
 import remote.IRemoteFacade;
+import remote.api.paypal.PaypalService;
 import java.io.IOException;
+import java.rmi.RemoteException;
+import com.paypal.api.payments.*;
+import com.paypal.base.rest.APIContext;
+import com.paypal.base.rest.PayPalRESTException;
 
 import controller.UserController;
 
@@ -22,6 +27,8 @@ public class TicketDetail extends JFrame {
     private final User user;
     private final UserController userController;
     private IRemoteFacade remoteFacade;
+    private PaypalService paypalService;
+
 
     public TicketDetail(Evento evento, Espacio espacio, Precio precio, User user, UserController userController) {
         this.evento = evento;
@@ -29,13 +36,13 @@ public class TicketDetail extends JFrame {
         this.precio = precio;
         this.user = user;
         this.userController = userController;
-        this.remoteFacade = userController.getRemoteFacade();
+        this.paypalService = new PaypalService();
         initComponents();
     }
 
     private void initComponents() {
         setTitle("GuTicket - Confirmación de compra");
-        setSize(400, 300);
+        setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -83,10 +90,27 @@ public class TicketDetail extends JFrame {
             }
         });
 
+        JButton paypalButton = new JButton("Pagar con PayPal");
+        paypalButton.setBackground(new Color(105, 155, 178));
+        paypalButton.setForeground(Color.WHITE);
+        paypalButton.setFont(new Font("Arial", Font.BOLD, 16));
+        paypalButton.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
+        paypalButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (paypalService != null && precio != null) {
+                        //paypalService.createPayment(String.valueOf(precio.getValor()));
+                        System.out.println("Pago iniciado con PayPal");
+                } else {
+                    System.out.println("PaypalService or precio is null");
+                }
+            }
+        });
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(255, 255, 255));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         buttonPanel.add(buyButton);
+        buttonPanel.add(paypalButton);
 
         mainPanel.add(infoPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
