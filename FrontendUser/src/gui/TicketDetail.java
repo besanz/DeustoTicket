@@ -42,7 +42,7 @@ public class TicketDetail extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("GuTicket - Confirmación de compra");
+        setTitle("GuTicket - Compra");
         setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -65,7 +65,7 @@ public class TicketDetail extends JFrame {
         JLabel venueLabel = new JLabel("Lugar: " + espacio.getNombre());
         venueLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        JLabel priceLabel = new JLabel("Precio: $" + precio.getValor());
+        JLabel priceLabel = new JLabel("Precio: " + precio.getValor() + "€");
         priceLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
         infoPanel.add(eventLabel);
@@ -73,7 +73,7 @@ public class TicketDetail extends JFrame {
         infoPanel.add(venueLabel);
         infoPanel.add(priceLabel);
 
-        JButton buyButton = new JButton("Comprar ticket");
+        JButton buyButton = new JButton("Comprar Ahora");
         buyButton.setBackground(new Color(114, 137, 218));
         buyButton.setForeground(Color.WHITE);
         buyButton.setFont(new Font("Arial", Font.BOLD, 16));
@@ -98,7 +98,8 @@ public class TicketDetail extends JFrame {
         paypalButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (paypalService != null && precio != null) {
-                        //paypalService.createPayment(String.valueOf(precio.getValor()));
+                        //Actuvar pasarela PayPal
+                        //paypalService.createPayment(String.valueOf(precio.getValor())); 
                         System.out.println("Pago iniciado con PayPal");
                 } else {
                     System.out.println("PaypalService or precio is null");

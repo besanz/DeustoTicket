@@ -38,7 +38,7 @@ public interface IRemoteFacade extends Remote {
 
     String readQRCodeImage(String filePath) throws RemoteException;
 
-    void sendEmailWithPDFAndQR(String recipientEmail, String subject, String body, Ticket ticket) throws RemoteException;
+    void sendEmailWithPDFAndQR(String recipientEmail, Ticket ticket) throws RemoteException;
 
     Precio getPrecioByID(int precioId) throws RemoteException;
     

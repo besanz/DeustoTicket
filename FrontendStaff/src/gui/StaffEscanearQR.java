@@ -14,17 +14,20 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import remote.IRemoteFacade;
 import controller.StaffController;
 
 public class StaffEscanearQR extends JFrame {
     private JPanel contentPane;
     private Webcam webcam;
     private MultiFormatReader qrCodeReader;
-    private IRemoteFacade remoteFacade;
+    private StaffController staffController;
 
     public StaffEscanearQR(StaffController staffController) {
-        this.remoteFacade = staffController.getRemoteFacade();
+        if (staffController == null) {
+            throw new IllegalArgumentException("El objeto StaffController no puede ser nulo");
+        }
+
+        this.staffController = staffController;
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Admin - Escanear QR");
         setBounds(100, 100, 858, 516);
@@ -48,7 +51,7 @@ public class StaffEscanearQR extends JFrame {
         contentPane.add(panel, BorderLayout.CENTER);
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(this::scanQRCode, 0, 500, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(this::scanQRCode, 0, 1000, TimeUnit.MILLISECONDS);
         pack();
         setVisible(true);
     }
@@ -60,7 +63,7 @@ public class StaffEscanearQR extends JFrame {
             try {
                 Result qrCodeResult = qrCodeReader.decode(binaryBitmap);
                 String qrCodeText = qrCodeResult.getText();
-                remoteFacade.updateTicketValido(qrCodeText);
+                staffController.updateTicketValido(qrCodeText);
                 System.out.println("QR Code detected: " + qrCodeText);
             } catch (Exception e) {
                 // No se detectó ningún código QR, simplemente ignorar

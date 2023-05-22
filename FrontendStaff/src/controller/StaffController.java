@@ -1,10 +1,15 @@
 package controller;
 
+import data.entidades.User;
 import data.entidades.Staff;
+import data.entidades.Ticket;
+
 import remote.ServiceLocator;
 import java.rmi.RemoteException;
 import rmi.server.exceptions.InvalidUser;
 import remote.IRemoteFacade;
+import java.util.List;
+
 
 public class StaffController {
     
@@ -12,6 +17,10 @@ public class StaffController {
 
     public StaffController(ServiceLocator serviceLocator) {
         this.remoteFacade = serviceLocator.getRemoteFacade();
+    }
+        
+    public IRemoteFacade getRemoteFacade() {
+        return remoteFacade;
     }
 
     public Staff loginStaff(String login, String password) {
@@ -43,8 +52,46 @@ public class StaffController {
             return null;
         }
     }
-        
-    public IRemoteFacade getRemoteFacade() {
-        return remoteFacade;
+
+    public List<User> getAllUsers() {
+        try {
+            return remoteFacade.findAllUsers();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void deleteUser(String dni) {
+        try {
+            remoteFacade.deleteUserByDni(dni);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Ticket> getAllTickets() {
+        try {
+            return remoteFacade.getAllTickets();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void removeTicketById(String id) {
+        try {
+            remoteFacade.removeTicketById(id);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateTicketValido(String ticketId) {
+        try {
+            remoteFacade.updateTicketValido(ticketId);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 }

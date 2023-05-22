@@ -84,9 +84,7 @@ public class UserController {
 
             // Enviar email con PDF y QR
             String recipientEmail = user.getEmail();
-            String subject = "Tu compra para " + evento.getTitulo();
-            String body = "Adjunto encontraras tu ticket.";
-            remoteFacade.sendEmailWithPDFAndQR(recipientEmail, subject, body, ticket);
+            remoteFacade.sendEmailWithPDFAndQR(recipientEmail, ticket);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

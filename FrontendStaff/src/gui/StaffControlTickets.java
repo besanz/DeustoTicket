@@ -3,7 +3,6 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -11,20 +10,19 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import data.entidades.Ticket;
-import remote.IRemoteFacade;
-import remote.ServiceLocator;
+import controller.StaffController;
 
 public class StaffControlTickets extends JFrame {
-    private IRemoteFacade remoteFacade;
+    private StaffController staffController;
     private JTable ticketsTable;
     private DefaultTableModel ticketsTableModel;
 
-    public StaffControlTickets(ServiceLocator serviceLocator) {
-        if (serviceLocator == null) {
-            throw new IllegalArgumentException("El objeto ServiceLocator no puede ser nulo");
+    public StaffControlTickets(StaffController staffController) {
+        if (staffController == null) {
+            throw new IllegalArgumentException("El objeto StaffController no puede ser nulo");
         }
 
-        this.remoteFacade = serviceLocator.getRemoteFacade();
+        this.staffController = staffController;
         initComponents();
         getAllTickets();
     }
@@ -83,7 +81,7 @@ public class StaffControlTickets extends JFrame {
                             JOptionPane.WARNING_MESSAGE);
 
                     if (result == JOptionPane.YES_OPTION) {
-                        removeTicket(id);
+                        eliminarTicket(id);
                         ticketsTableModel.removeRow(selectedRow);
                     }
                 }
@@ -106,7 +104,7 @@ public class StaffControlTickets extends JFrame {
                 int selectedRow = ticketsTable.getSelectedRow();
                 if (selectedRow != -1) {
                     String id = (String) ticketsTable.getValueAt(selectedRow, 0);
-                    validateTicket(id);
+                    validarTicket(id);
                 }
             }
         });
@@ -125,34 +123,23 @@ public class StaffControlTickets extends JFrame {
     }
 
     private void getAllTickets() {
-        try {
-            List<Ticket> tickets = remoteFacade.getAllTickets();
-            for (Ticket ticket : tickets) {
-                ticketsTableModel.addRow(new Object[]{ticket.getId(), ticket.getPrecio(), ticket.getValido()});
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        List<Ticket> tickets = staffController.getAllTickets();
+        if (tickets == null) {
             JOptionPane.showMessageDialog(this, "Error al cargar tickets");
+            return;
+        }
+        for (Ticket ticket : tickets) {
+            ticketsTableModel.addRow(new Object[]{ticket.getId(), ticket.getPrecio(), ticket.getValido()});
         }
     }
 
-    private void removeTicket(String id) {
-        try {
-            remoteFacade.removeTicketById(id);
-            JOptionPane.showMessageDialog(this, "Ticket eliminado correctamente");
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al eliminar ticket");
-        }
+    private void eliminarTicket(String id) {
+        staffController.removeTicketById(id);
+        JOptionPane.showMessageDialog(this, "Ticket eliminado correctamente");
     }
 
-    private void validateTicket(String id) {
-        try {
-            remoteFacade.updateTicketValido(id);
-            JOptionPane.showMessageDialog(this, "Ticket validado correctamente");
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al validar ticket");
-        }
+    private void validarTicket(String id) {
+        staffController.updateTicketValido(id);
+        JOptionPane.showMessageDialog(this, "Ticket validado correctamente");
     }
 }

@@ -1,35 +1,32 @@
 package gui;
 
 import data.entidades.User;
-import remote.IRemoteFacade;
-import remote.ServiceLocator;
+import controller.StaffController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.List;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class StaffControlUsuarios extends JFrame {
-    private IRemoteFacade remoteFacade;
+    private StaffController staffController;
     private JTable usersTable;
     private DefaultTableModel usersTableModel;
 
-    public StaffControlUsuarios(ServiceLocator serviceLocator) {
-        // Verificar que se ha pasado un objeto ServiceLocator no nulo
-        if (serviceLocator == null) {
-            throw new IllegalArgumentException("El objeto ServiceLocator no puede ser nulo");
+    public StaffControlUsuarios(StaffController staffController) {
+        if (staffController == null) {
+            throw new IllegalArgumentException("El objeto StaffController no puede ser nulo");
         }
 
-        // Obtiene el objeto IRemoteFacade a partir de ServiceLocator
-        this.remoteFacade = serviceLocator.getRemoteFacade();
+        this.staffController = staffController;
         initComponents();
         getAllUsers();
     }
+
 
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -48,29 +45,29 @@ public class StaffControlUsuarios extends JFrame {
         usersTable = new JTable(usersTableModel);
         usersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-// Crear renderizador de encabezados personalizado
+        // Crear renderizador de encabezados personalizado
         JTableHeader header = usersTable.getTableHeader();
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
         JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         label.setForeground(Color.WHITE); // Color del texto
         label.setBackground(new Color(220, 53, 69)); // Color de fondo
         label.setFont(label.getFont().deriveFont(Font.BOLD)); // Negrita
         return label;
-    }
-});
+            }
+        });
 
-JScrollPane scrollPane = new JScrollPane(usersTable);
-scrollPane.setPreferredSize(new Dimension(600, 400));
-c.gridx = 0;
-c.gridy = 0;
-c.weightx = 1.0;
-c.weighty = 1.0;
-c.fill = GridBagConstraints.BOTH;
-c.insets = new Insets(10, 10, 10, 10);
-mainPanel.add(scrollPane, c);
+        JScrollPane scrollPane = new JScrollPane(usersTable);
+        scrollPane.setPreferredSize(new Dimension(600, 400));
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(10, 10, 10, 10);
+        mainPanel.add(scrollPane, c);
         // Crear botón de eliminación de usuarios
         JButton deleteButton = new JButton("Eliminar");
         deleteButton.setBackground(new Color(220, 53, 69));
@@ -110,24 +107,18 @@ mainPanel.add(scrollPane, c);
     }
 
     private void getAllUsers() {
-        try {
-            List<User> users = remoteFacade.findAllUsers();
+        List<User> users = staffController.getAllUsers();
+        if (users != null) {
             for (User user : users) {
                 usersTableModel.addRow(new Object[]{user.getDni(), user.getNombre(), user.getApellidos(), user.getEmail()});
             }
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        } else {
             JOptionPane.showMessageDialog(this, "Error al cargar usuarios");
         }
     }
 
     private void deleteUser(String dni) {
-        try {
-            remoteFacade.deleteUserByDni(dni);
-            JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente");
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al eliminar usuario");
-        }
+        staffController.deleteUser(dni);
+        JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente");
     }
 }

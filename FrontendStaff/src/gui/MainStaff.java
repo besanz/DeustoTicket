@@ -57,8 +57,8 @@ public class MainStaff extends JFrame {
         c.gridwidth = 1;
         c.gridy = 1;
         c.weighty = 0;
-        addButton("Control de usuarios", new Color(114, 137, 218), c, 0, 1, new StaffControlUsuarios(serviceLocator));
-        addButton("Control de tickets", new Color(114, 137, 218), c, 1, 1, new StaffControlTickets(serviceLocator));
+        addButton("Control de usuarios", new Color(114, 137, 218), c, 0, 1, new StaffControlUsuarios(staffController));
+        addButton("Control de tickets", new Color(114, 137, 218), c, 1, 1, new StaffControlTickets(staffController));
 
         c.gridwidth = 2;
         c.gridy = 2;

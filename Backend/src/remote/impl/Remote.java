@@ -8,6 +8,9 @@ import remote.api.IUserService;
 import rmi.server.exceptions.InvalidUser;
 import remote.IRemoteFacade;
 import remote.service.*;
+import remote.service.qr.QRService;
+import remote.service.mail.EmailService;
+import remote.service.pdf.PDFService;
 import remote.api.paypal.PaypalService;
 import remote.rest.gateway.TicketProviderClient;
 
@@ -118,8 +121,8 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
     }
 
     @Override
-    public void sendEmailWithPDFAndQR(String recipientEmail, String subject, String body, Ticket ticket) throws RemoteException {
-        emailService.sendEmailWithPDFAndQR(recipientEmail, subject, body, ticket);
+    public void sendEmailWithPDFAndQR(String recipientEmail, Ticket ticket) throws RemoteException {
+        emailService.sendEmailWithPDFAndQR(recipientEmail, ticket);
     }
 
     @Override
