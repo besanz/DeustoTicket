@@ -36,6 +36,7 @@ public class TicketDetail extends JFrame {
         this.precio = precio;
         this.user = user;
         this.userController = userController;
+        this.remoteFacade = userController.getRemoteFacade();
         this.paypalService = new PaypalService();
         initComponents();
     }
@@ -80,7 +81,6 @@ public class TicketDetail extends JFrame {
         buyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 userController.buyTicket(evento, espacio, precio, user);
-                System.out.println("Precio ID: " + precio.getId());
                 try {
                     Precio updatedPrecio = remoteFacade.getPrecioByID(precio.getId());
                     remoteFacade.updateTickets(updatedPrecio);

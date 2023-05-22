@@ -332,8 +332,6 @@ public class TicketProviderClient {
         if (precio.getUpdatedAt() == null) precio.setUpdatedAt(currentDateTime);
         if (precio.getPublishedAt() == null) precio.setPublishedAt(currentDateTime);
 
-        System.out.println("Precio obtenido: " + precio);
-
         return precio;
     }
 
@@ -342,60 +340,25 @@ public class TicketProviderClient {
         int nuevosDisponibles = precio.getDisponibles() - 1;
 
         // Construye el objeto JSON para la actualización
-        JsonObject attributesJson = new JsonObject();
-        attributesJson.addProperty("nombre", precio.getNombre());
-        attributesJson.addProperty("precio", precio.getPrecio());
-        
-        // Convert the Date objects to strings
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC")); // este formato está en tiempo UTC
-
-        // Pone la última fecha de updatedAt
-        precio.setUpdatedAt(new Date());
-
-        attributesJson.addProperty("createdAt", sdf.format(precio.getCreatedAt()));
-        attributesJson.addProperty("updatedAt", sdf.format(precio.getUpdatedAt()));
-        attributesJson.addProperty("publishedAt", sdf.format(precio.getPublishedAt()));
-
-        attributesJson.addProperty("disponibles", nuevosDisponibles);
-        attributesJson.addProperty("ofertadas", precio.getOfertadas());
-
-        JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("id", precioId);
-        dataJson.add("attributes", attributesJson);
-
-        JsonObject ticketUpdateJson = new JsonObject();
-        ticketUpdateJson.add("data", dataJson);
-
-        System.out.println("JSON para actualizar: " + ticketUpdateJson.toString());
+        String data = "{ \"data\": { \"disponibles\": " + nuevosDisponibles + " } }";
 
         // Crea la conexión y configura los headers
         URL url = new URL(API_BASE_URL + "/api/precios/" + precioId);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
-        connection.setRequestProperty("Content-Type", "application/json; utf-8");
-        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", "Bearer " + TOKEN);
         connection.setDoOutput(true);
 
-        // Escribe el objeto JSON a la conexión
+        // Escribe los datos JSON a la conexión
         try (OutputStream outputStream = connection.getOutputStream()) {
-            connection.getOutputStream().write(ticketUpdateJson.toString().getBytes("UTF-8"));
+            outputStream.write(data.getBytes());
             outputStream.flush();
-        } catch (Exception e) {
-            System.out.println("Excepción al intentar escribir el JSON en el OutputStream: " + e.getMessage());
-            e.printStackTrace();
         }
 
         // Verifica la respuesta
-        int responseCode = -1;
-        try {
-            responseCode = connection.getResponseCode();
-        } catch (Exception e) {
-            System.out.println("Excepción al obtener el código de respuesta: " + e.getMessage());
-            e.printStackTrace();
-        }
-        if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_NO_CONTENT) {
+        int responseCode = connection.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
             System.out.println("Error en la llamada a la API: código de respuesta " + responseCode);
             try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), "utf-8"))) {
                 StringBuilder response = new StringBuilder();
@@ -404,16 +367,14 @@ public class TicketProviderClient {
                     response.append(responseLine.trim());
                 }
                 System.out.println("Mensaje de error: " + response.toString());
-            } catch (Exception e) {
-                System.out.println("Excepción al leer el mensaje de error: " + e.getMessage());
-                e.printStackTrace();
             }
         } else {
-            System.out.println("La respuesta de la API es: " + responseCode);
+            System.out.println("La respuesta de la API es: HTTP" + responseCode);
         }
 
         connection.disconnect();
     }
+
 
 
 }
