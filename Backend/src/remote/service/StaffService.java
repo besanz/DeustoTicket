@@ -7,6 +7,7 @@ import data.dao.impl.*;
 
 import data.entidades.Staff;
 import data.entidades.User;
+import data.entidades.Ticket;
 import remote.api.IStaffService;
 import rmi.server.exceptions.InvalidUser;
 
@@ -57,6 +58,18 @@ public class StaffService implements IStaffService {
     @Override
     public void updateTicketValido(String ticketId) throws RemoteException {
         ticketDAO.getInstance().updateTicketValido(ticketId);
+    }
+
+    @Override
+    public void removeTicketById(String id) throws RemoteException
+    {
+        ticketDAO.getInstance().removeById(id);
+    }
+
+    @Override
+    public List<Ticket> getAllTickets() throws RemoteException
+    {
+        return ticketDAO.getInstance().getAllTickets();
     }
 
 }

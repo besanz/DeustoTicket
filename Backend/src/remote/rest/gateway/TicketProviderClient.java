@@ -375,6 +375,4 @@ public class TicketProviderClient {
         connection.disconnect();
     }
 
-
-
 }

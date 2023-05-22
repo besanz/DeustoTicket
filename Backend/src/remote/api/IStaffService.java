@@ -6,6 +6,7 @@ import java.util.List;
 
 import data.entidades.Staff;
 import data.entidades.User;
+import data.entidades.Ticket;
 
 import rmi.server.exceptions.InvalidUser;
 
@@ -24,5 +25,7 @@ public interface IStaffService extends Remote {
     List<User> findAllUsers() throws RemoteException;
     void deleteUserByDni(String dni) throws RemoteException;
     void updateTicketValido(String ticketId) throws RemoteException;
+    void removeTicketById(String id) throws RemoteException;
+    List<Ticket> getAllTickets() throws RemoteException;
 
 }

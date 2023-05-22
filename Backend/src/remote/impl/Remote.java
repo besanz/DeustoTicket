@@ -134,12 +134,24 @@ public class Remote extends UnicastRemoteObject implements IRemoteFacade {
 
     @Override
     public void updateTicketValido(String ticketId) throws RemoteException {
-    staffService.updateTicketValido(ticketId);
+        staffService.updateTicketValido(ticketId);
     }
 
     @Override
     public void createPayment(String precio) throws RemoteException{
         paypalService.createPayment(precio);
+    }
+
+    @Override
+    public void removeTicketById(String id) throws RemoteException
+    {
+        staffService.removeTicketById(id);
+    }
+
+    @Override
+    public List<Ticket> getAllTickets() throws RemoteException
+    {
+        return staffService.getAllTickets();
     }
 
 }
