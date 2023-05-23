@@ -4,8 +4,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import remote.IRemoteFacade;
-import remote.impl.Remote;
+import remote.IFacadeStaff;
+import remote.impl.RemoteStaff;
 
 public class ServerStaff extends UnicastRemoteObject {
     private static ServerStaff instance;
@@ -29,7 +29,7 @@ public class ServerStaff extends UnicastRemoteObject {
 
             System.setProperty("java.security.policy", "../security/java.policy");
             System.setProperty("java.rmi.server.hostname", host);
-            IRemoteFacade objServer = Remote.getInstance();
+            IFacadeStaff objServer = RemoteStaff.getInstance();
 
             Registry registry = LocateRegistry.createRegistry(port);
             System.out.println("RMI Registry created on port " + port);

@@ -7,19 +7,19 @@ import data.entidades.Ticket;
 import remote.ServiceLocator;
 import java.rmi.RemoteException;
 import rmi.server.exceptions.InvalidUser;
-import remote.IRemoteFacade;
+import remote.IFacadeStaff;
 import java.util.List;
 
 
 public class StaffController {
     
-    private IRemoteFacade remoteFacade;
+    private IFacadeStaff remoteFacade;
 
     public StaffController(ServiceLocator serviceLocator) {
         this.remoteFacade = serviceLocator.getRemoteFacade();
     }
         
-    public IRemoteFacade getRemoteFacade() {
+    public IFacadeStaff getRemoteFacade() {
         return remoteFacade;
     }
 

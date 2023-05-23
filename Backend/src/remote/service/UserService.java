@@ -5,6 +5,8 @@ import java.util.List;
 
 import data.dao.IUserDAO;
 import data.dao.impl.UserDAO;
+import data.dao.ITicketDAO;
+import data.dao.impl.TicketDAO;
 import data.entidades.*;
 import rmi.server.exceptions.InvalidUser;
 import remote.api.IUserService;
@@ -14,10 +16,12 @@ import java.io.IOException;
 public class UserService implements IUserService {
     private static UserService instance;
     private final IUserDAO userDAO;
+    private final ITicketDAO ticketDAO;
     private final TicketProviderClient ticketProviderClient;
 
     private UserService() {
         this.userDAO = UserDAO.getInstance();
+        this.ticketDAO = TicketDAO.getInstance(); // initialize ticketDAO
         this.ticketProviderClient = TicketProviderClient.getInstance();
     }
 
@@ -100,6 +104,11 @@ public class UserService implements IUserService {
             e.printStackTrace();
             throw new RemoteException("Error al obtener precio de la API", e);
         }
+    }
+
+    @Override
+    public void addTicket(Ticket ticket) throws RemoteException {
+        ticketDAO.addTicket(ticket);
     }
 
     @Override

@@ -21,6 +21,7 @@ public interface IUserService extends Remote {
 
     Precio getPrecioByID(int precioId) throws RemoteException;
 
+    public void addTicket(Ticket ticket) throws RemoteException;
     void updateTickets(Precio precio) throws RemoteException;
     
 }

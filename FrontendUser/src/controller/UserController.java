@@ -1,6 +1,6 @@
 package controller;
 
-import remote.IRemoteFacade;
+import remote.IFacadeUser;
 import data.entidades.*;
 import remote.ServiceLocator;
 import java.rmi.RemoteException;
@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 public class UserController {
-    private IRemoteFacade remoteFacade;
+    private IFacadeUser remoteFacade;
     private User user;
     private final int qrCodeSize = 350;
 
@@ -52,7 +52,7 @@ public class UserController {
         System.out.println("User has been logged out.");
     }
     
-    public IRemoteFacade getRemoteFacade() {
+    public IFacadeUser getRemoteFacade() {
         return remoteFacade;
     }
 
@@ -89,7 +89,5 @@ public class UserController {
             e.printStackTrace();
         }
     }
-    
-
 }
 

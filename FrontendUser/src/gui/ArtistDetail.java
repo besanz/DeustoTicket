@@ -1,7 +1,7 @@
 package gui;
 
 import data.entidades.Artista;
-import remote.IRemoteFacade;
+import remote.IFacadeUser;
 import java.rmi.RemoteException;
 
 import javax.swing.*;
@@ -10,9 +10,9 @@ import java.text.SimpleDateFormat;
 
 public class ArtistDetail extends JFrame {
     private final Artista artista;
-    private final IRemoteFacade remoteFacade;
+    private final IFacadeUser remoteFacade;
 
-    public ArtistDetail(int artistaID, IRemoteFacade remoteFacade) {
+    public ArtistDetail(int artistaID, IFacadeUser remoteFacade) {
         this.remoteFacade = remoteFacade;
         Artista tempArtista = null;
         try {

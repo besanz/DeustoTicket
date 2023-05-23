@@ -6,7 +6,7 @@ import data.entidades.Evento;
 import data.entidades.Precio;
 import data.entidades.User;
 
-import remote.IRemoteFacade;
+import remote.IFacadeUser;
 import controller.UserController;
 
 import javax.swing.*;
@@ -17,14 +17,14 @@ import java.util.List;
 
 public class EventDetail extends JFrame {
     private final Evento evento;
-    private final IRemoteFacade remoteFacade;
+    private final IFacadeUser remoteFacade;
     private final List<Artista> artistas;
     private final Espacio espacio;
     private final List<Precio> precios;
     private final User user;
     private UserController userController;
 
-    public EventDetail(Evento evento, IRemoteFacade remoteFacade, User user, UserController userController) {
+    public EventDetail(Evento evento, IFacadeUser remoteFacade, User user, UserController userController) {
         this.user = user;
         this.remoteFacade = remoteFacade;
         this.evento = evento;

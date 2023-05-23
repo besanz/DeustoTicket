@@ -24,6 +24,7 @@ public class StaffService implements IStaffService {
     public StaffService() {
         staffDAO = StaffDAO.getInstance();
         userDAO = UserDAO.getInstance();
+        ticketDAO = TicketDAO.getInstance();
     }
 
     public static StaffService getInstance() {

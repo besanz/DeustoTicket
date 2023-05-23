@@ -171,7 +171,7 @@ public class RegisterUser extends JFrame {
             User newUser = userController.registerUser(dni, name, surname, email, password);
                     if (newUser != null) {
                 JOptionPane.showMessageDialog(this, "Usuario registrado con exito");
-                new LoginUser(serviceLocator).setVisible(true);
+                new MainUserWindow(newUser, userController).setVisible(true);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Error al registrar usuario");

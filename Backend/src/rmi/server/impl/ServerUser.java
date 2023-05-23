@@ -4,8 +4,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import remote.IRemoteFacade;
-import remote.impl.Remote;
+import remote.IFacadeUser;
+import remote.impl.RemoteUser;
 
 public class ServerUser extends UnicastRemoteObject {
     private static ServerUser instance;
@@ -29,13 +29,18 @@ public class ServerUser extends UnicastRemoteObject {
 
             System.setProperty("java.security.policy", "../security/java.policy");
             System.setProperty("java.rmi.server.hostname", host);
-            IRemoteFacade objServer = Remote.getInstance();
+            IFacadeUser objServer = RemoteUser.getInstance();
 
             Registry registry = LocateRegistry.createRegistry(port);
             System.out.println("RMI Registry created on port " + port);
 
             registry.rebind(serverName, objServer);
             System.out.println("* Server '" + "//" + host + ":" + port + "/" + serverName + "' active and waiting...");
+
+            while(true)
+            {
+                Thread.sleep(1000);
+            }
 
         } catch (Exception e) {
             System.err.println("- Exception running the server: " + e.getMessage());

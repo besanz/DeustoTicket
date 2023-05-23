@@ -5,7 +5,7 @@ import data.entidades.Espacio;
 import data.entidades.Precio;
 import data.entidades.User;
 
-import remote.IRemoteFacade;
+import remote.IFacadeUser;
 import remote.api.paypal.PaypalService;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -26,7 +26,7 @@ public class TicketDetail extends JFrame {
     private final Precio precio;
     private final User user;
     private final UserController userController;
-    private IRemoteFacade remoteFacade;
+    private IFacadeUser remoteFacade;
     private PaypalService paypalService;
 
 

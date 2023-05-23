@@ -5,7 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import remote.ServiceLocator;
-import remote.IRemoteFacade;
+import remote.IFacadeStaff;
 import gui.LoginStaff;
 
 public class Client {
@@ -23,11 +23,11 @@ public class Client {
         String remoteUrl = String.format("//%s:%d/%s", serverIP, serverPort, serverName);
         System.out.println("Remote URL: " + remoteUrl);
 
-        IRemoteFacade stubServer = null;
+        IFacadeStaff stubServer = null;
         final ServiceLocator serviceLocator;
         try {
             Registry registry = LocateRegistry.getRegistry(serverPort);
-            stubServer = (IRemoteFacade) registry.lookup(serverName);
+            stubServer = (IFacadeStaff) registry.lookup(serverName);
             serviceLocator = new ServiceLocator(registry);
 
         } catch (Exception e) {
