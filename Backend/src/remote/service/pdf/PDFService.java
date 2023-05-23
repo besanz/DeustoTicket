@@ -34,8 +34,6 @@ public class PDFService {
         String normalizedEvent = Normalizer.normalize(evento, Normalizer.Form.NFD);
         normalizedEvent = normalizedEvent.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 
-        System.out.println("Nueva venta: "+ normalizedEvent);
-
         // Determinar la estrategia
         switch (normalizedEvent) {
             case "Reggaeton Fest":
@@ -48,7 +46,8 @@ public class PDFService {
                 setTemplateStrategy(new LatinFestStrategy());
                 break;
             default:
-                throw new IllegalArgumentException("Evento no valido");
+                setTemplateStrategy(new DefaultStrategy());
+                break;
         }
 
         String pdf = templateStrategy.getTemplateName();
