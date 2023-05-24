@@ -40,7 +40,7 @@ public class TicketProviderClient {
         // Constructor privado para prevenir su instanciacion.
     }
 
-    // Método estático de acceso global
+    // Metodo estatico de acceso global
     public static synchronized TicketProviderClient getInstance() {
         if (instance == null) {
             instance = new TicketProviderClient();
@@ -263,7 +263,7 @@ public class TicketProviderClient {
         URL url = new URL(API_BASE_URL + endpoint);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         if (connection == null) {
-            throw new NullPointerException("No se pudo abrir la conexión");
+            throw new NullPointerException("No se pudo abrir la conexion");
         }
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Bearer " + TOKEN);
@@ -287,7 +287,7 @@ public class TicketProviderClient {
     private Date parseFecha(String fechaString) {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // este formato está en tiempo UTC
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // este formato esta en tiempo UTC
             return dateFormat.parse(fechaString);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -339,10 +339,10 @@ public class TicketProviderClient {
         int precioId = precio.getId();
         int nuevosDisponibles = precio.getDisponibles() - 1;
 
-        // Construye el objeto JSON para la actualización
+        // Construye el objeto JSON para la actualizacion
         String data = "{ \"data\": { \"disponibles\": " + nuevosDisponibles + " } }";
 
-        // Crea la conexión y configura los headers
+        // Crea la conexion y configura los headers
         URL url = new URL(API_BASE_URL + "/api/precios/" + precioId);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
@@ -350,7 +350,7 @@ public class TicketProviderClient {
         connection.setRequestProperty("Authorization", "Bearer " + TOKEN);
         connection.setDoOutput(true);
 
-        // Escribe los datos JSON a la conexión
+        // Escribe los datos JSON a la conexion
         try (OutputStream outputStream = connection.getOutputStream()) {
             outputStream.write(data.getBytes());
             outputStream.flush();
@@ -359,7 +359,7 @@ public class TicketProviderClient {
         // Verifica la respuesta
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            System.out.println("Error en la llamada a la API: código de respuesta " + responseCode);
+            System.out.println("Error en la llamada a la API: codigo de respuesta " + responseCode);
             try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), "utf-8"))) {
                 StringBuilder response = new StringBuilder();
                 String responseLine = null;

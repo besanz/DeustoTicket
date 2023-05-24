@@ -5,6 +5,11 @@ import data.entidades.User;
 import remote.ServiceLocator;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,6 +34,9 @@ public class LoginUser extends JFrame {
         setTitle("GuTicket - Iniciar sesion");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 700, 570);
+        
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -65,27 +73,27 @@ public class LoginUser extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         JLabel lblEmail = new JLabel("Email: ");
-        lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblEmail.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
         lblEmail.setForeground(Color.WHITE);
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(lblEmail, gbc);
 
         textField = new JTextField(20);
-        textField.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        textField.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
         gbc.gridx = 1;
         gbc.gridy = 0;
         panel.add(textField, gbc);
 
         JLabel lblPassword = new JLabel("Password: ");
-        lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblPassword.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
         lblPassword.setForeground(Color.WHITE);
         gbc.gridx = 0;
         gbc.gridy = 1;
         panel.add(lblPassword, gbc);
 
         passwordField = new JPasswordField(20);
-        passwordField.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        passwordField.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
         gbc.gridx = 1;
         gbc.gridy = 1;
         panel.add(passwordField, gbc);
@@ -93,8 +101,21 @@ public class LoginUser extends JFrame {
         JButton btnIniciarSesion = new JButton("Iniciar Sesion");
         btnIniciarSesion.addActionListener(evt -> jButtonLoginActionPerformed(evt));
         btnIniciarSesion.setBackground(new Color(114, 137, 218));
-        btnIniciarSesion.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnIniciarSesion.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
         btnIniciarSesion.setForeground(Color.WHITE);
+        btnIniciarSesion.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnIniciarSesion.setBackground(Color.WHITE);
+                btnIniciarSesion.setForeground(new Color(114, 137, 218));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnIniciarSesion.setBackground(new Color(114, 137, 218));
+                btnIniciarSesion.setForeground(Color.WHITE);
+            }
+        });
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -103,13 +124,26 @@ public class LoginUser extends JFrame {
 
         JButton btnRegistro = new JButton("No tienes cuenta? Registrate");
         btnRegistro.addActionListener(evt -> jButtonRegisterActionPerformed(evt));
-        btnRegistro.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnRegistro.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
         btnRegistro.setForeground(Color.WHITE);
         btnRegistro.setContentAreaFilled(false);
         btnRegistro.setBorderPainted(false);
         btnRegistro.setOpaque(false);
         btnRegistro.setFocusPainted(false);
         btnRegistro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnRegistro.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnRegistro.setForeground(Color.MAGENTA); // Cambiar a color morado (magenta)
+                btnRegistro.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnRegistro.setForeground(Color.WHITE); // Restaurar color original al salir del botón
+                btnRegistro.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
+            }
+        });
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;

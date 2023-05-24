@@ -36,9 +36,10 @@ public class MainUserWindow extends JFrame {
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GuTicket - Ventana Principal");
-        setSize(new Dimension(1400, 900));
+        setSize(800, 600);
         getContentPane().setLayout(new BorderLayout(0, 0));
         getContentPane().setBackground(new Color(54, 57, 63));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
 
         // Update the welcomeLabel's margin
         JLabel welcomeLabel = new JLabel("Bienvenido a GuTicket, " + user.getNombre());
@@ -71,7 +72,7 @@ public class MainUserWindow extends JFrame {
         scrollPane.setBorder(null);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        pack();
+        
         setLocationRelativeTo(null);
     }
 
@@ -85,13 +86,13 @@ public class MainUserWindow extends JFrame {
                 BorderFactory.createLineBorder(new Color(114, 137, 218), 2),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
-        // Panel de información del evento
+        // Panel de informacion del evento
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
         infoPanel.setBackground(new Color(52, 54, 59));
         eventoPanel.add(infoPanel, BorderLayout.CENTER);
 
-        // Muestra el título del evento
+        // Muestra el titulo del evento
         JLabel titleLabel = new JLabel(evento.getTitulo());
         titleLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 18));
         titleLabel.setForeground(new Color(114, 137, 218));
@@ -115,10 +116,28 @@ public class MainUserWindow extends JFrame {
         eventoPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                
                 EventDetail eventDetailWindow = new EventDetail(evento, userController.getRemoteFacade(), user, userController);
                 eventDetailWindow.setVisible(true);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                eventoPanel.setBackground(Color.WHITE);
+                eventoPanel.setForeground(Color.BLUE);
+                infoPanel.setBackground(Color.WHITE);
+                infoPanel.setForeground(Color.BLUE);
+                titleLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 28));
+                
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                eventoPanel.setBackground(new Color(52, 54, 59));
+                eventoPanel.setForeground(new Color(114, 137, 218));
+                infoPanel.setBackground(new Color(52, 54, 59));
+                infoPanel.setForeground(new Color(114, 137, 218));
+                titleLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 18));
+                
+            }
         });
+        
 
         return eventoPanel;
     }

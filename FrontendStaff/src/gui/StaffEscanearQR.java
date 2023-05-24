@@ -31,6 +31,8 @@ public class StaffEscanearQR extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Admin - Escanear QR");
         setBounds(100, 100, 858, 516);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+
         contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
         setContentPane(contentPane);
@@ -51,7 +53,7 @@ public class StaffEscanearQR extends JFrame {
         contentPane.add(panel, BorderLayout.CENTER);
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(this::scanQRCode, 0, 1000, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(this::scanQRCode, 0, 2000, TimeUnit.MILLISECONDS);
         pack();
         setVisible(true);
     }
@@ -62,11 +64,16 @@ public class StaffEscanearQR extends JFrame {
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(image)));
             try {
                 Result qrCodeResult = qrCodeReader.decode(binaryBitmap);
+                
+                if (qrCodeResult != null) {
                 String qrCodeText = qrCodeResult.getText();
                 staffController.updateTicketValido(qrCodeText);
-                System.out.println("QR Code detected: " + qrCodeText);
+                JOptionPane.showMessageDialog(this, "Escaneo realizado correctamente");
+                } else {
+                    // No se detectó ningún código QR durante el escaneo
+                }
             } catch (Exception e) {
-                // No se detectó ningún código QR, simplemente ignorar
+                // No se detecto ningun codigo QR, simplemente ignorar
             }
         }
     }

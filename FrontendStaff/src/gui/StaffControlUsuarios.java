@@ -33,6 +33,8 @@ public class StaffControlUsuarios extends JFrame {
         setTitle("Admin - Control de Usarios");
         setPreferredSize(new Dimension(800, 600));
         getContentPane().setBackground(new Color(54, 57, 63));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+
 
         // Crear panel principal
         JPanel mainPanel = new JPanel();
@@ -68,7 +70,7 @@ public class StaffControlUsuarios extends JFrame {
         c.fill = GridBagConstraints.BOTH;
         c.insets = new Insets(10, 10, 10, 10);
         mainPanel.add(scrollPane, c);
-        // Crear botón de eliminación de usuarios
+        // Crear boton de eliminacion de usuarios
         JButton deleteButton = new JButton("Eliminar");
         deleteButton.setBackground(new Color(220, 53, 69));
         deleteButton.setForeground(Color.WHITE);
@@ -79,7 +81,7 @@ public class StaffControlUsuarios extends JFrame {
                 if (selectedRow != -1) {
                     String dni = (String) usersTable.getValueAt(selectedRow, 0);
                     int result = JOptionPane.showConfirmDialog(null,
-                            "¿Está seguro de que desea eliminar al usuario con DNI " + dni + "?",
+                            "Esta seguro de que desea eliminar al usuario con DNI " + dni + "?",
                             "Eliminar usuario",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.WARNING_MESSAGE);

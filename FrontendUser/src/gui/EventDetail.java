@@ -8,6 +8,10 @@ import data.entidades.User;
 
 import remote.IFacadeUser;
 import controller.UserController;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,10 +54,11 @@ public class EventDetail extends JFrame {
     }
 
     private void initComponents() {
-        this.setTitle("GuTicket - " + user.getNombre());
+        this.setTitle("GuTicket - " + evento.getTitulo());
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -76,20 +81,37 @@ public class EventDetail extends JFrame {
         descripcionArea.setLineWrap(true);
         descripcionArea.setWrapStyleWord(true);
         descripcionArea.setEditable(false);
-        descripcionArea.setBackground(new Color(54, 57, 63));
-        descripcionArea.setForeground(new Color(114, 137, 218));
+        descripcionArea.setBackground(new Color(114, 137, 218));
+        descripcionArea.setForeground(Color.WHITE);
         descripcionArea.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
         descripcionArea.setBorder(BorderFactory.createLineBorder(new Color(114, 137, 218), 2));
         topPanel.add(descripcionArea);
 
-        JButton espacioButton = new JButton("Donde? " + espacio.getNombre());
+        JButton espacioButton = new JButton(espacio.getNombre());
         espacioButton.setBackground(new Color(114, 137, 218));
-        espacioButton.setFont(new Font("Tahoma", Font.BOLD, 16));
+        espacioButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 18));
         espacioButton.setForeground(Color.WHITE);
         espacioButton.setBorder(BorderFactory.createLineBorder(new Color(114, 137, 218), 2));
-        espacioButton.addActionListener(e -> {
-            EspacioDetail espacioDetail = new EspacioDetail(espacio, evento.getAforo());
-            espacioDetail.setVisible(true);
+        
+        espacioButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                
+                EspacioDetail espacioDetail = new EspacioDetail(espacio, evento.getAforo());
+                espacioDetail.setVisible(true);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    espacioButton.setBackground(Color.WHITE);
+                    espacioButton.setForeground(new Color(114, 137, 218));
+                    espacioButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 26));
+                    
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    espacioButton.setBackground(new Color(114, 137, 218)); 
+                    espacioButton.setForeground(Color.WHITE);
+                    espacioButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 18));
+                   
+                }
         });
         topPanel.add(espacioButton);
 
@@ -97,30 +119,59 @@ public class EventDetail extends JFrame {
         JPanel artistasPanel = new JPanel();
         artistasPanel.setLayout(new BoxLayout(artistasPanel, BoxLayout.Y_AXIS)); // BoxLayout to center vertically
         artistasPanel.setBackground(new Color(54, 57, 63));
-        artistasPanel.setBorder(BorderFactory.createLineBorder(new Color(114, 137, 218), 2));
+        artistasPanel.setBorder(BorderFactory.createLineBorder(new Color(54, 57, 63), 2));
         mainPanel.add(artistasPanel, BorderLayout.CENTER);
 
         // Panel for artist buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0)); // FlowLayout to place buttons side by side
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0)); // FlowLayout para colocar los botones uno al lado del otro
         buttonPanel.setBackground(new Color(54, 57, 63));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT); 
+
         for (Artista artista : artistas) {
             JButton artistaButton = new JButton(artista.getNombre());
-            artistaButton.setBackground(Color.WHITE); // Fondo blanco
-            artistaButton.setFont(new Font("Tahoma", Font.BOLD, 16));
-            artistaButton.setForeground(new Color(114, 137, 218)); // Texto morado
-            artistaButton.setBorder(BorderFactory.createLineBorder(new Color(114, 137, 218), 2)); // Borde morado
-            artistaButton.setMargin(new Insets(10,20,10,20));
-            artistaButton.addActionListener(e -> {
-            ArtistDetail artistaDetail = new ArtistDetail(artista.getId(), remoteFacade);
-            artistaDetail.setVisible(true);
+            artistaButton.setBackground(Color.WHITE);
+            artistaButton.setForeground(new Color(114, 137, 218));
+            artistaButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
+            
+            // Establecer márgenes y padding
+            artistaButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Sin borde, solo espacio interno
+            artistaButton.setContentAreaFilled(false); // No rellenar área de contenido
+            
+            // Establecer borde personalizado
+            artistaButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(114, 137, 218), 2), // Borde morado
+                BorderFactory.createEmptyBorder(5, 10, 5, 10) // Espacio entre el borde y el contenido
+            ));
+            
+            artistaButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    ArtistDetail artistaDetail = new ArtistDetail(artista.getId(), remoteFacade);
+                    artistaDetail.setVisible(true);
+                }
+                
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    artistaButton.setBackground(new Color(114, 137, 218)); 
+                    artistaButton.setForeground(Color.WHITE);
+                    artistaButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 20));
+                }
+                
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    artistaButton.setBackground(Color.WHITE);
+                    artistaButton.setForeground(new Color(114, 137, 218));
+                    artistaButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
+                }
             });
+            
             buttonPanel.add(artistaButton);
         }
 
-        artistasPanel.add(Box.createVerticalGlue()); // Glue to push buttonPanel to center
+        artistasPanel.add(Box.createVerticalGlue()); // Glue para centrar buttonPanel
         artistasPanel.add(buttonPanel);
         artistasPanel.add(Box.createVerticalGlue());
+
 
         // Bottom panel
         JPanel bottomPanel = new JPanel();
@@ -130,14 +181,30 @@ public class EventDetail extends JFrame {
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         for (Precio precio : precios) {
-            JButton precioButton = new JButton(precio.getNombre() + ": " + precio.getValor());
+            String[] stringSplit = precio.getNombre().split("-");
+            String botonTexto = stringSplit[0] + ": $" + precio.getValor();
+            JButton precioButton = new JButton(botonTexto);
             precioButton.setBackground(new Color(114, 137, 218));
-            precioButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+            precioButton.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
             precioButton.setForeground(Color.WHITE);
-            precioButton.addActionListener(e -> {
+            precioButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                
                 TicketDetail ticketDetail = new TicketDetail(evento, espacio, precio, user, userController);
                 ticketDetail.setVisible(true);
-            });
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    precioButton.setBackground(Color.WHITE);
+                    precioButton.setForeground(new Color(114, 137, 218));
+                    
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    precioButton.setBackground(new Color(114, 137, 218)); 
+                    precioButton.setForeground(Color.WHITE);
+                   
+                }
+        });
             bottomPanel.add(precioButton);
         }
 

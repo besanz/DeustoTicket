@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import data.entidades.Staff;
 import controller.StaffController;
@@ -29,6 +31,8 @@ public class MainStaff extends JFrame {
         setTitle("Admin - Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 600, 400);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout());
@@ -46,7 +50,7 @@ public class MainStaff extends JFrame {
         c.weighty = 1.0;
         c.insets = new Insets(5, 5, 5, 5);
 
-        JLabel title = new JLabel("Bienvenido a la interfaz de Staff", SwingConstants.CENTER);
+        JLabel title = new JLabel("GuTicket - Administracion", SwingConstants.CENTER);
         title.setForeground(new Color(114, 137, 218));
         title.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 24));
         c.gridwidth = 2;
@@ -87,6 +91,22 @@ public class MainStaff extends JFrame {
         });
         c.gridx = gridx;
         c.gridy = gridy;
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setForeground(color);
+                button.setBackground(Color.WHITE);
+                button.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 25));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setForeground(Color.WHITE);
+                button.setBackground(color);
+                button.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 20));
+                
+            }
+        });
         mainPanel.add(button, c);
     }
 }
