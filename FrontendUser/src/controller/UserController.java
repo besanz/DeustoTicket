@@ -58,7 +58,7 @@ public class UserController {
 
     public void buyTicket(Evento evento, Espacio espacio, Precio precio, User user) {
         try {
-            // Aquí debes crear un Ticket con los datos proporcionados
+            // Aqui debes crear un Ticket con los datos proporcionados
             Ticket ticket = new Ticket();
             ticket.setId(UUID.randomUUID().toString()); // Genera un UUID para el ticket
             ticket.setNombreEvento(evento.getTitulo());
@@ -72,12 +72,12 @@ public class UserController {
             ticket.setPrecio(precio.getValor());
             ticket.setDni(user.getDni());
             ticket.setTitular(user.getNombre() + " " + user.getApellidos());
-            ticket.setValido(1); // asumo que un ticket nuevo es siempre válido
+            ticket.setValido(1); // asumo que un ticket nuevo es siempre valido
 
             // Guarda el ticket en la base de datos
             remoteFacade.addTicket(ticket);
 
-            // Generar código QR y guardar en un archivo
+            // Generar codigo QR y guardar en un archivo
             String qrCodeFilePath = "ticketQR.png";
             String qrCodeText = String.valueOf(ticket.getId());
             remoteFacade.generateQRCodeImage(qrCodeText, qrCodeFilePath, qrCodeSize);

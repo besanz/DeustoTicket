@@ -26,6 +26,8 @@ private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Admin - Registro de Staff");
         setBounds(100, 100, 800, 600);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+
 
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

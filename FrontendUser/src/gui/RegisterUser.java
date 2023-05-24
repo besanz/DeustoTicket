@@ -29,6 +29,8 @@ public class RegisterUser extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("GuTicket - Registro de usuario");
         setBounds(100, 100, 1000, 900);
+        setSize(650, 600);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
 
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -150,7 +152,7 @@ public class RegisterUser extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(jButtonRegister, gbc);
 
-        pack();
+        
         setLocationRelativeTo(null);
     }
 

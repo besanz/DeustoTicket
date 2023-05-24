@@ -46,6 +46,7 @@ public class TicketDetail extends JFrame {
         setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
 
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(new Color(255, 255, 255));
@@ -65,7 +66,7 @@ public class TicketDetail extends JFrame {
         JLabel venueLabel = new JLabel("Lugar: " + espacio.getNombre());
         venueLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        JLabel priceLabel = new JLabel("Precio: " + precio.getValor() + "€");
+        JLabel priceLabel = new JLabel("Precio: $" + precio.getValor());
         priceLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
         infoPanel.add(eventLabel);
@@ -79,15 +80,30 @@ public class TicketDetail extends JFrame {
         buyButton.setFont(new Font("Arial", Font.BOLD, 16));
         buyButton.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
         buyButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                userController.buyTicket(evento, espacio, precio, user);
-                try {
-                    Precio updatedPrecio = remoteFacade.getPrecioByID(precio.getId());
-                    remoteFacade.updateTickets(updatedPrecio);
-                } catch (IOException ex) {
-                    System.out.println("Error al actualizar los tickets: " + ex.getMessage());
+                if (e.getSource() == buyButton) {
+                    // Mostrar el cuadro de dialogo de confirmacion
+                    int result = JOptionPane.showConfirmDialog(TicketDetail.this,
+                            "Estas seguro de que quieres comprar ahora?", "Confirmacion",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (result == JOptionPane.YES_OPTION) {
+                        // Accion cuando se hace clic en "Si"
+                        userController.buyTicket(evento, espacio, precio, user);
+                        try {
+                            Precio updatedPrecio = remoteFacade.getPrecioByID(precio.getId());
+                            remoteFacade.updateTickets(updatedPrecio);
+                        } catch (IOException ex) {
+                            System.out.println("Error al actualizar los tickets: " + ex.getMessage());
+                        }
+                    } else if (result == JOptionPane.NO_OPTION) {
+                        // Accion cuando se hace clic en "No"
+                        System.out.println("Compra cancelada");
+                    }
                 }
             }
+
         });
 
         JButton paypalButton = new JButton("Pagar con PayPal");

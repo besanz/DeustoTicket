@@ -32,13 +32,15 @@ public class StaffControlTickets extends JFrame {
         setTitle("Admin - Control de Tickets");
         setPreferredSize(new Dimension(800, 600));
         getContentPane().setBackground(new Color(54, 57, 63));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.setBackground(new Color(54, 57, 63));
         GridBagConstraints c = new GridBagConstraints();
 
-        ticketsTableModel = new DefaultTableModel(new String[]{"ID", "Precio", "Valido"}, 0);
+        ticketsTableModel = new DefaultTableModel(new String[]{"ID", "Precio", "Titular", "DNI", "Valido"}, 0);
         ticketsTable = new JTable(ticketsTableModel);
         ticketsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -75,7 +77,7 @@ public class StaffControlTickets extends JFrame {
                 if (selectedRow != -1) {
                     String id = (String) ticketsTable.getValueAt(selectedRow, 0);
                     int result = JOptionPane.showConfirmDialog(null,
-                            "¿Estás seguro de que deseas eliminar el ticket con ID " + id + "?",
+                            "Estas seguro de que deseas eliminar el ticket con ID " + id + "?",
                             "Eliminar ticket",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.WARNING_MESSAGE);
@@ -89,10 +91,10 @@ public class StaffControlTickets extends JFrame {
         });
         c.gridx = 0;
         c.gridy = 1;
-        c.weightx = 0.0;
+        c.weightx = 0.5; // Cambiado a 0.5 para ajustar el ancho relativo
         c.weighty = 0.0;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = new Insets(0, 0, 10, 0);
+        c.fill = GridBagConstraints.HORIZONTAL; // Cambiado a HORIZONTAL para ajustar el ancho
+        c.insets = new Insets(0, 0, 10, 5); // Cambiado el margen derecho a 5 para reducir el espacio
         mainPanel.add(deleteButton, c);
 
         JButton validateButton = new JButton("Validar Ticket");
@@ -110,10 +112,10 @@ public class StaffControlTickets extends JFrame {
         });
         c.gridx = 1;
         c.gridy = 1;
-        c.weightx = 0.0;
+        c.weightx = 0.5; // Cambiado a 0.5 para ajustar el ancho relativo
         c.weighty = 0.0;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = new Insets(0, 0, 10, 0);
+        c.fill = GridBagConstraints.HORIZONTAL; // Cambiado a HORIZONTAL para ajustar el ancho
+        c.insets = new Insets(0, 5, 10, 0); // Cambiado el margen izquierdo a 5 para reducir el espacio
         mainPanel.add(validateButton, c);
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -129,7 +131,7 @@ public class StaffControlTickets extends JFrame {
             return;
         }
         for (Ticket ticket : tickets) {
-            ticketsTableModel.addRow(new Object[]{ticket.getId(), ticket.getPrecio(), ticket.getValido()});
+            ticketsTableModel.addRow(new Object[]{ticket.getId(), ticket.getPrecio(), ticket.getTitular(), ticket.getDni(), ticket.getValido()});
         }
     }
 
