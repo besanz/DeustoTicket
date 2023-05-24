@@ -34,7 +34,6 @@ public class StaffControlTickets extends JFrame {
         getContentPane().setBackground(new Color(54, 57, 63));
         setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
 
-
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.setBackground(new Color(54, 57, 63));
@@ -48,7 +47,7 @@ public class StaffControlTickets extends JFrame {
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus, int row, int column) {
+                                                        boolean isSelected, boolean hasFocus, int row, int column) {
                 JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 label.setForeground(Color.WHITE);
                 label.setBackground(new Color(220, 53, 69));
@@ -61,11 +60,16 @@ public class StaffControlTickets extends JFrame {
         scrollPane.setPreferredSize(new Dimension(600, 400));
         c.gridx = 0;
         c.gridy = 0;
+        c.gridwidth = 2;  // Modificado para abarcar 2 columnas
         c.weightx = 1.0;
         c.weighty = 1.0;
         c.fill = GridBagConstraints.BOTH;
         c.insets = new Insets(10, 10, 10, 10);
         mainPanel.add(scrollPane, c);
+
+        JPanel buttonsPanel = new JPanel();  // Nuevo panel para los botones
+        buttonsPanel.setLayout(new GridLayout(1, 2, 10, 0));
+        buttonsPanel.setBackground(new Color(54, 57, 63)); 
 
         JButton deleteButton = new JButton("Eliminar Ticket");
         deleteButton.setBackground(new Color(220, 53, 69));
@@ -89,13 +93,7 @@ public class StaffControlTickets extends JFrame {
                 }
             }
         });
-        c.gridx = 0;
-        c.gridy = 1;
-        c.weightx = 0.5; // Cambiado a 0.5 para ajustar el ancho relativo
-        c.weighty = 0.0;
-        c.fill = GridBagConstraints.HORIZONTAL; // Cambiado a HORIZONTAL para ajustar el ancho
-        c.insets = new Insets(0, 0, 10, 5); // Cambiado el margen derecho a 5 para reducir el espacio
-        mainPanel.add(deleteButton, c);
+        buttonsPanel.add(deleteButton);  // Agrega el botón de eliminar al panel de botones
 
         JButton validateButton = new JButton("Validar Ticket");
         validateButton.setBackground(new Color(220, 53, 69));
@@ -110,19 +108,23 @@ public class StaffControlTickets extends JFrame {
                 }
             }
         });
-        c.gridx = 1;
+        buttonsPanel.add(validateButton);  // Agrega el botón de validar al panel de botones
+
+        c.gridx = 0;
         c.gridy = 1;
-        c.weightx = 0.5; // Cambiado a 0.5 para ajustar el ancho relativo
+        c.gridwidth = 2;  // Modificado para abarcar 2 columnas
+        c.weightx = 1.0;
         c.weighty = 0.0;
-        c.fill = GridBagConstraints.HORIZONTAL; // Cambiado a HORIZONTAL para ajustar el ancho
-        c.insets = new Insets(0, 5, 10, 0); // Cambiado el margen izquierdo a 5 para reducir el espacio
-        mainPanel.add(validateButton, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(10, 10, 10, 10);
+        mainPanel.add(buttonsPanel, c);  // Agrega el panel de botones al panel principal
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);
 
         pack();
         setLocationRelativeTo(null);
     }
+
 
     private void getAllTickets() {
         List<Ticket> tickets = staffController.getAllTickets();

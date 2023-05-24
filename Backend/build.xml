@@ -21,7 +21,7 @@
     </path>
 
     <target name="help">
-        <echo>Uso: ant [build | export | server]</echo>
+        <echo>Usage: ant [serverUser | serverStaff]</echo>
     </target>
 
     <target name="build" description="Builds the project">
@@ -51,7 +51,8 @@
         <mkdir dir="${dist.dir}"/>
         <jar destfile="${dist.dir}/${export.file}" basedir="${build.dir}" includes="**/*.class">
             <fileset dir="resources" includes="META-INF/persistence.xml"/>
-            <fileset dir="src" excludes="remote/rest/**/*"/>
+            <fileset dir="src" excludes="remote/rest/**/*, remote/api/**/*, remote/service/**/*, remote/impl/*"/>
+            <fileset dir="src" includes="data/entidades/**/*, remote/IFacadeStaff.java, remote/IFacadeUser.java"/>
         </jar>
     </target>
 
