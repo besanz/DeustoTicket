@@ -2,25 +2,19 @@ package remote;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import remote.IFacadeStaff;
 
 public class ServiceLocator {
     private IFacadeStaff remoteFacade;
 
-    public ServiceLocator(String remoteUrl) throws RemoteException {
+    public ServiceLocator(String serverName) throws RemoteException {
         try {
-            remoteFacade = (IFacadeStaff) Naming.lookup(remoteUrl);
+            Registry registry = LocateRegistry.getRegistry(1999); // asumiendo que el puerto es siempre 2000
+            remoteFacade = (IFacadeStaff) registry.lookup(serverName);
         } catch (Exception e) {
             throw new RemoteException("Error al localizar el objeto remoto", e);
-        }
-    }
-
-    public ServiceLocator(Registry registry) {
-        try {
-            remoteFacade = (IFacadeStaff) registry.lookup("GuTicketServer");
-        } catch (Exception e) {
-            System.err.println("Error looking up RemoteFacade in ServiceLocator: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
