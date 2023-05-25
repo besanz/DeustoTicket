@@ -76,15 +76,15 @@ public class PDFService {
         contentStream.showText("" + ticket.getPrecio());
 
         contentStream.setFont(PDType1Font.TIMES_BOLD, 20);
-        contentStream.newLineAtOffset(-450, -300);
+        contentStream.newLineAtOffset(-600, -300);
         contentStream.showText("Titular: " + ticket.getTitular());
 
         contentStream.setFont(PDType1Font.TIMES_BOLD, 20);
-        contentStream.newLineAtOffset(160, 0);
+        contentStream.newLineAtOffset(280, 0);
         contentStream.showText(" - ");
 
         contentStream.setFont(PDType1Font.TIMES_BOLD, 20);
-        contentStream.newLineAtOffset(30, 0);
+        contentStream.newLineAtOffset(60, 0);
         contentStream.showText("" + ticket.getDni());
         contentStream.endText();
 
