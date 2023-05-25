@@ -15,7 +15,7 @@ public class Client {
             serviceLocator = new ServiceLocator(serverName);
         } catch (Exception e) {
             System.err.println("- Exception running the client: " + e.getMessage());
-            e.printStackTrace();cd .
+            e.printStackTrace();
             return;
         }
 
