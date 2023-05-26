@@ -30,7 +30,7 @@ public class RegisterUser extends JFrame {
         setTitle("GuTicket - Registro de usuario");
         setBounds(100, 100, 1000, 900);
         setSize(650, 600);
-        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Desktop\\GuTicket\\FrontendUser\\src\\gui\\element\\gu.png"));
 
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

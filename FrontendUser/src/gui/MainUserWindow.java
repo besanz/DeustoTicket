@@ -39,7 +39,7 @@ public class MainUserWindow extends JFrame {
         setSize(800, 600);
         getContentPane().setLayout(new BorderLayout(0, 0));
         getContentPane().setBackground(new Color(54, 57, 63));
-        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Desktop\\GuTicket\\FrontendUser\\src\\gui\\element\\gu.png"));
 
         // Update the welcomeLabel's margin
         JLabel welcomeLabel = new JLabel("Bienvenido a GuTicket, " + user.getNombre());

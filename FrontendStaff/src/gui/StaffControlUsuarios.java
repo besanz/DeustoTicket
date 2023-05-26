@@ -33,7 +33,7 @@ public class StaffControlUsuarios extends JFrame {
         setTitle("Admin - Control de Usarios");
         setPreferredSize(new Dimension(800, 600));
         getContentPane().setBackground(new Color(54, 57, 63));
-        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Pictures\\Saved Pictures\\gu.png"));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\ALUMNO\\Desktop\\GuTicket\\FrontendUser\\src\\gui\\element\\gu.png"));
 
 
         // Crear panel principal
